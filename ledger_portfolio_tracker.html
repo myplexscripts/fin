@@ -1,0 +1,2351 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#090d0b">
+<meta name="color-scheme" content="dark">
+<title>Ledger</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/fill/style.css">
+
+<style>
+:root{
+  /* Neutral scale */
+  --neutral-0:#ffffff;
+  --neutral-50:#f7f8f7;
+  --neutral-100:#eef0ef;
+  --neutral-200:#d8dcda;
+  --neutral-300:#b8c0bc;
+  --neutral-400:#8c9791;
+  --neutral-500:#69756f;
+  --neutral-600:#4b5651;
+  --neutral-700:#313a36;
+  --neutral-800:#202724;
+  --neutral-850:#181f1c;
+  --neutral-900:#111714;
+  --neutral-925:#0d120f;
+  --neutral-950:#090d0b;
+
+  /* Brand scale */
+  --brand-50:#eefbf4;
+  --brand-100:#d7f6e5;
+  --brand-200:#b1ecca;
+  --brand-300:#7edca9;
+  --brand-400:#48c785;
+  --brand-500:#25a966;
+  --brand-600:#178951;
+  --brand-700:#146d43;
+  --brand-800:#135737;
+  --brand-900:#10472f;
+  --brand-950:#08281b;
+
+  /* Blue scale */
+  --blue-50:#eff7ff;
+  --blue-100:#dcebfe;
+  --blue-200:#bfddfe;
+  --blue-300:#93c9fd;
+  --blue-400:#60aaf9;
+  --blue-500:#3b8cf4;
+  --blue-600:#286dde;
+  --blue-700:#2058c1;
+  --blue-800:#204a9c;
+  --blue-900:#1e407b;
+
+  /* Amber scale */
+  --amber-50:#fff9eb;
+  --amber-100:#feefc7;
+  --amber-200:#fddd8a;
+  --amber-300:#fac54d;
+  --amber-400:#f5ad1f;
+  --amber-500:#e58e0e;
+  --amber-600:#c56a09;
+  --amber-700:#9d4a0b;
+  --amber-800:#813b10;
+  --amber-900:#6d3113;
+
+  /* Red scale */
+  --red-50:#fff3f1;
+  --red-100:#ffe1dd;
+  --red-200:#ffc7c0;
+  --red-300:#ffa197;
+  --red-400:#ff6f61;
+  --red-500:#f14d3d;
+  --red-600:#d83526;
+  --red-700:#b62b20;
+  --red-800:#96291f;
+  --red-900:#7c2922;
+
+  /* Violet scale */
+  --violet-50:#f8f5ff;
+  --violet-100:#eee7ff;
+  --violet-200:#dfd2ff;
+  --violet-300:#c8aeff;
+  --violet-400:#aa7fff;
+  --violet-500:#8d54fa;
+  --violet-600:#7835ee;
+  --violet-700:#6624d3;
+  --violet-800:#5722ad;
+  --violet-900:#49208c;
+
+  /* Semantic tokens */
+  --app-bg:var(--neutral-950);
+  --app-bg-elevated:var(--neutral-925);
+  --surface:var(--neutral-900);
+  --surface-raised:var(--neutral-850);
+  --surface-soft:var(--neutral-800);
+  --surface-hover:var(--neutral-700);
+  --border:rgba(216,220,218,.11);
+  --border-strong:rgba(216,220,218,.18);
+  --text:var(--neutral-50);
+  --text-secondary:var(--neutral-300);
+  --text-muted:var(--neutral-400);
+  --text-faint:var(--neutral-500);
+  --accent:var(--brand-400);
+  --accent-strong:var(--brand-500);
+  --accent-soft:rgba(72,199,133,.13);
+  --positive:var(--brand-400);
+  --positive-soft:rgba(72,199,133,.13);
+  --negative:var(--red-400);
+  --negative-soft:rgba(255,111,97,.12);
+  --info:var(--blue-400);
+  --info-soft:rgba(96,170,249,.12);
+  --warning:var(--amber-400);
+  --warning-soft:rgba(245,173,31,.12);
+  --violet:var(--violet-400);
+  --violet-soft:rgba(170,127,255,.12);
+
+  --shadow-sm:0 8px 24px rgba(0,0,0,.17);
+  --shadow-md:0 18px 50px rgba(0,0,0,.25);
+  --radius-xl:24px;
+  --radius-lg:18px;
+  --radius-md:14px;
+  --radius-sm:10px;
+
+  --space-1:4px;
+  --space-2:8px;
+  --space-3:12px;
+  --space-4:16px;
+  --space-5:20px;
+  --space-6:24px;
+  --space-7:32px;
+  --space-8:40px;
+  --space-9:48px;
+}
+
+*{box-sizing:border-box}
+
+html{
+  min-height:100%;
+  background:var(--app-bg);
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 82% -8%, rgba(72,199,133,.09), transparent 28rem),
+    radial-gradient(circle at 18% 108%, rgba(96,170,249,.05), transparent 34rem),
+    var(--app-bg);
+  color:var(--text);
+  font-family:"Manrope",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:14px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible{
+  outline:3px solid rgba(72,199,133,.24);
+  outline-offset:2px;
+}
+
+.app{
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:240px minmax(0,1fr);
+}
+
+.sidebar{
+  position:sticky;
+  top:0;
+  height:100vh;
+  padding:22px 16px;
+  border-right:1px solid var(--border);
+  background:rgba(9,13,11,.78);
+  backdrop-filter:blur(22px);
+  z-index:30;
+  display:flex;
+  flex-direction:column;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:4px 8px 22px;
+}
+
+.brand-mark{
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  border-radius:12px;
+  background:linear-gradient(145deg,var(--brand-400),var(--brand-600));
+  color:var(--brand-950);
+  box-shadow:0 9px 26px rgba(72,199,133,.14);
+}
+
+.brand-mark i{font-size:1.22rem}
+
+.brand-copy strong{
+  display:block;
+  font-size:16px;
+  letter-spacing:-.035em;
+}
+
+.brand-copy span{
+  display:block;
+  margin-top:2px;
+  font-size:10px;
+  color:var(--text-faint);
+  letter-spacing:.03em;
+  text-transform:uppercase;
+}
+
+.nav{
+  display:grid;
+  gap:5px;
+}
+
+.nav button{
+  min-height:42px;
+  width:100%;
+  border:0;
+  background:transparent;
+  color:var(--text-muted);
+  border-radius:12px;
+  padding:9px 11px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  text-align:left;
+  font-weight:650;
+}
+
+.nav button i{
+  width:20px;
+  font-size:1.1rem;
+}
+
+.nav button:hover{
+  background:rgba(255,255,255,.035);
+  color:var(--text-secondary);
+}
+
+.nav button.active{
+  background:var(--surface-raised);
+  color:var(--text);
+  box-shadow:inset 0 0 0 1px var(--border);
+}
+
+.nav button.active i{color:var(--accent)}
+
+.sidebar-spacer{flex:1}
+
+.sidebar-foot{
+  padding:13px;
+  border:1px solid var(--border);
+  border-radius:14px;
+  background:rgba(255,255,255,.022);
+}
+
+.sidebar-foot i{
+  color:var(--accent);
+  font-size:1.1rem;
+}
+
+.sidebar-foot strong{
+  display:block;
+  margin-top:7px;
+  font-size:11px;
+}
+
+.sidebar-foot p{
+  margin:4px 0 0;
+  color:var(--text-faint);
+  font-size:10px;
+  line-height:1.55;
+}
+
+.main{
+  min-width:0;
+  padding:22px clamp(18px,3vw,42px) 72px;
+}
+
+.topbar{
+  display:grid;
+  grid-template-columns:repeat(12,minmax(0,1fr));
+  gap:clamp(14px,1.25vw,20px);
+  align-items:center;
+  margin-bottom:24px;
+}
+
+.page-heading{
+  grid-column:span 8;
+  min-width:0;
+}
+
+.page-heading h1{
+  margin:0;
+  font-size:25px;
+  letter-spacing:-.045em;
+  line-height:1.1;
+}
+
+.page-heading p{
+  margin:5px 0 0;
+  color:var(--text-muted);
+  font-size:11px;
+}
+
+.top-actions{
+  grid-column:span 4;
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+}
+
+.icon-btn,.btn{
+  border:1px solid var(--border);
+  background:var(--surface);
+  min-height:40px;
+  border-radius:12px;
+  transition:background .15s ease,border-color .15s ease,transform .15s ease;
+}
+
+.icon-btn:hover,.btn:hover{
+  background:var(--surface-raised);
+  border-color:var(--border-strong);
+  transform:translateY(-1px);
+}
+
+.icon-btn{
+  width:40px;
+  display:grid;
+  place-items:center;
+  padding:0;
+}
+
+.btn{
+  padding:9px 13px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  font-weight:700;
+  font-size:12px;
+}
+
+.btn.primary{
+  background:var(--accent);
+  border-color:var(--accent);
+  color:var(--brand-950);
+}
+
+.btn.primary:hover{
+  background:var(--brand-300);
+  border-color:var(--brand-300);
+}
+
+.btn.soft{
+  background:var(--accent-soft);
+  border-color:rgba(72,199,133,.2);
+  color:var(--brand-300);
+}
+
+.btn.danger{
+  background:var(--negative-soft);
+  border-color:rgba(255,111,97,.18);
+  color:var(--negative);
+}
+
+.btn.small{
+  min-height:34px;
+  padding:7px 10px;
+  border-radius:10px;
+  font-size:11px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(12,minmax(0,1fr));
+  gap:clamp(14px,1.25vw,20px);
+}
+
+.span-12{grid-column:span 12}
+.span-8{grid-column:span 8}
+.span-7{grid-column:span 7}
+.span-6{grid-column:span 6}
+.span-5{grid-column:span 5}
+.span-4{grid-column:span 4}
+.span-3{grid-column:span 3}
+
+.card{
+  min-width:0;
+  background:linear-gradient(180deg,rgba(24,31,28,.94),rgba(17,23,20,.94));
+  border:1px solid var(--border);
+  border-radius:var(--radius-xl);
+  box-shadow:var(--shadow-sm);
+}
+
+.card.pad{padding:clamp(18px,2vw,28px)}
+
+.hero{
+  position:relative;
+  min-height:318px;
+  overflow:hidden;
+}
+
+.hero::after{
+  content:"";
+  position:absolute;
+  width:300px;
+  height:300px;
+  border-radius:50%;
+  top:-150px;
+  right:-70px;
+  background:radial-gradient(circle,rgba(72,199,133,.12),rgba(72,199,133,0) 66%);
+  pointer-events:none;
+}
+
+.eyebrow{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  color:var(--text-muted);
+  font-size:10px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+}
+
+.eyebrow i{color:var(--accent)}
+
+.balance{
+  margin-top:13px;
+  font-size:clamp(38px,4.7vw,62px);
+  line-height:1;
+  letter-spacing:-.065em;
+  font-weight:800;
+}
+
+.balance-row{
+  display:flex;
+  gap:9px;
+  flex-wrap:wrap;
+  align-items:center;
+  margin-top:15px;
+}
+
+.change-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  min-height:30px;
+  padding:6px 9px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:800;
+}
+
+.change-chip.positive{color:var(--positive);background:var(--positive-soft)}
+.change-chip.negative{color:var(--negative);background:var(--negative-soft)}
+.change-chip.neutral{color:var(--text-muted);background:var(--surface-soft)}
+
+.as-of{
+  color:var(--text-faint);
+  font-size:10px;
+}
+
+.hero-stats{
+  position:absolute;
+  left:clamp(18px,2vw,28px);
+  right:clamp(18px,2vw,28px);
+  bottom:clamp(18px,2vw,28px);
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;
+}
+
+.hero-stat{
+  padding-top:14px;
+  border-top:1px solid var(--border);
+  min-width:0;
+}
+
+.hero-stat span{
+  display:block;
+  color:var(--text-faint);
+  font-size:10px;
+  margin-bottom:4px;
+}
+
+.hero-stat strong{
+  font-size:15px;
+  letter-spacing:-.025em;
+}
+
+.entry-card{
+  min-height:318px;
+  display:flex;
+  flex-direction:column;
+}
+
+.card-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:14px;
+}
+
+.card-head h2{
+  margin:0;
+  font-size:16px;
+  letter-spacing:-.035em;
+}
+
+.card-head p{
+  margin:4px 0 0;
+  color:var(--text-muted);
+  font-size:10px;
+}
+
+.date-chip{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 9px;
+  border-radius:999px;
+  background:var(--surface-soft);
+  color:var(--text-secondary);
+  font-size:10px;
+  font-weight:750;
+  white-space:nowrap;
+}
+
+.entry-form{
+  display:grid;
+  gap:13px;
+  margin-top:22px;
+  flex:1;
+}
+
+.field{
+  display:grid;
+  gap:6px;
+}
+
+label{
+  color:var(--text-muted);
+  font-size:10px;
+  font-weight:750;
+}
+
+input{
+  width:100%;
+  min-height:45px;
+  border:1px solid var(--border);
+  background:var(--neutral-925);
+  border-radius:12px;
+  padding:10px 12px;
+  outline:0;
+}
+
+input:hover{border-color:var(--border-strong)}
+
+input:focus{
+  border-color:rgba(72,199,133,.5);
+  box-shadow:0 0 0 4px rgba(72,199,133,.08);
+}
+
+input[type="date"]{
+  color-scheme:dark;
+}
+
+.input-wrap{position:relative}
+
+.prefix{
+  position:absolute;
+  left:15px;
+  top:50%;
+  transform:translateY(-50%);
+  color:var(--text-muted);
+  font-weight:700;
+}
+
+.money-input{
+  min-height:59px;
+  padding-left:32px;
+  font-size:23px;
+  font-weight:800;
+  letter-spacing:-.035em;
+}
+
+.form-help{
+  color:var(--text-faint);
+  font-size:9px;
+}
+
+.entry-actions{
+  margin-top:auto;
+  display:flex;
+  gap:8px;
+}
+
+.entry-actions .primary{flex:1}
+
+.section-title{
+  display:flex;
+  justify-content:space-between;
+  gap:14px;
+  align-items:center;
+  margin-bottom:18px;
+}
+
+.section-title h2{
+  margin:0;
+  font-size:15px;
+  letter-spacing:-.03em;
+}
+
+.section-title p{
+  margin:3px 0 0;
+  color:var(--text-faint);
+  font-size:10px;
+}
+
+.periods{
+  display:flex;
+  gap:3px;
+  padding:3px;
+  border-radius:10px;
+  background:var(--neutral-925);
+  border:1px solid var(--border);
+}
+
+.periods button{
+  border:0;
+  background:transparent;
+  color:var(--text-faint);
+  min-width:36px;
+  padding:6px 7px;
+  border-radius:8px;
+  font-size:9px;
+  font-weight:800;
+}
+
+.periods button.active{
+  background:var(--surface-soft);
+  color:var(--text);
+}
+
+.chart-card{min-height:380px}
+
+.chart-wrap{
+  height:285px;
+  position:relative;
+}
+
+canvas{
+  width:100%;
+  height:100%;
+  display:block;
+}
+
+.chart-empty{
+  position:absolute;
+  inset:0;
+  display:none;
+  place-items:center;
+  text-align:center;
+  color:var(--text-faint);
+  font-size:10px;
+}
+
+.chart-empty.show{display:grid}
+
+.chart-empty i{
+  display:block;
+  margin-bottom:7px;
+  color:var(--accent);
+  font-size:1.45rem;
+}
+
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+}
+
+.stat-card{
+  min-height:112px;
+  padding:17px;
+}
+
+.stat-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:8px;
+}
+
+.stat-icon{
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border-radius:10px;
+}
+
+.stat-icon.green{background:var(--positive-soft);color:var(--positive)}
+.stat-icon.blue{background:var(--info-soft);color:var(--info)}
+.stat-icon.amber{background:var(--warning-soft);color:var(--warning)}
+.stat-icon.violet{background:var(--violet-soft);color:var(--violet)}
+
+.stat-label{
+  color:var(--text-faint);
+  font-size:9px;
+}
+
+.stat-value{
+  margin-top:14px;
+  font-size:17px;
+  font-weight:800;
+  letter-spacing:-.035em;
+}
+
+.stat-sub{
+  margin-top:2px;
+  color:var(--text-faint);
+  font-size:9px;
+}
+
+.delta-card{min-height:320px}
+
+.delta-wrap{
+  height:225px;
+  position:relative;
+}
+
+.history-card{overflow:hidden}
+
+.history-head{
+  padding:20px 22px 15px;
+  display:flex;
+  justify-content:space-between;
+  align-items:end;
+  gap:14px;
+}
+
+.history-head h2{
+  margin:0;
+  font-size:15px;
+  letter-spacing:-.03em;
+}
+
+.history-head p{
+  margin:3px 0 0;
+  color:var(--text-faint);
+  font-size:10px;
+}
+
+.history-tools{
+  display:flex;
+  gap:7px;
+  align-items:center;
+}
+
+.search{
+  width:210px;
+  min-height:35px;
+  padding:7px 10px;
+  font-size:10px;
+}
+
+.table-wrap{
+  overflow:auto;
+  border-top:1px solid var(--border);
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:680px;
+}
+
+th,td{
+  padding:13px 22px;
+  text-align:left;
+  border-bottom:1px solid var(--border);
+  white-space:nowrap;
+}
+
+th{
+  color:var(--text-faint);
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  font-weight:800;
+}
+
+td{
+  color:var(--text-secondary);
+  font-size:11px;
+}
+
+td strong{
+  color:var(--text);
+  font-size:12px;
+}
+
+.positive-text{color:var(--positive)!important}
+.negative-text{color:var(--negative)!important}
+
+.row-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:5px;
+}
+
+.row-actions button{
+  width:31px;
+  height:31px;
+  border:1px solid var(--border);
+  background:var(--neutral-925);
+  color:var(--text-muted);
+  border-radius:9px;
+  display:grid;
+  place-items:center;
+}
+
+.row-actions button:hover{
+  color:var(--text);
+  background:var(--surface-soft);
+}
+
+.empty{
+  padding:38px 22px;
+  text-align:center;
+  color:var(--text-faint);
+  font-size:10px;
+}
+
+.empty i{
+  display:block;
+  margin-bottom:9px;
+  font-size:1.55rem;
+  color:var(--accent);
+}
+
+.empty strong{
+  display:block;
+  color:var(--text);
+  font-size:13px;
+  margin-bottom:3px;
+}
+
+.privacy .money-value{
+  filter:blur(7px);
+  user-select:none;
+}
+
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  display:none;
+  place-items:center;
+  padding:16px;
+  background:rgba(0,0,0,.58);
+  backdrop-filter:blur(7px);
+  z-index:100;
+}
+
+.modal-backdrop.open{display:grid}
+
+.modal{
+  width:min(560px,100%);
+  max-height:92vh;
+  overflow:auto;
+  border-radius:20px;
+  border:1px solid var(--border-strong);
+  background:var(--neutral-900);
+  box-shadow:var(--shadow-md);
+}
+
+.modal-head{
+  padding:20px 20px 13px;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+}
+
+.modal-head h3{
+  margin:0;
+  font-size:17px;
+  letter-spacing:-.035em;
+}
+
+.modal-head p{
+  margin:4px 0 0;
+  color:var(--text-muted);
+  font-size:10px;
+}
+
+.modal-body{padding:0 20px 20px}
+
+.modal-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.full{grid-column:1/-1}
+
+.modal-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  margin-top:16px;
+}
+
+.notice{
+  padding:11px 12px;
+  margin-bottom:14px;
+  border:1px solid var(--border);
+  border-radius:11px;
+  background:var(--neutral-925);
+  color:var(--text-muted);
+  font-size:9px;
+  line-height:1.6;
+}
+
+.file-input{display:none}
+
+.toast{
+  position:fixed;
+  right:18px;
+  bottom:18px;
+  z-index:150;
+  padding:11px 13px;
+  border-radius:11px;
+  background:var(--neutral-50);
+  color:var(--neutral-950);
+  box-shadow:var(--shadow-md);
+  font-size:10px;
+  font-weight:800;
+  opacity:0;
+  transform:translateY(10px);
+  pointer-events:none;
+  transition:.18s ease;
+}
+
+.toast.show{
+  opacity:1;
+  transform:none;
+}
+
+.mobile-nav{display:none}
+
+@media(max-width:1120px){
+  .span-7,.span-5,.span-8,.span-4{grid-column:span 12}
+  .stats-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .stat-card{min-height:106px}
+}
+
+@media(max-width:840px){
+  .app{display:block}
+  .sidebar{display:none}
+  .main{padding:16px 14px 92px}
+  .page-heading{grid-column:span 8}
+  .top-actions{grid-column:span 4}
+  .top-actions .btn{display:none}
+  .hero,.entry-card{min-height:auto}
+  .hero-stats{
+    position:static;
+    margin-top:34px;
+  }
+  .chart-wrap{height:245px}
+  .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .mobile-nav{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    position:fixed;
+    left:10px;
+    right:10px;
+    bottom:10px;
+    z-index:60;
+    padding:6px;
+    border-radius:16px;
+    border:1px solid var(--border-strong);
+    background:rgba(17,23,20,.9);
+    backdrop-filter:blur(20px);
+    box-shadow:var(--shadow-md);
+  }
+  .mobile-nav button{
+    border:0;
+    background:transparent;
+    color:var(--text-faint);
+    border-radius:11px;
+    min-height:48px;
+    display:grid;
+    place-items:center;
+    align-content:center;
+    gap:2px;
+    font-size:8px;
+    font-weight:750;
+  }
+  .mobile-nav button i{font-size:1.1rem}
+  .mobile-nav button.active{
+    background:var(--surface-soft);
+    color:var(--text);
+  }
+  .mobile-nav button.active i{color:var(--accent)}
+}
+
+@media(max-width:620px){
+  .page-heading h1{font-size:21px}
+  .balance{font-size:39px}
+  .hero-stats{grid-template-columns:1fr}
+  .hero-stat{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+  }
+  .hero-stat span{margin:0}
+  .entry-actions{flex-direction:column}
+  .entry-actions .btn{width:100%}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .section-title{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+  .periods{width:100%;overflow:auto}
+  .periods button{flex:1}
+  .history-head{
+    align-items:flex-start;
+    flex-direction:column;
+    padding:18px 16px 13px;
+  }
+  .history-tools{width:100%;flex-wrap:wrap}
+  .search{width:100%}
+  th,td{padding-left:16px;padding-right:16px}
+  .modal-grid{grid-template-columns:1fr}
+  .full{grid-column:auto}
+}
+
+@media(max-width:420px){
+  .main{padding-left:12px;padding-right:12px}
+  .topbar{gap:10px}
+  .page-heading{grid-column:span 7}
+  .top-actions{grid-column:span 5}
+  .card{border-radius:20px}
+  .card.pad{padding:17px}
+  .stats-grid{grid-template-columns:1fr}
+}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    scroll-behavior:auto!important;
+    transition:none!important;
+  }
+}
+</style>
+</head>
+
+<body>
+<div class="app" id="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark"><i class="ph-fill ph-chart-line-up"></i></div>
+      <div class="brand-copy">
+        <strong>Ledger</strong>
+        <span>Portfolio Journal</span>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <button class="active" data-scroll="dashboard">
+        <i class="ph ph-squares-four"></i>
+        Dashboard
+      </button>
+      <button data-scroll="charts">
+        <i class="ph ph-chart-line"></i>
+        Charts
+      </button>
+      <button data-scroll="history">
+        <i class="ph ph-clock-counter-clockwise"></i>
+        History
+      </button>
+      <button id="sidebarDataBtn">
+        <i class="ph ph-database"></i>
+        Data
+      </button>
+    </nav>
+
+    <div class="sidebar-spacer"></div>
+
+    <div class="sidebar-foot">
+      <i class="ph ph-lock-simple"></i>
+      <strong>Stored on this device</strong>
+      <p>Your values stay in this browser unless you export them.</p>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="page-heading">
+        <h1>Portfolio overview</h1>
+        <p id="todayLong"></p>
+      </div>
+
+      <div class="top-actions">
+        <button class="icon-btn" id="privacyBtn" aria-label="Hide values" title="Hide values">
+          <i class="ph ph-eye"></i>
+        </button>
+        <button class="icon-btn" id="dataBtn" aria-label="Data tools" title="Data tools">
+          <i class="ph ph-database"></i>
+        </button>
+        <button class="btn primary" id="addTodayBtn">
+          <i class="ph ph-plus"></i>
+          Add today
+        </button>
+      </div>
+    </header>
+
+    <section class="grid" id="dashboard">
+      <article class="card pad hero span-7">
+        <div class="eyebrow">
+          <i class="ph ph-wallet"></i>
+          Current portfolio value
+        </div>
+
+        <div class="balance money-value" id="currentValue">$0.00</div>
+
+        <div class="balance-row">
+          <span class="change-chip neutral" id="dailyChange">
+            <i class="ph ph-minus"></i>
+            No previous entry
+          </span>
+          <span class="as-of" id="asOfLabel">No values recorded yet</span>
+        </div>
+
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <span>7 day change</span>
+            <strong class="money-value" id="weekChange">Not enough data</strong>
+          </div>
+          <div class="hero-stat">
+            <span>30 day change</span>
+            <strong class="money-value" id="monthChange">Not enough data</strong>
+          </div>
+          <div class="hero-stat">
+            <span>Since tracking</span>
+            <strong class="money-value" id="allChange">Not enough data</strong>
+          </div>
+        </div>
+      </article>
+
+      <article class="card pad entry-card span-5" id="entryCard">
+        <div class="card-head">
+          <div>
+            <h2>Record a value</h2>
+            <p>Enter the total shown in Desjardins.</p>
+          </div>
+          <div class="date-chip">
+            <i class="ph ph-calendar-blank"></i>
+            <span id="todayChip"></span>
+          </div>
+        </div>
+
+        <form class="entry-form" id="entryForm">
+          <div class="field">
+            <label for="entryDate">Date</label>
+            <input id="entryDate" type="date" required>
+          </div>
+
+          <div class="field">
+            <label for="entryValue">Total investment value</label>
+            <div class="input-wrap">
+              <span class="prefix">$</span>
+              <input class="money-input" id="entryValue" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00" required>
+            </div>
+            <span class="form-help" id="entryHint">Today is selected automatically.</span>
+          </div>
+
+          <div class="entry-actions">
+            <button class="btn primary" type="submit">
+              <i class="ph ph-check"></i>
+              Save value
+            </button>
+            <button class="btn" type="button" id="clearBtn">Clear</button>
+          </div>
+        </form>
+      </article>
+
+      <section class="stats-grid span-12">
+        <article class="card stat-card">
+          <div class="stat-top">
+            <div class="stat-label">Year to date</div>
+            <div class="stat-icon green"><i class="ph ph-calendar-dots"></i></div>
+          </div>
+          <div class="stat-value money-value" id="ytdChange">Not enough data</div>
+          <div class="stat-sub" id="ytdSub">Compared with the start of the year</div>
+        </article>
+
+        <article class="card stat-card">
+          <div class="stat-top">
+            <div class="stat-label">Highest value</div>
+            <div class="stat-icon blue"><i class="ph ph-crown-simple"></i></div>
+          </div>
+          <div class="stat-value money-value" id="highValue">$0.00</div>
+          <div class="stat-sub" id="highDate">No data yet</div>
+        </article>
+
+        <article class="card stat-card">
+          <div class="stat-top">
+            <div class="stat-label">Best day</div>
+            <div class="stat-icon amber"><i class="ph ph-trend-up"></i></div>
+          </div>
+          <div class="stat-value money-value" id="bestDay">Not enough data</div>
+          <div class="stat-sub" id="bestDayDate">Daily balance change</div>
+        </article>
+
+        <article class="card stat-card">
+          <div class="stat-top">
+            <div class="stat-label">Days recorded</div>
+            <div class="stat-icon violet"><i class="ph ph-calendar-check"></i></div>
+          </div>
+          <div class="stat-value" id="daysRecorded">0</div>
+          <div class="stat-sub" id="trackingSince">No history yet</div>
+        </article>
+      </section>
+
+      <article class="card pad chart-card span-8" id="charts">
+        <div class="section-title">
+          <div>
+            <h2>Portfolio value</h2>
+            <p>Your total recorded balance over time.</p>
+          </div>
+
+          <div class="periods" id="periods">
+            <button data-days="30">1M</button>
+            <button data-days="90">3M</button>
+            <button data-days="180">6M</button>
+            <button data-days="365" class="active">1Y</button>
+            <button data-days="99999">All</button>
+          </div>
+        </div>
+
+        <div class="chart-wrap">
+          <canvas id="valueChart"></canvas>
+          <div class="chart-empty" id="valueChartEmpty">
+            <div>
+              <i class="ph ph-chart-line"></i>
+              Add at least two values to build your chart.
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card pad delta-card span-4">
+        <div class="section-title">
+          <div>
+            <h2>Daily movement</h2>
+            <p>Change from one recorded day to the next.</p>
+          </div>
+        </div>
+
+        <div class="delta-wrap">
+          <canvas id="deltaChart"></canvas>
+          <div class="chart-empty" id="deltaChartEmpty">
+            <div>
+              <i class="ph ph-chart-bar"></i>
+              Daily changes will appear here.
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card history-card span-12" id="history">
+        <div class="history-head">
+          <div>
+            <h2>Daily history</h2>
+            <p>Edit or remove any recorded value.</p>
+          </div>
+
+          <div class="history-tools">
+            <input class="search" id="historySearch" placeholder="Search date">
+            <button class="btn small" id="importBtn">
+              <i class="ph ph-upload-simple"></i>
+              Import CSV
+            </button>
+          </div>
+        </div>
+
+        <div class="table-wrap" id="historyTable"></div>
+      </article>
+    </section>
+  </main>
+</div>
+
+<nav class="mobile-nav">
+  <button class="active" data-mobile-scroll="dashboard">
+    <i class="ph ph-squares-four"></i>
+    Dashboard
+  </button>
+  <button data-mobile-scroll="entryCard">
+    <i class="ph ph-plus-circle"></i>
+    Add
+  </button>
+  <button data-mobile-scroll="charts">
+    <i class="ph ph-chart-line"></i>
+    Charts
+  </button>
+  <button data-mobile-scroll="history">
+    <i class="ph ph-clock-counter-clockwise"></i>
+    History
+  </button>
+</nav>
+
+<div class="modal-backdrop" id="editModal">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <h3>Edit value</h3>
+        <p>Change the date or total for this entry.</p>
+      </div>
+      <button class="icon-btn close-modal" aria-label="Close">
+        <i class="ph ph-x"></i>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <form id="editForm">
+        <input id="editOriginalDate" type="hidden">
+        <div class="modal-grid">
+          <div class="field">
+            <label for="editDate">Date</label>
+            <input id="editDate" type="date" required>
+          </div>
+          <div class="field">
+            <label for="editValue">Total value</label>
+            <div class="input-wrap">
+              <span class="prefix">$</span>
+              <input id="editValue" type="number" min="0" step="0.01" required style="padding-left:32px">
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn" type="button" data-close>Cancel</button>
+          <button class="btn primary" type="submit">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="dataModal">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <h3>Data tools</h3>
+        <p>Back up, import, or export your portfolio history.</p>
+      </div>
+      <button class="icon-btn close-modal" aria-label="Close">
+        <i class="ph ph-x"></i>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="notice">
+        Your entries are stored locally in this browser. Export a backup before clearing browser data or moving to another device.
+      </div>
+
+      <div class="modal-grid">
+        <button class="btn full" id="exportCsvBtn" type="button">
+          <i class="ph ph-file-csv"></i>
+          Export history as CSV
+        </button>
+
+        <button class="btn full" id="exportBackupBtn" type="button">
+          <i class="ph ph-download-simple"></i>
+          Export full backup
+        </button>
+
+        <label class="btn full" for="backupFile">
+          <i class="ph ph-upload-simple"></i>
+          Restore full backup
+        </label>
+        <input class="file-input" id="backupFile" type="file" accept=".json,application/json">
+
+        <button class="btn danger full" id="resetBtn" type="button">
+          <i class="ph ph-trash"></i>
+          Clear all tracking data
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="importModal">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <h3>Import spreadsheet history</h3>
+        <p>Bring over the dates and totals you already track.</p>
+      </div>
+      <button class="icon-btn close-modal" aria-label="Close">
+        <i class="ph ph-x"></i>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="notice">
+        CSV works best with a date column and a value, amount, balance, or total column. Imported dates replace existing values for the same day.
+      </div>
+
+      <label class="btn" for="csvFile" style="width:100%">
+        <i class="ph ph-file-csv"></i>
+        Choose CSV file
+      </label>
+      <input class="file-input" id="csvFile" type="file" accept=".csv,text/csv">
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(() => {
+  const STORAGE_KEY = "ledger-portfolio-journal-v3";
+
+  const emptyState = () => ({
+    version: 3,
+    entries: [],
+    privacy: false
+  });
+
+  let state = loadState();
+  let chartDays = 365;
+  let historySearch = "";
+
+  const $ = selector => document.querySelector(selector);
+  const $$ = selector => [...document.querySelectorAll(selector)];
+
+  const money = value => new Intl.NumberFormat("en-CA", {
+    style: "currency",
+    currency: "CAD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(Number(value) || 0);
+
+  const signedMoney = value => {
+    const n = Number(value) || 0;
+    const sign = n > 0 ? "+" : n < 0 ? "-" : "";
+    return `${sign}${money(Math.abs(n))}`;
+  };
+
+  const pct = value => `${Math.abs(Number(value) || 0).toFixed(2)}%`;
+
+  function localToday() {
+    const d = new Date();
+    return [
+      d.getFullYear(),
+      String(d.getMonth() + 1).padStart(2, "0"),
+      String(d.getDate()).padStart(2, "0")
+    ].join("-");
+  }
+
+  function formatDate(date) {
+    return new Date(`${date}T12:00:00`).toLocaleDateString("en-CA", {
+      month: "short",
+      day: "numeric",
+      year: "numeric"
+    });
+  }
+
+  function formatDateLong(date) {
+    return new Date(`${date}T12:00:00`).toLocaleDateString("en-CA", {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      year: "numeric"
+    });
+  }
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        return {
+          ...emptyState(),
+          ...parsed,
+          entries: Array.isArray(parsed.entries) ? parsed.entries : []
+        };
+      }
+
+      const oldKeys = ["portfolio-journal-v2", "northstar-investments-v1"];
+      for (const key of oldKeys) {
+        const oldRaw = localStorage.getItem(key);
+        if (!oldRaw) continue;
+        const old = JSON.parse(oldRaw);
+
+        if (Array.isArray(old.entries)) {
+          return {
+            ...emptyState(),
+            entries: old.entries,
+            privacy: !!old.privacy
+          };
+        }
+      }
+    } catch {}
+
+    return emptyState();
+  }
+
+  function saveState() {
+    state.entries = normaliseEntries(state.entries);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+
+  function normaliseEntries(entries) {
+    const byDate = new Map();
+
+    for (const entry of entries) {
+      if (!entry || !entry.date) continue;
+      const value = Number(entry.value);
+      if (!Number.isFinite(value) || value < 0) continue;
+      byDate.set(entry.date, { date: entry.date, value });
+    }
+
+    return [...byDate.values()].sort((a, b) => a.date.localeCompare(b.date));
+  }
+
+  function toast(message) {
+    const node = $("#toast");
+    node.textContent = message;
+    node.classList.add("show");
+    clearTimeout(toast.timer);
+    toast.timer = setTimeout(() => node.classList.remove("show"), 2100);
+  }
+
+  function openModal(id) {
+    $(`#${id}`).classList.add("open");
+  }
+
+  function closeModals() {
+    $$(".modal-backdrop").forEach(modal => modal.classList.remove("open"));
+  }
+
+  function latestEntry() {
+    return state.entries.at(-1) || null;
+  }
+
+  function previousEntry(index = state.entries.length - 1) {
+    return index > 0 ? state.entries[index - 1] : null;
+  }
+
+  function entryOnOrBefore(date) {
+    let result = null;
+    for (const entry of state.entries) {
+      if (entry.date <= date) result = entry;
+      else break;
+    }
+    return result;
+  }
+
+  function firstEntryOnOrAfter(date) {
+    return state.entries.find(entry => entry.date >= date) || null;
+  }
+
+  function daysBefore(dateString, days) {
+    const d = new Date(`${dateString}T12:00:00`);
+    d.setDate(d.getDate() - days);
+    return [
+      d.getFullYear(),
+      String(d.getMonth() + 1).padStart(2, "0"),
+      String(d.getDate()).padStart(2, "0")
+    ].join("-");
+  }
+
+  function changeBetween(current, baseline) {
+    if (!current || !baseline || current.date === baseline.date) return null;
+    const amount = current.value - baseline.value;
+    const percent = baseline.value ? amount / baseline.value * 100 : 0;
+    return { amount, percent, baseline };
+  }
+
+  function changeForDays(days) {
+    const current = latestEntry();
+    if (!current) return null;
+
+    const target = daysBefore(current.date, days);
+    let baseline = entryOnOrBefore(target);
+    if (!baseline) baseline = firstEntryOnOrAfter(target);
+
+    return changeBetween(current, baseline);
+  }
+
+  function ytdChange() {
+    const current = latestEntry();
+    if (!current) return null;
+
+    const start = `${current.date.slice(0, 4)}-01-01`;
+    let baseline = entryOnOrBefore(daysBefore(start, 1));
+    if (!baseline) baseline = firstEntryOnOrAfter(start);
+
+    return changeBetween(current, baseline);
+  }
+
+  function allChange() {
+    return changeBetween(latestEntry(), state.entries[0]);
+  }
+
+  function valueClass(value) {
+    return value > 0 ? "positive-text" : value < 0 ? "negative-text" : "";
+  }
+
+  function renderChangeText(node, change, fallback = "Not enough data") {
+    node.className = `money-value ${change ? valueClass(change.amount) : ""}`.trim();
+    node.textContent = change ? signedMoney(change.amount) : fallback;
+    node.title = change ? `${signedMoney(change.amount)}, ${pct(change.percent)}` : "";
+  }
+
+  function render() {
+    state.entries = normaliseEntries(state.entries);
+
+    const current = latestEntry();
+    const previous = previousEntry();
+
+    $("#app").classList.toggle("privacy", !!state.privacy);
+    $("#privacyBtn").innerHTML = state.privacy
+      ? '<i class="ph ph-eye-slash"></i>'
+      : '<i class="ph ph-eye"></i>';
+
+    if (!current) {
+      $("#currentValue").textContent = money(0);
+      $("#asOfLabel").textContent = "No values recorded yet";
+      $("#dailyChange").className = "change-chip neutral";
+      $("#dailyChange").innerHTML = '<i class="ph ph-minus"></i>No previous entry';
+    } else {
+      $("#currentValue").textContent = money(current.value);
+      $("#asOfLabel").textContent = `As of ${formatDateLong(current.date)}`;
+
+      const daily = changeBetween(current, previous);
+
+      if (!daily) {
+        $("#dailyChange").className = "change-chip neutral";
+        $("#dailyChange").innerHTML = '<i class="ph ph-minus"></i>No previous entry';
+      } else {
+        const cls = daily.amount > 0 ? "positive" : daily.amount < 0 ? "negative" : "neutral";
+        const icon = daily.amount > 0 ? "ph-trend-up" : daily.amount < 0 ? "ph-trend-down" : "ph-minus";
+        const pctSign = daily.amount > 0 ? "+" : daily.amount < 0 ? "-" : "";
+
+        $("#dailyChange").className = `change-chip ${cls}`;
+        $("#dailyChange").innerHTML = `
+          <i class="ph ${icon}"></i>
+          ${signedMoney(daily.amount)} · ${pctSign}${pct(daily.percent)}
+        `;
+      }
+    }
+
+    renderChangeText($("#weekChange"), changeForDays(7));
+    renderChangeText($("#monthChange"), changeForDays(30));
+    renderChangeText($("#allChange"), allChange());
+
+    const ytd = ytdChange();
+    renderChangeText($("#ytdChange"), ytd);
+    $("#ytdSub").textContent = ytd
+      ? `Compared with ${formatDate(ytd.baseline.date)}`
+      : "Compared with the start of the year";
+
+    renderStats();
+    renderHistory();
+    renderValueChart();
+    renderDeltaChart();
+    updateEntryHint();
+  }
+
+  function renderStats() {
+    if (!state.entries.length) {
+      $("#highValue").textContent = money(0);
+      $("#highDate").textContent = "No data yet";
+      $("#bestDay").textContent = "Not enough data";
+      $("#bestDayDate").textContent = "Daily balance change";
+      $("#daysRecorded").textContent = "0";
+      $("#trackingSince").textContent = "No history yet";
+      return;
+    }
+
+    const high = state.entries.reduce((a, b) => b.value > a.value ? b : a);
+
+    $("#highValue").textContent = money(high.value);
+    $("#highDate").textContent = formatDate(high.date);
+    $("#daysRecorded").textContent = String(state.entries.length);
+    $("#trackingSince").textContent = `Since ${formatDate(state.entries[0].date)}`;
+
+    if (state.entries.length < 2) {
+      $("#bestDay").textContent = "Not enough data";
+      $("#bestDayDate").textContent = "Daily balance change";
+      return;
+    }
+
+    const changes = [];
+
+    for (let i = 1; i < state.entries.length; i++) {
+      changes.push({
+        date: state.entries[i].date,
+        amount: state.entries[i].value - state.entries[i - 1].value
+      });
+    }
+
+    const best = changes.reduce((a, b) => b.amount > a.amount ? b : a);
+    $("#bestDay").className = `stat-value money-value ${valueClass(best.amount)}`;
+    $("#bestDay").textContent = signedMoney(best.amount);
+    $("#bestDayDate").textContent = formatDate(best.date);
+  }
+
+  function renderHistory() {
+    const host = $("#historyTable");
+    const query = historySearch.trim().toLowerCase();
+
+    const rows = [...state.entries]
+      .reverse()
+      .filter(entry => {
+        if (!query) return true;
+        return entry.date.includes(query) || formatDate(entry.date).toLowerCase().includes(query);
+      });
+
+    if (!rows.length) {
+      host.innerHTML = `
+        <div class="empty">
+          <i class="ph ph-calendar-blank"></i>
+          <strong>${state.entries.length ? "No matching dates" : "No daily values yet"}</strong>
+          ${state.entries.length ? "Try a different date search." : "Your saved values will appear here."}
+        </div>
+      `;
+      return;
+    }
+
+    host.innerHTML = `
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Total value</th>
+            <th>Change</th>
+            <th>Change %</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows.map(entry => {
+            const index = state.entries.findIndex(item => item.date === entry.date);
+            const prev = previousEntry(index);
+            const change = changeBetween(entry, prev);
+
+            return `
+              <tr>
+                <td><strong>${formatDate(entry.date)}</strong></td>
+                <td><strong class="money-value">${money(entry.value)}</strong></td>
+                <td class="${change ? valueClass(change.amount) : ""}">
+                  ${change ? `<strong class="money-value">${signedMoney(change.amount)}</strong>` : '<span style="color:var(--text-faint)">First entry</span>'}
+                </td>
+                <td class="${change ? valueClass(change.amount) : ""}">
+                  ${change ? `${change.amount > 0 ? "+" : change.amount < 0 ? "-" : ""}${pct(change.percent)}` : "N/A"}
+                </td>
+                <td>
+                  <div class="row-actions">
+                    <button class="edit-entry" data-date="${entry.date}" aria-label="Edit ${entry.date}">
+                      <i class="ph ph-pencil-simple"></i>
+                    </button>
+                    <button class="delete-entry" data-date="${entry.date}" aria-label="Delete ${entry.date}">
+                      <i class="ph ph-trash"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            `;
+          }).join("")}
+        </tbody>
+      </table>
+    `;
+  }
+
+  function setupCanvas(canvas) {
+    const rect = canvas.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+
+    canvas.width = Math.max(1, Math.floor(rect.width * dpr));
+    canvas.height = Math.max(1, Math.floor(rect.height * dpr));
+
+    const ctx = canvas.getContext("2d");
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, rect.width, rect.height);
+
+    return { ctx, width: rect.width, height: rect.height };
+  }
+
+  function renderValueChart() {
+    const canvas = $("#valueChart");
+    const empty = $("#valueChartEmpty");
+    const { ctx, width, height } = setupCanvas(canvas);
+
+    const current = latestEntry();
+    let points = [];
+
+    if (current) {
+      const cutoff = chartDays > 10000 ? "0000-01-01" : daysBefore(current.date, chartDays);
+      points = state.entries.filter(entry => entry.date >= cutoff);
+    }
+
+    empty.classList.toggle("show", points.length < 2);
+    if (points.length < 2) return;
+
+    const values = points.map(point => point.value);
+    const min = Math.min(...values);
+    const max = Math.max(...values);
+    const rawRange = max - min;
+    const padValue = rawRange === 0 ? Math.max(max * .02, 1) : rawRange * .14;
+    const chartMin = min - padValue;
+    const chartMax = max + padValue;
+    const range = chartMax - chartMin;
+
+    const pad = { left: 8, right: 8, top: 12, bottom: 22 };
+    const innerW = width - pad.left - pad.right;
+    const innerH = height - pad.top - pad.bottom;
+
+    ctx.strokeStyle = "rgba(216,220,218,.075)";
+    ctx.lineWidth = 1;
+
+    for (let i = 0; i < 4; i++) {
+      const y = pad.top + innerH * (i / 3);
+      ctx.beginPath();
+      ctx.moveTo(pad.left, y);
+      ctx.lineTo(width - pad.right, y);
+      ctx.stroke();
+    }
+
+    const coords = points.map((point, index) => ({
+      point,
+      x: pad.left + innerW * (index / (points.length - 1)),
+      y: pad.top + innerH * (1 - (point.value - chartMin) / range)
+    }));
+
+    const fill = ctx.createLinearGradient(0, pad.top, 0, height);
+    fill.addColorStop(0, "rgba(72,199,133,.19)");
+    fill.addColorStop(1, "rgba(72,199,133,0)");
+
+    ctx.beginPath();
+    coords.forEach((c, i) => {
+      if (i === 0) ctx.moveTo(c.x, c.y);
+      else ctx.lineTo(c.x, c.y);
+    });
+    ctx.lineTo(coords.at(-1).x, height - pad.bottom);
+    ctx.lineTo(coords[0].x, height - pad.bottom);
+    ctx.closePath();
+    ctx.fillStyle = fill;
+    ctx.fill();
+
+    ctx.beginPath();
+    coords.forEach((c, i) => {
+      if (i === 0) ctx.moveTo(c.x, c.y);
+      else ctx.lineTo(c.x, c.y);
+    });
+    ctx.strokeStyle = "#48c785";
+    ctx.lineWidth = 2.5;
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
+    ctx.stroke();
+
+    const last = coords.at(-1);
+    ctx.beginPath();
+    ctx.arc(last.x, last.y, 3.5, 0, Math.PI * 2);
+    ctx.fillStyle = "#7edca9";
+    ctx.fill();
+
+    ctx.fillStyle = "#69756f";
+    ctx.font = '600 9px "Manrope", sans-serif';
+    ctx.textAlign = "left";
+    ctx.fillText(formatDate(points[0].date), pad.left, height - 5);
+    ctx.textAlign = "right";
+    ctx.fillText(formatDate(points.at(-1).date), width - pad.right, height - 5);
+  }
+
+  function renderDeltaChart() {
+    const canvas = $("#deltaChart");
+    const empty = $("#deltaChartEmpty");
+    const { ctx, width, height } = setupCanvas(canvas);
+
+    if (state.entries.length < 2) {
+      empty.classList.add("show");
+      return;
+    }
+
+    let changes = [];
+
+    for (let i = 1; i < state.entries.length; i++) {
+      changes.push({
+        date: state.entries[i].date,
+        amount: state.entries[i].value - state.entries[i - 1].value
+      });
+    }
+
+    changes = changes.slice(-30);
+    empty.classList.toggle("show", !changes.length);
+    if (!changes.length) return;
+
+    const maxAbs = Math.max(...changes.map(item => Math.abs(item.amount)), 1);
+    const pad = { left: 4, right: 4, top: 9, bottom: 18 };
+    const innerW = width - pad.left - pad.right;
+    const innerH = height - pad.top - pad.bottom;
+    const zeroY = pad.top + innerH / 2;
+
+    ctx.strokeStyle = "rgba(216,220,218,.10)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(pad.left, zeroY);
+    ctx.lineTo(width - pad.right, zeroY);
+    ctx.stroke();
+
+    const slot = innerW / changes.length;
+    const barW = Math.max(2, Math.min(12, slot * .58));
+
+    changes.forEach((item, index) => {
+      const x = pad.left + slot * index + (slot - barW) / 2;
+      const h = (Math.abs(item.amount) / maxAbs) * (innerH * .43);
+      const y = item.amount >= 0 ? zeroY - h : zeroY;
+
+      ctx.fillStyle = item.amount >= 0 ? "rgba(72,199,133,.82)" : "rgba(255,111,97,.82)";
+      roundRect(ctx, x, y, barW, Math.max(h, 1.5), 2);
+      ctx.fill();
+    });
+
+    ctx.fillStyle = "#69756f";
+    ctx.font = '600 8px "Manrope", sans-serif';
+    ctx.textAlign = "left";
+    ctx.fillText(formatDate(changes[0].date), pad.left, height - 4);
+    ctx.textAlign = "right";
+    ctx.fillText(formatDate(changes.at(-1).date), width - pad.right, height - 4);
+  }
+
+  function roundRect(ctx, x, y, width, height, radius) {
+    const r = Math.min(radius, Math.abs(width) / 2, Math.abs(height) / 2);
+    ctx.beginPath();
+    ctx.roundRect(x, y, width, height, r);
+  }
+
+  function updateEntryHint() {
+    const date = $("#entryDate").value;
+    const existing = state.entries.find(entry => entry.date === date);
+
+    if (existing) {
+      $("#entryHint").textContent = `A value is already saved for this date. Saving will update ${money(existing.value)}.`;
+    } else if (date === localToday()) {
+      $("#entryHint").textContent = "Today is selected automatically.";
+    } else {
+      $("#entryHint").textContent = "Saving creates one value for this date.";
+    }
+  }
+
+  function resetEntryToToday() {
+    $("#entryDate").value = localToday();
+    $("#entryValue").value = "";
+    updateEntryHint();
+  }
+
+  function saveEntry(date, value) {
+    const numeric = Number(value);
+
+    if (!date || !Number.isFinite(numeric) || numeric < 0) return false;
+
+    const existing = state.entries.find(entry => entry.date === date);
+
+    if (existing) existing.value = numeric;
+    else state.entries.push({ date, value: numeric });
+
+    saveState();
+    return true;
+  }
+
+  function editEntry(date) {
+    const entry = state.entries.find(item => item.date === date);
+    if (!entry) return;
+
+    $("#editOriginalDate").value = entry.date;
+    $("#editDate").value = entry.date;
+    $("#editValue").value = entry.value.toFixed(2);
+    openModal("editModal");
+  }
+
+  function deleteEntry(date) {
+    if (!confirm(`Delete the value saved for ${formatDate(date)}?`)) return;
+
+    state.entries = state.entries.filter(entry => entry.date !== date);
+    saveState();
+    render();
+    toast("Entry deleted");
+  }
+
+  $("#entryForm").addEventListener("submit", event => {
+    event.preventDefault();
+
+    if (!saveEntry($("#entryDate").value, $("#entryValue").value)) {
+      toast("Enter a valid value");
+      return;
+    }
+
+    render();
+    $("#entryValue").value = "";
+    toast("Value saved");
+  });
+
+  $("#editForm").addEventListener("submit", event => {
+    event.preventDefault();
+
+    const originalDate = $("#editOriginalDate").value;
+    const date = $("#editDate").value;
+    const value = Number($("#editValue").value);
+
+    if (!date || !Number.isFinite(value) || value < 0) {
+      toast("Enter a valid date and value");
+      return;
+    }
+
+    state.entries = state.entries.filter(entry => entry.date !== originalDate && entry.date !== date);
+    state.entries.push({ date, value });
+
+    saveState();
+    closeModals();
+    render();
+    toast("Entry updated");
+  });
+
+  $("#entryDate").addEventListener("change", updateEntryHint);
+  $("#clearBtn").addEventListener("click", resetEntryToToday);
+
+  $("#privacyBtn").addEventListener("click", () => {
+    state.privacy = !state.privacy;
+    saveState();
+    render();
+  });
+
+  $("#addTodayBtn").addEventListener("click", () => {
+    resetEntryToToday();
+    $("#entryCard").scrollIntoView({ behavior: "smooth", block: "center" });
+    setTimeout(() => $("#entryValue").focus(), 320);
+  });
+
+  $("#dataBtn").addEventListener("click", () => openModal("dataModal"));
+  $("#sidebarDataBtn").addEventListener("click", () => openModal("dataModal"));
+  $("#importBtn").addEventListener("click", () => openModal("importModal"));
+
+  $("#historySearch").addEventListener("input", event => {
+    historySearch = event.target.value;
+    renderHistory();
+  });
+
+  $("#periods").addEventListener("click", event => {
+    const button = event.target.closest("button[data-days]");
+    if (!button) return;
+
+    chartDays = Number(button.dataset.days);
+    $$("#periods button").forEach(item => item.classList.toggle("active", item === button));
+    renderValueChart();
+  });
+
+  document.addEventListener("click", event => {
+    const edit = event.target.closest(".edit-entry");
+    if (edit) editEntry(edit.dataset.date);
+
+    const del = event.target.closest(".delete-entry");
+    if (del) deleteEntry(del.dataset.date);
+
+    if (event.target.closest("[data-close]")) closeModals();
+
+    const sideScroll = event.target.closest("[data-scroll]");
+    if (sideScroll) {
+      const target = document.getElementById(sideScroll.dataset.scroll);
+      if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+      $$(".nav button[data-scroll]").forEach(btn => btn.classList.toggle("active", btn === sideScroll));
+    }
+
+    const mobileScroll = event.target.closest("[data-mobile-scroll]");
+    if (mobileScroll) {
+      const target = document.getElementById(mobileScroll.dataset.mobileScroll);
+      if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+      $$(".mobile-nav button").forEach(btn => btn.classList.toggle("active", btn === mobileScroll));
+      if (mobileScroll.dataset.mobileScroll === "entryCard") {
+        resetEntryToToday();
+        setTimeout(() => $("#entryValue").focus(), 320);
+      }
+    }
+  });
+
+  $$(".close-modal").forEach(button => button.addEventListener("click", closeModals));
+
+  $$(".modal-backdrop").forEach(backdrop => {
+    backdrop.addEventListener("click", event => {
+      if (event.target === backdrop) closeModals();
+    });
+  });
+
+  window.addEventListener("keydown", event => {
+    if (event.key === "Escape") closeModals();
+  });
+
+  $("#exportCsvBtn").addEventListener("click", () => {
+    const rows = [["Date", "Total Value CAD"]];
+
+    state.entries.forEach(entry => {
+      rows.push([entry.date, entry.value.toFixed(2)]);
+    });
+
+    const csv = rows.map(row =>
+      row.map(value => `"${String(value).replaceAll('"', '""')}"`).join(",")
+    ).join("\n");
+
+    downloadBlob(
+      new Blob([csv], { type: "text/csv;charset=utf-8" }),
+      `ledger-history-${localToday()}.csv`
+    );
+  });
+
+  $("#exportBackupBtn").addEventListener("click", () => {
+    downloadBlob(
+      new Blob([JSON.stringify(state, null, 2)], { type: "application/json" }),
+      `ledger-backup-${localToday()}.json`
+    );
+  });
+
+  $("#backupFile").addEventListener("change", async event => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    try {
+      const parsed = JSON.parse(await file.text());
+      if (!parsed || !Array.isArray(parsed.entries)) throw new Error();
+
+      if (confirm("Replace your current history with this backup?")) {
+        state = {
+          ...emptyState(),
+          ...parsed,
+          entries: normaliseEntries(parsed.entries)
+        };
+        saveState();
+        closeModals();
+        resetEntryToToday();
+        render();
+        toast("Backup restored");
+      }
+    } catch {
+      alert("That file does not look like a valid Ledger backup.");
+    }
+
+    event.target.value = "";
+  });
+
+  $("#resetBtn").addEventListener("click", () => {
+    if (!confirm("Clear every saved daily value from this browser?")) return;
+
+    state = emptyState();
+    saveState();
+    closeModals();
+    resetEntryToToday();
+    render();
+    toast("All data cleared");
+  });
+
+  $("#csvFile").addEventListener("change", async event => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    try {
+      const imported = parseCsvHistory(await file.text());
+
+      if (!imported.length) {
+        alert("I could not find usable date and value rows in that CSV.");
+      } else {
+        state.entries = normaliseEntries([...state.entries, ...imported]);
+        saveState();
+        closeModals();
+        render();
+        toast(`${imported.length} ${imported.length === 1 ? "entry" : "entries"} imported`);
+      }
+    } catch {
+      alert("I could not read that CSV file.");
+    }
+
+    event.target.value = "";
+  });
+
+  function parseCsvHistory(text) {
+    const lines = text
+      .replace(/\r/g, "")
+      .split("\n")
+      .map(line => line.trim())
+      .filter(Boolean);
+
+    if (!lines.length) return [];
+
+    const rows = lines.map(parseCsvLine);
+    const headers = rows[0].map(cell => cell.trim().toLowerCase());
+
+    const dateIndex = headers.findIndex(header =>
+      ["date", "day", "recorded date"].some(term => header.includes(term))
+    );
+
+    const valueIndex = headers.findIndex(header =>
+      ["value", "amount", "balance", "total"].some(term => header.includes(term))
+    );
+
+    const hasHeader = dateIndex >= 0 && valueIndex >= 0;
+    const dIndex = hasHeader ? dateIndex : 0;
+    const vIndex = hasHeader ? valueIndex : 1;
+    const start = hasHeader ? 1 : 0;
+    const results = [];
+
+    for (let i = start; i < rows.length; i++) {
+      const date = normaliseDate(rows[i][dIndex]);
+      const value = parseCurrency(rows[i][vIndex]);
+
+      if (date && Number.isFinite(value) && value >= 0) {
+        results.push({ date, value });
+      }
+    }
+
+    return results;
+  }
+
+  function parseCsvLine(line) {
+    const values = [];
+    let current = "";
+    let quoted = false;
+
+    for (let i = 0; i < line.length; i++) {
+      const char = line[i];
+
+      if (char === '"') {
+        if (quoted && line[i + 1] === '"') {
+          current += '"';
+          i++;
+        } else {
+          quoted = !quoted;
+        }
+      } else if (char === "," && !quoted) {
+        values.push(current);
+        current = "";
+      } else {
+        current += char;
+      }
+    }
+
+    values.push(current);
+    return values;
+  }
+
+  function parseCurrency(value = "") {
+    return Number(String(value).replace(/\$/g, "").replace(/,/g, "").replace(/\s/g, "").trim());
+  }
+
+  function normaliseDate(value = "") {
+    const raw = String(value).trim();
+    if (!raw) return null;
+
+    if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw;
+
+    const slash = raw.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{2,4})$/);
+
+    if (slash) {
+      let first = Number(slash[1]);
+      let second = Number(slash[2]);
+      let year = Number(slash[3]);
+      if (year < 100) year += 2000;
+
+      let month = first;
+      let day = second;
+
+      if (first > 12 && second <= 12) {
+        day = first;
+        month = second;
+      }
+
+      const test = new Date(year, month - 1, day);
+
+      if (
+        test.getFullYear() === year &&
+        test.getMonth() === month - 1 &&
+        test.getDate() === day
+      ) {
+        return [
+          year,
+          String(month).padStart(2, "0"),
+          String(day).padStart(2, "0")
+        ].join("-");
+      }
+    }
+
+    const parsed = new Date(raw);
+    if (Number.isNaN(parsed.getTime())) return null;
+
+    return [
+      parsed.getFullYear(),
+      String(parsed.getMonth() + 1).padStart(2, "0"),
+      String(parsed.getDate()).padStart(2, "0")
+    ].join("-");
+  }
+
+  function downloadBlob(blob, filename) {
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  }
+
+  function initialiseToday() {
+    const today = localToday();
+    $("#entryDate").value = today;
+    $("#todayChip").textContent = new Date(`${today}T12:00:00`).toLocaleDateString("en-CA", {
+      month: "short",
+      day: "numeric"
+    });
+    $("#todayLong").textContent = formatDateLong(today);
+    updateEntryHint();
+  }
+
+  window.addEventListener("resize", () => {
+    renderValueChart();
+    renderDeltaChart();
+  });
+
+  initialiseToday();
+  render();
+})();
+</script>
+</body>
+</html>

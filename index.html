@@ -161,7 +161,7 @@ body{
   font-family:"Inter",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   font-size:var(--fs-sm);
   line-height:1.5;
-  letter-spacing:-.011em;
+  letter-spacing:-.006em;
   -webkit-font-smoothing:antialiased;
 }
 
@@ -234,7 +234,7 @@ button:focus-visible,input:focus-visible{
 .brand-copy strong{
   display:block;
   font-size:var(--fs-md);
-  letter-spacing:-.035em;
+  letter-spacing:-.014em;
 }
 
 .brand-copy span{
@@ -242,16 +242,34 @@ button:focus-visible,input:focus-visible{
   margin-top:2px;
   font-size:var(--fs-2xs);
   color:var(--text-faint);
-  letter-spacing:.03em;
+  letter-spacing:.045em;
   text-transform:uppercase;
 }
 
 .nav{
+  position:relative;
   display:grid;
   gap:5px;
 }
 
+.nav-indicator{
+  position:absolute;
+  top:0;
+  left:0;
+  border-radius:var(--radius-md);
+  background:var(--glass-3);
+  box-shadow:inset 0 0 0 1px var(--border),var(--glass-edge);
+  opacity:0;
+  pointer-events:none;
+  z-index:0;
+  transition:transform .42s var(--ease-spring),width .38s var(--ease-out),height .38s var(--ease-out),opacity .2s var(--ease-out);
+}
+
+.nav-indicator.ready{opacity:1}
+
 .nav button{
+  position:relative;
+  z-index:1;
   min-height:44px;
   width:100%;
   border:0;
@@ -265,28 +283,36 @@ button:focus-visible,input:focus-visible{
   text-align:left;
   font-weight:640;
   font-size:var(--fs-2xs);
-  transition:background .18s var(--ease-out),color .18s var(--ease-out);
+  transition:color .18s var(--ease-out),transform .18s var(--ease-out);
 }
 
 .nav button i{
   width:20px;
   font-size:18px;
+  flex:none;
+  transition:color .18s var(--ease-out);
 }
 
-.nav button:hover{
-  background:rgba(255,255,255,.035);
-  color:var(--text-secondary);
+.nav button .label{
+  overflow:hidden;
+  white-space:nowrap;
+  opacity:0;
+  transform:translateX(-6px);
+  transition:opacity .28s var(--ease-out),transform .32s var(--ease-out);
 }
+
+.nav button:hover{color:var(--text-secondary)}
 
 .nav button:active{transform:scale(.98)}
 
-.nav button.active{
-  background:var(--glass-3);
-  color:var(--text);
-  box-shadow:inset 0 0 0 1px var(--border),var(--glass-edge);
-}
+.nav button.active{color:var(--text)}
 
 .nav button.active i{color:var(--accent)}
+
+.nav button.active .label{
+  opacity:1;
+  transform:translateX(0);
+}
 
 .sidebar-spacer{flex:1}
 
@@ -341,7 +367,7 @@ button:focus-visible,input:focus-visible{
 .page-heading h1{
   margin:0;
   font-size:26px;
-  letter-spacing:-.045em;
+  letter-spacing:-.02em;
   line-height:1.1;
 }
 
@@ -474,7 +500,7 @@ button:focus-visible,input:focus-visible{
   font-size:var(--fs-2xs);
   font-weight:600;
   text-transform:uppercase;
-  letter-spacing:.09em;
+  letter-spacing:.11em;
 }
 
 .eyebrow i{color:var(--accent)}
@@ -483,7 +509,7 @@ button:focus-visible,input:focus-visible{
   margin-top:13px;
   font-size:clamp(38px,4.7vw,62px);
   line-height:1.05;
-  letter-spacing:-.04em;
+  letter-spacing:-.017em;
   font-weight:700;
 }
 
@@ -541,7 +567,7 @@ button:focus-visible,input:focus-visible{
 
 .hero-stat strong{
   font-size:var(--fs-md);
-  letter-spacing:-.025em;
+  letter-spacing:-.008em;
 }
 
 .entry-card{
@@ -560,7 +586,7 @@ button:focus-visible,input:focus-visible{
 .card-head h2{
   margin:0;
   font-size:var(--fs-md);
-  letter-spacing:-.035em;
+  letter-spacing:-.014em;
 }
 
 .card-head p{
@@ -664,7 +690,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{opacity:1}
   padding-left:32px;
   font-size:25px;
   font-weight:640;
-  letter-spacing:-.035em;
+  letter-spacing:-.014em;
 }
 
 .form-help{
@@ -691,7 +717,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{opacity:1}
 .section-title h2{
   margin:0;
   font-size:var(--fs-md);
-  letter-spacing:-.03em;
+  letter-spacing:-.011em;
 }
 
 .section-title p{
@@ -701,6 +727,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{opacity:1}
 }
 
 .periods{
+  position:relative;
   display:flex;
   gap:3px;
   padding:3px;
@@ -710,7 +737,24 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{opacity:1}
   border:1px solid var(--border);
 }
 
+.periods .nav-indicator{
+  position:absolute;
+  top:3px;
+  left:3px;
+  border-radius:var(--radius-2xs);
+  background:var(--glass-3);
+  box-shadow:var(--glass-edge-strong);
+  opacity:0;
+  pointer-events:none;
+  z-index:0;
+  transition:transform .38s var(--ease-spring),width .3s var(--ease-out),height .3s var(--ease-out),opacity .2s var(--ease-out);
+}
+
+.periods .nav-indicator.ready{opacity:1}
+
 .periods button{
+  position:relative;
+  z-index:1;
   border:0;
   background:transparent;
   color:var(--text-faint);
@@ -719,12 +763,10 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{opacity:1}
   border-radius:var(--radius-2xs);
   font-size:var(--fs-2xs);
   font-weight:640;
-  transition:background .2s var(--ease-out),color .2s var(--ease-out);
+  transition:color .2s var(--ease-out);
 }
 
 .periods button.active{
-  background:var(--glass-3);
-  box-shadow:var(--glass-edge-strong);
   color:var(--text);
 }
 
@@ -801,7 +843,7 @@ canvas{
   margin-top:14px;
   font-size:var(--fs-lg);
   font-weight:640;
-  letter-spacing:-.035em;
+  letter-spacing:-.014em;
 }
 
 .stat-sub{
@@ -817,6 +859,157 @@ canvas{
   position:relative;
 }
 
+.returns-card{min-height:120px}
+
+.return-list,.month-list{
+  display:grid;
+  gap:2px;
+}
+
+.return-row,.month-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  padding:13px 6px;
+  border-bottom:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  text-align:left;
+  transition:background .18s var(--ease-out),padding-left .18s var(--ease-out);
+}
+
+.return-row:last-child,.month-row:last-child{border-bottom:0}
+
+.return-row:hover,.month-row:hover{
+  background:rgba(255,255,255,.03);
+  padding-left:12px;
+}
+
+.return-row-label,.month-row-label{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  color:var(--text-secondary);
+  font-size:var(--fs-2xs);
+  font-weight:640;
+}
+
+.month-row-label strong{
+  display:block;
+  color:var(--text);
+  font-size:var(--fs-xs);
+  font-weight:640;
+}
+
+.month-row-label span{
+  display:block;
+  margin-top:2px;
+  color:var(--text-faint);
+  font-size:var(--fs-2xs);
+}
+
+.return-row-right{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.return-row-value{
+  font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+
+.return-row i.ph-caret-right,.month-row i.ph-caret-right{
+  color:var(--text-faint);
+  font-size:14px;
+}
+
+.return-row-empty{
+  padding:20px 6px;
+  color:var(--text-faint);
+  font-size:var(--fs-2xs);
+}
+
+.period-detail-summary{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:18px;
+}
+
+.period-detail-value{
+  font-size:28px;
+  font-weight:700;
+  letter-spacing:-.01em;
+}
+
+.period-detail-grid{
+  margin-top:18px;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+}
+
+.period-stat{
+  padding:12px 14px;
+  border:1px solid var(--border);
+  border-radius:var(--radius-md);
+  background:var(--surface-2);
+}
+
+.period-stat span{
+  display:block;
+  color:var(--text-faint);
+  font-size:var(--fs-2xs);
+}
+
+.period-stat strong{
+  display:block;
+  margin-top:4px;
+  font-size:var(--fs-sm);
+  font-variant-numeric:tabular-nums;
+}
+
+.chart-tooltip{
+  position:absolute;
+  z-index:5;
+  padding:8px 11px;
+  border-radius:var(--radius-sm);
+  background:var(--glass-3);
+  border:1px solid var(--border-strong);
+  box-shadow:var(--shadow-md),var(--glass-edge-strong);
+  backdrop-filter:var(--glass-blur-strong);
+  -webkit-backdrop-filter:var(--glass-blur-strong);
+  font-size:var(--fs-2xs);
+  line-height:1.4;
+  white-space:nowrap;
+  pointer-events:none;
+  opacity:0;
+  transform:translate(-50%,calc(-100% - 10px));
+  transition:opacity .12s var(--ease-out);
+}
+
+.chart-tooltip.show{opacity:1}
+
+.chart-tooltip .tt-date{
+  display:block;
+  color:var(--text-faint);
+  font-weight:600;
+  margin-bottom:2px;
+}
+
+.chart-tooltip .tt-value{
+  display:block;
+  font-weight:700;
+  font-variant-numeric:tabular-nums;
+}
+
+.chart-tooltip .tt-change{
+  display:block;
+  margin-top:2px;
+  font-weight:600;
+}
+
 .history-card{overflow:hidden}
 
 .history-head{
@@ -830,7 +1023,7 @@ canvas{
 .history-head h2{
   margin:0;
   font-size:var(--fs-md);
-  letter-spacing:-.03em;
+  letter-spacing:-.011em;
 }
 
 .history-head p{
@@ -874,7 +1067,7 @@ th{
   color:var(--text-faint);
   font-size:var(--fs-2xs);
   text-transform:uppercase;
-  letter-spacing:.08em;
+  letter-spacing:.1em;
   font-weight:640;
 }
 
@@ -1004,7 +1197,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 .modal-head h3{
   margin:0;
   font-size:var(--fs-lg);
-  letter-spacing:-.035em;
+  letter-spacing:-.014em;
 }
 
 .modal-head p{
@@ -1101,15 +1294,17 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   .chart-wrap{height:245px}
   .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .mobile-nav{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
     position:fixed;
     left:calc(10px + var(--safe-left));
     right:calc(10px + var(--safe-right));
     bottom:calc(10px + var(--safe-bottom));
     z-index:60;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:3px;
     padding:6px;
-    border-radius:var(--radius-lg);
+    border-radius:var(--radius-pill);
     border:1px solid var(--border-strong);
     background:var(--glass-2);
     backdrop-filter:var(--glass-blur-strong);
@@ -1117,28 +1312,51 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     box-shadow:var(--shadow-md),var(--glass-edge-strong);
   }
   .mobile-nav button{
+    position:relative;
+    flex:0 0 auto;
     border:0;
     background:transparent;
     color:var(--text-faint);
-    border-radius:var(--radius-md);
-    min-height:56px;
-    display:grid;
-    place-items:center;
-    align-content:center;
-    gap:3px;
+    border-radius:var(--radius-pill);
+    height:42px;
+    width:42px;
+    max-width:42px;
+    padding:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    overflow:hidden;
+    white-space:nowrap;
     font-size:var(--fs-2xs);
-    line-height:1.1;
-    font-weight:600;
-    transition:background .2s var(--ease-out),color .2s var(--ease-out);
+    font-weight:700;
+    transition:max-width .42s var(--ease-spring),width .42s var(--ease-spring),padding .42s var(--ease-spring),background .32s var(--ease-out),color .2s var(--ease-out),box-shadow .32s var(--ease-out),transform .18s var(--ease-out);
   }
-  .mobile-nav button i{font-size:20px}
+  .mobile-nav button i{
+    font-size:18px;
+    flex:none;
+    transition:color .2s var(--ease-out);
+  }
   .mobile-nav button:active{transform:scale(.94)}
-  .mobile-nav button.active{
-    background:var(--glass-3);
-    box-shadow:var(--glass-edge-strong);
-    color:var(--text);
+  .mobile-nav button .label{
+    opacity:0;
+    max-width:0;
+    overflow:hidden;
+    transition:opacity .22s var(--ease-out),max-width .32s var(--ease-out);
   }
-  .mobile-nav button.active i{color:var(--accent)}
+  .mobile-nav button.active{
+    width:auto;
+    max-width:120px;
+    padding:0 14px 0 11px;
+    color:#fff;
+    background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+    box-shadow:0 6px 16px rgba(146,132,244,.4),var(--glass-edge-strong);
+  }
+  .mobile-nav button.active i{color:#fff}
+  .mobile-nav button.active .label{
+    opacity:1;
+    max-width:74px;
+  }
 }
 
 @media(max-width:620px){
@@ -1278,21 +1496,26 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     </div>
 
     <nav class="nav">
+      <span class="nav-indicator" aria-hidden="true"></span>
       <button class="active" data-scroll="dashboard">
         <i class="ph ph-squares-four"></i>
-        Dashboard
+        <span class="label">Dashboard</span>
       </button>
       <button data-scroll="charts">
         <i class="ph ph-chart-line"></i>
-        Charts
+        <span class="label">Charts</span>
+      </button>
+      <button data-scroll="returns">
+        <i class="ph ph-percent"></i>
+        <span class="label">Returns</span>
       </button>
       <button data-scroll="history">
         <i class="ph ph-clock-counter-clockwise"></i>
-        History
+        <span class="label">History</span>
       </button>
       <button id="sidebarDataBtn">
         <i class="ph ph-database"></i>
-        Data
+        <span class="label">Data</span>
       </button>
     </nav>
 
@@ -1442,6 +1665,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
           </div>
 
           <div class="periods" id="periods">
+            <span class="nav-indicator" aria-hidden="true"></span>
             <button data-days="30">1M</button>
             <button data-days="90">3M</button>
             <button data-days="180">6M</button>
@@ -1450,7 +1674,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
           </div>
         </div>
 
-        <div class="chart-wrap">
+        <div class="chart-wrap" id="valueChartWrap">
           <canvas id="valueChart"></canvas>
           <div class="chart-empty" id="valueChartEmpty">
             <div>
@@ -1458,6 +1682,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
               Add at least two values to build your chart.
             </div>
           </div>
+          <div class="chart-tooltip" id="valueChartTooltip"></div>
         </div>
       </article>
 
@@ -1478,6 +1703,28 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
             </div>
           </div>
         </div>
+      </article>
+
+      <article class="card pad returns-card span-7" id="returns">
+        <div class="section-title">
+          <div>
+            <h2>Rate of return</h2>
+            <p>Tap a period to open its detail.</p>
+          </div>
+        </div>
+
+        <div class="return-list" id="returnList"></div>
+      </article>
+
+      <article class="card pad returns-card span-5" id="byMonth">
+        <div class="section-title">
+          <div>
+            <h2>By month</h2>
+            <p>Every month you've tracked, on its own.</p>
+          </div>
+        </div>
+
+        <div class="month-list" id="monthList"></div>
       </article>
 
       <article class="card history-card span-12" id="history">
@@ -1505,19 +1752,23 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 <nav class="mobile-nav">
   <button class="active" data-mobile-scroll="dashboard">
     <i class="ph ph-squares-four"></i>
-    Dashboard
+    <span class="label">Dashboard</span>
   </button>
   <button data-mobile-scroll="entryCard">
     <i class="ph ph-plus-circle"></i>
-    Add
+    <span class="label">Add</span>
   </button>
   <button data-mobile-scroll="charts">
     <i class="ph ph-chart-line"></i>
-    Charts
+    <span class="label">Charts</span>
+  </button>
+  <button data-mobile-scroll="returns">
+    <i class="ph ph-percent"></i>
+    <span class="label">Returns</span>
   </button>
   <button data-mobile-scroll="history">
     <i class="ph ph-clock-counter-clockwise"></i>
-    History
+    <span class="label">History</span>
   </button>
 </nav>
 
@@ -1628,11 +1879,58 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   </div>
 </div>
 
+<div class="modal-backdrop" id="periodModal">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <h3 id="periodModalTitle">Period detail</h3>
+        <p id="periodModalRange">&nbsp;</p>
+      </div>
+      <button class="icon-btn close-modal" aria-label="Close">
+        <i class="ph ph-x"></i>
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <div class="period-detail-summary">
+        <div class="period-detail-value money-value" id="periodModalChange">$0.00</div>
+        <span class="change-chip neutral" id="periodModalPercent">0.00%</span>
+      </div>
+
+      <div class="chart-wrap" id="periodModalChartWrap">
+        <canvas id="periodModalChart"></canvas>
+        <div class="chart-empty" id="periodModalChartEmpty">
+          <div>
+            <i class="ph ph-chart-line"></i>
+            Not enough values in this period yet.
+          </div>
+        </div>
+        <div class="chart-tooltip" id="periodModalChartTooltip"></div>
+      </div>
+
+      <div class="period-detail-grid" id="periodModalStats"></div>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
 (() => {
   const STORAGE_KEY = "ledger-portfolio-journal-v3";
+
+  // A realistic 54-day starter history so a fresh install isn't a blank
+  // slate. Mirrors a real recorded run: started at $80,000, peaked at
+  // $83,346.34, and has settled at $82,667.68 after a recent pullback.
+  const SEED_VALUES = [80000,80191.01,80140.93,80323.65,80416.25,80663.08,80746.4,80904.3,80774.32,80961.83,80944.2,81087.86,81257.7,81212.07,81347.74,81560.53,81616.77,81610.75,81798.1,81943.14,81801.05,82106.97,82158.35,82139.12,82167.83,82472.26,82377.96,82388.69,82468.38,82756.75,82766.25,82900.56,82955.88,82978.33,83176.94,83086.4,83210.6,83345.34,83346.34,83343.34,83343.34,83299.84,83302.6,83163.88,83176.52,83167.44,83109.58,83116.98,83073.11,83084.83,83129.07,83060.18,83064.37,82667.68];
+
+  function seedEntries() {
+    const today = localToday();
+    return SEED_VALUES.map((value, index) => ({
+      date: daysBefore(today, SEED_VALUES.length - 1 - index),
+      value
+    }));
+  }
 
   const emptyState = () => ({
     version: 3,
@@ -1770,7 +2068,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
       }
     } catch {}
 
-    return emptyState();
+    return { ...emptyState(), entries: seedEntries() };
   }
 
   function saveState() {
@@ -1943,6 +2241,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 
     renderStats();
     renderHistory();
+    renderReturnsSection();
     renderValueChart();
     renderDeltaChart();
     updateEntryHint();
@@ -2054,6 +2353,175 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     `;
   }
 
+  function monthLabel(ym) {
+    const [year, month] = ym.split("-");
+    return new Date(`${ym}-01T12:00:00`).toLocaleDateString("en-CA", {
+      month: "long",
+      year: "numeric"
+    });
+  }
+
+  function listMonths() {
+    const months = new Set();
+    state.entries.forEach(entry => months.add(entry.date.slice(0, 7)));
+    return [...months].sort().reverse();
+  }
+
+  function entriesInRange(start, end) {
+    return state.entries.filter(entry =>
+      (!start || entry.date >= start) && (!end || entry.date <= end)
+    );
+  }
+
+  function rangeStats(entries) {
+    if (entries.length < 2) return null;
+
+    const startEntry = entries[0];
+    const endEntry = entries.at(-1);
+    const change = changeBetween(endEntry, startEntry);
+    const high = entries.reduce((a, b) => b.value > a.value ? b : a);
+    const low = entries.reduce((a, b) => b.value < a.value ? b : a);
+
+    return { entries, startEntry, endEntry, change, high, low };
+  }
+
+  const PERIOD_DEFS = [
+    { key: "ytd", label: "Year to date" },
+    { key: "1m", label: "1 month", days: 30 },
+    { key: "3m", label: "3 months", days: 90 },
+    { key: "6m", label: "6 months", days: 180 },
+    { key: "1y", label: "12 months", days: 365 },
+    { key: "all", label: "All time" }
+  ];
+
+  function periodEntries(key) {
+    const current = latestEntry();
+    if (!current) return [];
+
+    if (key === "all") return state.entries;
+
+    if (key === "ytd") {
+      const start = `${current.date.slice(0, 4)}-01-01`;
+      return entriesInRange(start, current.date);
+    }
+
+    const def = PERIOD_DEFS.find(item => item.key === key);
+    if (!def) return [];
+    return entriesInRange(daysBefore(current.date, def.days), current.date);
+  }
+
+  function renderReturnsSection() {
+    const list = $("#returnList");
+    const months = $("#monthList");
+
+    if (state.entries.length < 2) {
+      list.innerHTML = `<p class="return-row-empty">Add at least two values to see period returns.</p>`;
+      months.innerHTML = `<p class="return-row-empty">Your months will show up here once you have history.</p>`;
+      return;
+    }
+
+    list.innerHTML = PERIOD_DEFS.map(def => {
+      const stats = rangeStats(periodEntries(def.key));
+      const valueText = stats ? `${stats.change.amount >= 0 ? "+" : "-"}${pct(stats.change.percent)}` : "\u2013";
+      const cls = stats ? valueClass(stats.change.amount) : "";
+
+      return `
+        <button class="return-row" data-period="${def.key}" type="button">
+          <span class="return-row-label">${def.label}</span>
+          <span class="return-row-right">
+            <span class="return-row-value ${cls}">${valueText}</span>
+            <i class="ph ph-caret-right"></i>
+          </span>
+        </button>
+      `;
+    }).join("");
+
+    const monthKeys = listMonths();
+    months.innerHTML = monthKeys.map(ym => {
+      const entries = entriesInRange(`${ym}-01`, `${ym}-31`);
+      const stats = rangeStats(entries);
+      const valueText = stats ? `${stats.change.amount >= 0 ? "+" : "-"}${pct(stats.change.percent)}` : "\u2013";
+      const cls = stats ? valueClass(stats.change.amount) : "";
+
+      return `
+        <button class="month-row" data-month="${ym}" type="button">
+          <span class="month-row-label">
+            <strong>${monthLabel(ym)}</strong>
+            <span>${entries.length} value${entries.length === 1 ? "" : "s"} recorded</span>
+          </span>
+          <span class="return-row-right">
+            <span class="return-row-value ${cls}">${valueText}</span>
+            <i class="ph ph-caret-right"></i>
+          </span>
+        </button>
+      `;
+    }).join("");
+  }
+
+  function openPeriodDetail(key, type = "preset") {
+    const entries = type === "month"
+      ? entriesInRange(`${key}-01`, `${key}-31`)
+      : periodEntries(key);
+
+    const stats = rangeStats(entries);
+
+    const title = type === "month"
+      ? monthLabel(key)
+      : (PERIOD_DEFS.find(item => item.key === key) || {}).label || "Period detail";
+
+    $("#periodModalTitle").textContent = title;
+
+    if (!stats) {
+      $("#periodModalRange").textContent = "Not enough values recorded in this period.";
+      $("#periodModalChange").textContent = "\u2013";
+      $("#periodModalChange").className = "period-detail-value money-value";
+      $("#periodModalPercent").className = "change-chip neutral";
+      $("#periodModalPercent").textContent = "No data";
+      $("#periodModalStats").innerHTML = "";
+      drawValueLineChart($("#periodModalChart"), $("#periodModalChartEmpty"), [], true);
+      openModal("periodModal");
+      return;
+    }
+
+    $("#periodModalRange").textContent = `${formatDate(stats.startEntry.date)} \u2013 ${formatDate(stats.endEntry.date)}`;
+    $("#periodModalChange").textContent = signedMoney(stats.change.amount);
+    $("#periodModalChange").className = `period-detail-value money-value ${valueClass(stats.change.amount)}`;
+
+    const pctCls = stats.change.amount > 0 ? "positive" : stats.change.amount < 0 ? "negative" : "neutral";
+    $("#periodModalPercent").className = `change-chip ${pctCls}`;
+    $("#periodModalPercent").innerHTML = `<i class="ph ${stats.change.amount > 0 ? "ph-trend-up" : stats.change.amount < 0 ? "ph-trend-down" : "ph-minus"}"></i>${stats.change.amount >= 0 ? "+" : "-"}${pct(stats.change.percent)}`;
+
+    $("#periodModalStats").innerHTML = `
+      <div class="period-stat">
+        <span>Starting value</span>
+        <strong>${money(stats.startEntry.value)}</strong>
+      </div>
+      <div class="period-stat">
+        <span>Ending value</span>
+        <strong>${money(stats.endEntry.value)}</strong>
+      </div>
+      <div class="period-stat">
+        <span>Highest</span>
+        <strong>${money(stats.high.value)} \u00b7 ${formatDate(stats.high.date)}</strong>
+      </div>
+      <div class="period-stat">
+        <span>Lowest</span>
+        <strong>${money(stats.low.value)} \u00b7 ${formatDate(stats.low.date)}</strong>
+      </div>
+      <div class="period-stat">
+        <span>Values recorded</span>
+        <strong>${stats.entries.length}</strong>
+      </div>
+      <div class="period-stat">
+        <span>Avg. daily change</span>
+        <strong>${signedMoney(stats.change.amount / Math.max(1, stats.entries.length - 1))}</strong>
+      </div>
+    `;
+
+    drawValueLineChart($("#periodModalChart"), $("#periodModalChartEmpty"), stats.entries, true);
+    openModal("periodModal");
+  }
+
   function setupCanvas(canvas) {
     const rect = canvas.getBoundingClientRect();
     const dpr = window.devicePixelRatio || 1;
@@ -2068,20 +2536,17 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     return { ctx, width: rect.width, height: rect.height };
   }
 
-  function renderValueChart(instant = false) {
-    const canvas = $("#valueChart");
-    const empty = $("#valueChartEmpty");
+  // Coordinates from the most recent draw of each canvas, keyed by canvas id.
+  // Hover handlers use this to hit-test the nearest point without re-walking
+  // the data on every mousemove.
+  const chartCoordsStore = {};
 
-    const current = latestEntry();
-    let points = [];
-
-    if (current) {
-      const cutoff = chartDays > 10000 ? "0000-01-01" : daysBefore(current.date, chartDays);
-      points = state.entries.filter(entry => entry.date >= cutoff);
-    }
-
+  function drawValueLineChart(canvas, empty, points, instant = false) {
     empty.classList.toggle("show", points.length < 2);
-    if (points.length < 2) return;
+    if (points.length < 2) {
+      chartCoordsStore[canvas.id] = null;
+      return;
+    }
 
     const values = points.map(point => point.value);
     const min = Math.min(...values);
@@ -2102,6 +2567,13 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
       x: pad.left + innerW * (index / (points.length - 1)),
       y: pad.top + innerH * (1 - (point.value - chartMin) / range)
     }));
+
+    chartCoordsStore[canvas.id] = { coords, pad, width, height };
+
+    // Three evenly spaced value labels (top / middle / bottom of the grid)
+    // give the eye a way to read approximate magnitude without cluttering
+    // every gridline with a number.
+    const gridLabels = [chartMax, (chartMax + chartMin) / 2, chartMin];
 
     animate(750, progress => {
       ctx.clearRect(0, 0, width, height);
@@ -2164,8 +2636,91 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
       ctx.fillText(formatDate(points[0].date), pad.left, height - 7);
       ctx.textAlign = "right";
       ctx.fillText(formatDate(points.at(-1).date), width - pad.right, height - 7);
+
+      ctx.font = '600 11px "Inter", system-ui, sans-serif';
+      ctx.textAlign = "right";
+      gridLabels.forEach((value, i) => {
+        const y = pad.top + innerH * (i / 2);
+        ctx.fillText(money(value), width - pad.right, Math.max(11, y - 5));
+      });
       ctx.globalAlpha = 1;
     }, instant);
+  }
+
+  function nearestCoord(store, offsetX) {
+    if (!store || !store.coords.length) return null;
+    let closest = store.coords[0];
+    let bestDist = Math.abs(closest.x - offsetX);
+
+    for (const c of store.coords) {
+      const dist = Math.abs(c.x - offsetX);
+      if (dist < bestDist) {
+        bestDist = dist;
+        closest = c;
+      }
+    }
+
+    return closest;
+  }
+
+  function attachChartTooltip(canvas, wrap, tooltip) {
+    function show(event) {
+      const store = chartCoordsStore[canvas.id];
+      if (!store) return;
+
+      const rect = canvas.getBoundingClientRect();
+      const offsetX = (event.touches ? event.touches[0].clientX : event.clientX) - rect.left;
+      const coord = nearestCoord(store, offsetX);
+      if (!coord) return;
+
+      const idx = store.coords.indexOf(coord);
+      const prev = store.coords[idx - 1];
+      const change = prev ? changeBetween(coord.point, prev.point) : null;
+
+      tooltip.querySelector(".tt-date").textContent = formatDateLong(coord.point.date);
+      tooltip.querySelector(".tt-value").textContent = money(coord.point.value);
+
+      const changeEl = tooltip.querySelector(".tt-change");
+      if (change) {
+        changeEl.textContent = `${signedMoney(change.amount)} vs previous entry`;
+        changeEl.className = `tt-change ${valueClass(change.amount)}`;
+        changeEl.style.display = "";
+      } else {
+        changeEl.style.display = "none";
+      }
+
+      tooltip.style.left = `${coord.x}px`;
+      tooltip.style.top = `${coord.y}px`;
+      tooltip.classList.add("show");
+    }
+
+    function hide() {
+      tooltip.classList.remove("show");
+    }
+
+    wrap.addEventListener("mousemove", show);
+    wrap.addEventListener("mouseleave", hide);
+    wrap.addEventListener("touchstart", show, { passive: true });
+    wrap.addEventListener("touchmove", show, { passive: true });
+    wrap.addEventListener("touchend", hide);
+  }
+
+  attachChartTooltip($("#valueChart"), $("#valueChartWrap"), $("#valueChartTooltip"));
+  attachChartTooltip($("#periodModalChart"), $("#periodModalChartWrap"), $("#periodModalChartTooltip"));
+
+  function renderValueChart(instant = false) {
+    const canvas = $("#valueChart");
+    const empty = $("#valueChartEmpty");
+
+    const current = latestEntry();
+    let points = [];
+
+    if (current) {
+      const cutoff = chartDays > 10000 ? "0000-01-01" : daysBefore(current.date, chartDays);
+      points = state.entries.filter(entry => entry.date >= cutoff);
+    }
+
+    drawValueLineChart(canvas, empty, points, instant);
   }
 
   function renderDeltaChart(instant = false) {
@@ -2349,12 +2904,42 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     renderHistory();
   });
 
+  // Sliding pill indicator shared by the sidebar nav, mobile nav and the
+  // chart period selector. Reads the active button's live geometry and
+  // transforms/resizes the indicator to match, so it glides between items
+  // instead of the highlight just snapping into place.
+  function moveIndicator(container, activeBtn, instant = false) {
+    const indicator = container.querySelector(":scope > .nav-indicator");
+    if (!indicator || !activeBtn) return;
+
+    const containerRect = container.getBoundingClientRect();
+    const btnRect = activeBtn.getBoundingClientRect();
+
+    if (instant || reduceMotion) indicator.style.transitionDuration = "0s";
+
+    indicator.style.width = `${btnRect.width}px`;
+    indicator.style.height = `${btnRect.height}px`;
+    indicator.style.transform = `translate(${btnRect.left - containerRect.left}px, ${btnRect.top - containerRect.top}px)`;
+    indicator.classList.add("ready");
+
+    if (instant || reduceMotion) {
+      void indicator.offsetWidth;
+      indicator.style.transitionDuration = "";
+    }
+  }
+
+  function refreshIndicators(instant = false) {
+    moveIndicator($("#periods"), $("#periods button.active"), instant);
+    moveIndicator($(".nav"), $(".nav button.active"), instant);
+  }
+
   $("#periods").addEventListener("click", event => {
     const button = event.target.closest("button[data-days]");
     if (!button) return;
 
     chartDays = Number(button.dataset.days);
     $$("#periods button").forEach(item => item.classList.toggle("active", item === button));
+    moveIndicator($("#periods"), button);
     renderValueChart();
   });
 
@@ -2372,6 +2957,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
       const target = document.getElementById(sideScroll.dataset.scroll);
       if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
       $$(".nav button[data-scroll]").forEach(btn => btn.classList.toggle("active", btn === sideScroll));
+      moveIndicator($(".nav"), sideScroll);
     }
 
     const mobileScroll = event.target.closest("[data-mobile-scroll]");
@@ -2384,6 +2970,12 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
         setTimeout(() => $("#entryValue").focus(), 320);
       }
     }
+
+    const periodRow = event.target.closest("[data-period]");
+    if (periodRow) openPeriodDetail(periodRow.dataset.period);
+
+    const monthRow = event.target.closest("[data-month]");
+    if (monthRow) openPeriodDetail(monthRow.dataset.month, "month");
   });
 
   $$(".close-modal").forEach(button => button.addEventListener("click", closeModals));
@@ -2624,10 +3216,12 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   window.addEventListener("resize", () => {
     renderValueChart(true);
     renderDeltaChart(true);
+    refreshIndicators(true);
   });
 
   initialiseToday();
   render();
+  requestAnimationFrame(() => refreshIndicators(true));
 })();
 </script>
 </body>

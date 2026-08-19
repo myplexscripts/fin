@@ -144,6 +144,11 @@
   --space-7:32px;
   --space-8:40px;
   --space-9:48px;
+
+  /* Every tappable control — buttons, nav items, table row actions — is
+     built to at least this size, per Apple HIG and WCAG 2.5.5, even when
+     its visible icon or label is smaller than the hit area. */
+  --tap-min:44px;
 }
 
 *{box-sizing:border-box}
@@ -198,7 +203,7 @@ button:focus-visible,input:focus-visible{
   position:sticky;
   top:0;
   height:100vh;
-  padding:calc(22px + var(--safe-top)) 16px 22px calc(16px + var(--safe-left));
+  padding:calc(var(--space-6) + var(--safe-top)) var(--space-4) var(--space-6) calc(var(--space-4) + var(--safe-left));
   border-right:1px solid var(--border);
   background:var(--glass-1);
   backdrop-filter:var(--glass-blur-strong);
@@ -211,8 +216,8 @@ button:focus-visible,input:focus-visible{
 .brand{
   display:flex;
   align-items:center;
-  gap:11px;
-  padding:4px 8px 22px;
+  gap:var(--space-3);
+  padding:var(--space-1) var(--space-2) var(--space-6);
 }
 
 .brand-mark{
@@ -239,7 +244,7 @@ button:focus-visible,input:focus-visible{
 
 .brand-copy span{
   display:block;
-  margin-top:2px;
+  margin-top:var(--space-1)
   font-size:var(--fs-2xs);
   color:var(--text-faint);
   letter-spacing:.045em;
@@ -249,7 +254,7 @@ button:focus-visible,input:focus-visible{
 .nav{
   position:relative;
   display:grid;
-  gap:5px;
+  gap:var(--space-2);
 }
 
 .nav-indicator{
@@ -270,16 +275,16 @@ button:focus-visible,input:focus-visible{
 .nav button{
   position:relative;
   z-index:1;
-  min-height:44px;
+  min-height:56px;
   width:100%;
   border:0;
   background:transparent;
   color:var(--text-muted);
   border-radius:var(--radius-md);
-  padding:9px 11px;
+  padding:var(--space-2) var(--space-3);
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:var(--space-3);
   text-align:left;
   font-weight:640;
   font-size:var(--fs-2xs);
@@ -287,8 +292,8 @@ button:focus-visible,input:focus-visible{
 }
 
 .nav button i{
-  width:20px;
-  font-size:18px;
+  width:30px;
+  font-size:30px;
   flex:none;
   transition:color .18s var(--ease-out);
 }
@@ -296,9 +301,6 @@ button:focus-visible,input:focus-visible{
 .nav button .label{
   overflow:hidden;
   white-space:nowrap;
-  opacity:0;
-  transform:translateX(-6px);
-  transition:opacity .28s var(--ease-out),transform .32s var(--ease-out);
 }
 
 .nav button:hover{color:var(--text-secondary)}
@@ -309,15 +311,10 @@ button:focus-visible,input:focus-visible{
 
 .nav button.active i{color:var(--accent)}
 
-.nav button.active .label{
-  opacity:1;
-  transform:translateX(0);
-}
-
 .sidebar-spacer{flex:1}
 
 .sidebar-foot{
-  padding:13px;
+  padding:var(--space-3);
   border:1px solid var(--border);
   border-radius:var(--radius-md);
   background:var(--glass-2);
@@ -331,12 +328,12 @@ button:focus-visible,input:focus-visible{
 
 .sidebar-foot strong{
   display:block;
-  margin-top:7px;
+  margin-top:var(--space-2)
   font-size:var(--fs-2xs);
 }
 
 .sidebar-foot p{
-  margin:4px 0 0;
+  margin:var(--space-1) 0 0
   color:var(--text-faint);
   font-size:var(--fs-2xs);
   line-height:1.55;
@@ -345,10 +342,10 @@ button:focus-visible,input:focus-visible{
 .main{
   min-width:0;
   padding:
-    calc(22px + var(--safe-top))
-    calc(clamp(18px,3vw,42px) + var(--safe-right))
+    calc(var(--space-6) + var(--safe-top))
+    calc(clamp(var(--space-5),3vw,var(--space-9)) + var(--safe-right))
     calc(72px + var(--safe-bottom))
-    calc(clamp(18px,3vw,42px) + var(--safe-left));
+    calc(clamp(var(--space-5),3vw,var(--space-9)) + var(--safe-left));
 }
 
 .topbar{
@@ -356,7 +353,7 @@ button:focus-visible,input:focus-visible{
   grid-template-columns:repeat(12,minmax(0,1fr));
   gap:clamp(14px,1.25vw,20px);
   align-items:center;
-  margin-bottom:24px;
+  margin-bottom:var(--space-6)
 }
 
 .page-heading{
@@ -372,7 +369,7 @@ button:focus-visible,input:focus-visible{
 }
 
 .page-heading p{
-  margin:5px 0 0;
+  margin:var(--space-1) 0 0
   color:var(--text-muted);
   font-size:var(--fs-2xs);
 }
@@ -381,7 +378,7 @@ button:focus-visible,input:focus-visible{
   grid-column:span 4;
   display:flex;
   justify-content:flex-end;
-  gap:8px;
+  gap:var(--space-2);
 }
 
 .icon-btn,.btn{
@@ -391,7 +388,7 @@ button:focus-visible,input:focus-visible{
   backdrop-filter:var(--glass-blur);
   -webkit-backdrop-filter:var(--glass-blur);
   box-shadow:var(--glass-edge);
-  min-height:42px;
+  min-height:var(--tap-min);
   border-radius:var(--radius-md);
   transition:background .2s var(--ease-out),border-color .2s var(--ease-out),transform .2s var(--ease-out),box-shadow .2s var(--ease-out);
 }
@@ -409,19 +406,19 @@ button:focus-visible,input:focus-visible{
 }
 
 .icon-btn{
-  width:42px;
+  width:var(--tap-min);
   display:grid;
   place-items:center;
   padding:0;
-  font-size:18px;
+  font-size:20px;
 }
 
 .btn{
-  padding:9px 14px;
+  padding:var(--space-3) var(--space-4);
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  gap:8px;
+  gap:var(--space-2);
   font-weight:640;
   font-size:var(--fs-2xs);
 }
@@ -452,8 +449,8 @@ button:focus-visible,input:focus-visible{
 }
 
 .btn.small{
-  min-height:36px;
-  padding:7px 11px;
+  min-height:var(--tap-min);
+  padding:var(--space-2) var(--space-4);
   border-radius:var(--radius-sm);
   font-size:var(--fs-2xs);
 }
@@ -495,7 +492,7 @@ button:focus-visible,input:focus-visible{
   animation:rise .5s var(--ease-out) both;
 }
 
-.card.pad{padding:clamp(18px,2vw,28px)}
+.card.pad{padding:clamp(var(--space-5),2vw,var(--space-6))}
 
 .hero{
   position:relative;
@@ -506,7 +503,7 @@ button:focus-visible,input:focus-visible{
 .eyebrow{
   display:flex;
   align-items:center;
-  gap:7px;
+  gap:var(--space-2);
   color:var(--text-muted);
   font-size:var(--fs-2xs);
   font-weight:600;
@@ -517,7 +514,7 @@ button:focus-visible,input:focus-visible{
 .eyebrow i{color:var(--accent)}
 
 .balance{
-  margin-top:13px;
+  margin-top:var(--space-3)
   font-size:clamp(38px,4.7vw,62px);
   line-height:1.05;
   letter-spacing:-.017em;
@@ -526,18 +523,18 @@ button:focus-visible,input:focus-visible{
 
 .balance-row{
   display:flex;
-  gap:9px;
+  gap:var(--space-2);
   flex-wrap:wrap;
   align-items:center;
-  margin-top:15px;
+  margin-top:var(--space-4)
 }
 
 .change-chip{
   display:inline-flex;
   align-items:center;
-  gap:6px;
+  gap:var(--space-2);
   min-height:32px;
-  padding:6px 10px;
+  padding:var(--space-2) var(--space-3);
   border-radius:var(--radius-pill);
   font-size:var(--fs-2xs);
   font-weight:640;
@@ -560,7 +557,7 @@ button:focus-visible,input:focus-visible{
   bottom:clamp(18px,2vw,28px);
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:16px;
+  gap:var(--space-4);
 }
 
 .hero-stat{
@@ -573,7 +570,7 @@ button:focus-visible,input:focus-visible{
   display:block;
   color:var(--text-faint);
   font-size:var(--fs-2xs);
-  margin-bottom:4px;
+  margin-bottom:var(--space-1)
 }
 
 .hero-stat strong{
@@ -591,7 +588,7 @@ button:focus-visible,input:focus-visible{
   display:flex;
   justify-content:space-between;
   align-items:flex-start;
-  gap:14px;
+  gap:var(--space-4);
 }
 
 .card-head h2{
@@ -601,7 +598,7 @@ button:focus-visible,input:focus-visible{
 }
 
 .card-head p{
-  margin:4px 0 0;
+  margin:var(--space-1) 0 0
   color:var(--text-muted);
   font-size:var(--fs-2xs);
 }
@@ -609,8 +606,8 @@ button:focus-visible,input:focus-visible{
 .date-chip{
   display:inline-flex;
   align-items:center;
-  gap:6px;
-  padding:6px 10px;
+  gap:var(--space-2);
+  padding:var(--space-2) var(--space-3);
   border-radius:var(--radius-pill);
   background:var(--glass-3);
   box-shadow:var(--glass-edge);
@@ -622,14 +619,14 @@ button:focus-visible,input:focus-visible{
 
 .entry-form{
   display:grid;
-  gap:13px;
-  margin-top:22px;
+  gap:var(--space-3);
+  margin-top:var(--space-6)
   flex:1;
 }
 
 .field{
   display:grid;
-  gap:6px;
+  gap:var(--space-2);
 }
 
 label{
@@ -645,7 +642,7 @@ input{
   background:rgba(0,0,0,.34);
   box-shadow:inset 0 1px 2px rgba(0,0,0,.4);
   border-radius:var(--radius-md);
-  padding:10px 12px;
+  padding:var(--space-3) var(--space-4);
   outline:0;
   font-size:var(--fs-sm);
   transition:border-color .2s var(--ease-out),box-shadow .2s var(--ease-out);
@@ -712,7 +709,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{opacity:1}
 .entry-actions{
   margin-top:auto;
   display:flex;
-  gap:8px;
+  gap:var(--space-2);
 }
 
 .entry-actions .primary{flex:1}
@@ -720,9 +717,9 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{opacity:1}
 .section-title{
   display:flex;
   justify-content:space-between;
-  gap:14px;
+  gap:var(--space-4);
   align-items:center;
-  margin-bottom:18px;
+  margin-bottom:var(--space-5)
 }
 
 .section-title h2{
@@ -732,7 +729,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{opacity:1}
 }
 
 .section-title p{
-  margin:3px 0 0;
+  margin:var(--space-1) 0 0
   color:var(--text-faint);
   font-size:var(--fs-2xs);
 }
@@ -740,8 +737,8 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{opacity:1}
 .periods{
   position:relative;
   display:flex;
-  gap:3px;
-  padding:3px;
+  gap:var(--space-1);
+  padding:var(--space-1);
   border-radius:var(--radius-sm);
   background:rgba(0,0,0,.3);
   box-shadow:inset 0 1px 2px rgba(0,0,0,.36);
@@ -750,8 +747,8 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{opacity:1}
 
 .periods .nav-indicator{
   position:absolute;
-  top:3px;
-  left:3px;
+  top:var(--space-1);
+  left:var(--space-1);
   border-radius:var(--radius-2xs);
   background:var(--glass-3);
   box-shadow:var(--glass-edge-strong);
@@ -769,8 +766,9 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{opacity:1}
   border:0;
   background:transparent;
   color:var(--text-faint);
-  min-width:38px;
-  padding:6px 8px;
+  min-width:42px;
+  min-height:var(--tap-min);
+  padding:var(--space-2) var(--space-3);
   border-radius:var(--radius-2xs);
   font-size:var(--fs-2xs);
   font-weight:640;
@@ -808,7 +806,7 @@ canvas{
 
 .chart-empty i{
   display:block;
-  margin-bottom:7px;
+  margin-bottom:var(--space-2)
   color:var(--accent);
   font-size:22px;
 }
@@ -816,19 +814,19 @@ canvas{
 .stats-grid{
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:14px;
+  gap:var(--space-4);
 }
 
 .stat-card{
   min-height:112px;
-  padding:17px;
+  padding:var(--space-4);
 }
 
 .stat-top{
   display:flex;
   justify-content:space-between;
   align-items:flex-start;
-  gap:8px;
+  gap:var(--space-2);
 }
 
 .stat-icon{
@@ -851,14 +849,14 @@ canvas{
 }
 
 .stat-value{
-  margin-top:14px;
+  margin-top:var(--space-4)
   font-size:var(--fs-lg);
   font-weight:640;
   letter-spacing:-.014em;
 }
 
 .stat-sub{
-  margin-top:2px;
+  margin-top:var(--space-1)
   color:var(--text-faint);
   font-size:var(--fs-2xs);
 }
@@ -872,17 +870,50 @@ canvas{
 
 .returns-card{min-height:120px}
 
+.recent-card{min-height:120px}
+
+.recent-list{
+  display:grid;
+  gap:var(--space-1);
+}
+
+.recent-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:var(--space-4);
+  padding:var(--space-3) var(--space-2);
+  border-bottom:1px solid var(--border);
+}
+
+.recent-row:last-child{border-bottom:0}
+
+.recent-row-date{
+  color:var(--text-secondary);
+  font-size:var(--fs-2xs);
+  font-weight:640;
+}
+
+.recent-row-value{
+  display:flex;
+  align-items:center;
+  gap:var(--space-3);
+  font-variant-numeric:tabular-nums;
+}
+
+.recent-row-value strong{font-weight:700}
+
 .return-list,.month-list{
   display:grid;
-  gap:2px;
+  gap:var(--space-1);
 }
 
 .return-row,.month-row{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:14px;
-  padding:13px 6px;
+  gap:var(--space-4);
+  padding:var(--space-3) var(--space-2);
   border-bottom:1px solid var(--border);
   border-radius:var(--radius-sm);
   text-align:left;
@@ -899,7 +930,7 @@ canvas{
 .return-row-label,.month-row-label{
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:var(--space-3);
   color:var(--text-secondary);
   font-size:var(--fs-2xs);
   font-weight:640;
@@ -914,7 +945,7 @@ canvas{
 
 .month-row-label span{
   display:block;
-  margin-top:2px;
+  margin-top:var(--space-1)
   color:var(--text-faint);
   font-size:var(--fs-2xs);
 }
@@ -922,7 +953,7 @@ canvas{
 .return-row-right{
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:var(--space-3);
 }
 
 .return-row-value{
@@ -936,7 +967,7 @@ canvas{
 }
 
 .return-row-empty{
-  padding:20px 6px;
+  padding:var(--space-5) var(--space-2);
   color:var(--text-faint);
   font-size:var(--fs-2xs);
 }
@@ -944,8 +975,8 @@ canvas{
 .period-detail-summary{
   display:flex;
   align-items:center;
-  gap:12px;
-  margin-bottom:18px;
+  gap:var(--space-3);
+  margin-bottom:var(--space-5)
 }
 
 .period-detail-value{
@@ -955,14 +986,14 @@ canvas{
 }
 
 .period-detail-grid{
-  margin-top:18px;
+  margin-top:var(--space-5)
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:10px;
+  gap:var(--space-3);
 }
 
 .period-stat{
-  padding:12px 14px;
+  padding:var(--space-3) var(--space-4);
   border:1px solid var(--border);
   border-radius:var(--radius-md);
   background:var(--surface-2);
@@ -976,7 +1007,7 @@ canvas{
 
 .period-stat strong{
   display:block;
-  margin-top:4px;
+  margin-top:var(--space-1)
   font-size:var(--fs-sm);
   font-variant-numeric:tabular-nums;
 }
@@ -984,7 +1015,7 @@ canvas{
 .chart-tooltip{
   position:absolute;
   z-index:5;
-  padding:8px 11px;
+  padding:var(--space-2) var(--space-3);
   border-radius:var(--radius-sm);
   background:var(--glass-3);
   border:1px solid var(--border-strong);
@@ -1006,7 +1037,7 @@ canvas{
   display:block;
   color:var(--text-faint);
   font-weight:600;
-  margin-bottom:2px;
+  margin-bottom:var(--space-1)
 }
 
 .chart-tooltip .tt-value{
@@ -1017,18 +1048,18 @@ canvas{
 
 .chart-tooltip .tt-change{
   display:block;
-  margin-top:2px;
+  margin-top:var(--space-1)
   font-weight:600;
 }
 
 .history-card{overflow:hidden}
 
 .history-head{
-  padding:20px 22px 15px;
+  padding:var(--space-5) var(--space-6) var(--space-4);
   display:flex;
   justify-content:space-between;
   align-items:end;
-  gap:14px;
+  gap:var(--space-4);
 }
 
 .history-head h2{
@@ -1038,21 +1069,21 @@ canvas{
 }
 
 .history-head p{
-  margin:3px 0 0;
+  margin:var(--space-1) 0 0
   color:var(--text-faint);
   font-size:var(--fs-2xs);
 }
 
 .history-tools{
   display:flex;
-  gap:7px;
+  gap:var(--space-2);
   align-items:center;
 }
 
 .search{
   width:210px;
-  min-height:37px;
-  padding:7px 11px;
+  min-height:var(--tap-min);
+  padding:var(--space-2) var(--space-3);
   font-size:var(--fs-2xs);
 }
 
@@ -1068,7 +1099,7 @@ table{
 }
 
 th,td{
-  padding:13px 22px;
+  padding:var(--space-3) var(--space-6);
   text-align:left;
   border-bottom:1px solid var(--border);
   white-space:nowrap;
@@ -1103,12 +1134,12 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 .row-actions{
   display:flex;
   justify-content:flex-end;
-  gap:5px;
+  gap:var(--space-2);
 }
 
 .row-actions button{
-  width:32px;
-  height:32px;
+  width:var(--tap-min);
+  height:var(--tap-min);
   border:1px solid var(--border);
   background:var(--glass-2);
   box-shadow:var(--glass-edge);
@@ -1116,7 +1147,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   border-radius:var(--radius-xs);
   display:grid;
   place-items:center;
-  font-size:15px;
+  font-size:16px;
   transition:background .18s var(--ease-out),color .18s var(--ease-out),transform .18s var(--ease-out);
 }
 
@@ -1128,7 +1159,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 .row-actions button:active{transform:scale(.92)}
 
 .empty{
-  padding:38px 22px;
+  padding:var(--space-8) var(--space-6);
   text-align:center;
   color:var(--text-faint);
   font-size:var(--fs-2xs);
@@ -1136,7 +1167,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 
 .empty i{
   display:block;
-  margin-bottom:9px;
+  margin-bottom:var(--space-2)
   font-size:24px;
   color:var(--accent);
 }
@@ -1145,7 +1176,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   display:block;
   color:var(--text);
   font-size:var(--fs-md);
-  margin-bottom:3px;
+  margin-bottom:var(--space-1)
 }
 
 .privacy .money-value{
@@ -1158,7 +1189,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   inset:0;
   display:grid;
   place-items:center;
-  padding:calc(16px + var(--safe-top)) calc(16px + var(--safe-right)) calc(16px + var(--safe-bottom)) calc(16px + var(--safe-left));
+  padding:calc(var(--space-4) + var(--safe-top)) calc(var(--space-4) + var(--safe-right)) calc(var(--space-4) + var(--safe-bottom)) calc(var(--space-4) + var(--safe-left));
   background:rgba(0,0,0,.5);
   z-index:100;
   opacity:0;
@@ -1198,11 +1229,11 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 }
 
 .modal-head{
-  padding:20px 20px 13px;
+  padding:var(--space-5) var(--space-5) var(--space-4);
   display:flex;
   justify-content:space-between;
   align-items:flex-start;
-  gap:12px;
+  gap:var(--space-3);
 }
 
 .modal-head h3{
@@ -1212,17 +1243,17 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 }
 
 .modal-head p{
-  margin:4px 0 0;
+  margin:var(--space-1) 0 0
   color:var(--text-muted);
   font-size:var(--fs-2xs);
 }
 
-.modal-body{padding:0 20px 20px}
+.modal-body{padding:0 var(--space-5) var(--space-5)}
 
 .modal-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:12px;
+  gap:var(--space-3);
 }
 
 .full{grid-column:1/-1}
@@ -1230,13 +1261,13 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 .modal-actions{
   display:flex;
   justify-content:flex-end;
-  gap:8px;
-  margin-top:16px;
+  gap:var(--space-2);
+  margin-top:var(--space-4)
 }
 
 .notice{
-  padding:12px 13px;
-  margin-bottom:14px;
+  padding:var(--space-3);
+  margin-bottom:var(--space-4)
   border:1px solid var(--border);
   border-radius:var(--radius-sm);
   background:rgba(0,0,0,.28);
@@ -1252,7 +1283,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   right:calc(18px + var(--safe-right));
   bottom:calc(18px + var(--safe-bottom));
   z-index:150;
-  padding:12px 14px;
+  padding:var(--space-3) var(--space-4);
   border-radius:var(--radius-sm);
   border:1px solid var(--border-strong);
   background:var(--glass-3);
@@ -1289,10 +1320,10 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
      Bottom clears the floating nav (68px + its 10px offset) as well. */
   .main{
     padding:
-      calc(16px + var(--safe-top))
-      calc(14px + var(--safe-right))
+      calc(var(--space-4) + var(--safe-top))
+      calc(var(--space-4) + var(--safe-right))
       calc(106px + var(--safe-bottom))
-      calc(14px + var(--safe-left));
+      calc(var(--space-4) + var(--safe-left));
   }
   .page-heading{grid-column:span 8}
   .top-actions{grid-column:span 4}
@@ -1300,7 +1331,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   .hero,.entry-card{min-height:auto}
   .hero-stats{
     position:static;
-    margin-top:34px;
+    margin-top:var(--space-7)
   }
   .chart-wrap{height:245px}
   .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -1312,8 +1343,8 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     z-index:60;
     display:grid;
     grid-template-columns:repeat(5,1fr);
-    gap:4px;
-    padding:8px;
+    gap:var(--space-1);
+    padding:var(--space-2);
     border-radius:var(--radius-pill);
     border:1px solid var(--border-strong);
     background:var(--glass-2);
@@ -1321,49 +1352,41 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     -webkit-backdrop-filter:var(--glass-blur-strong);
     box-shadow:var(--shadow-md),var(--glass-edge-strong);
   }
+  .mobile-nav .nav-indicator{
+    position:absolute;
+    top:0;
+    left:0;
+    border-radius:var(--radius-pill);
+    background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+    box-shadow:0 6px 16px rgba(146,132,244,.4),var(--glass-edge-strong);
+    opacity:0;
+    pointer-events:none;
+    z-index:0;
+    transition:transform .42s var(--ease-spring),width .38s var(--ease-out),height .38s var(--ease-out),opacity .2s var(--ease-out);
+  }
+  .mobile-nav .nav-indicator.ready{opacity:1}
   .mobile-nav button{
     position:relative;
+    z-index:1;
     border:0;
     background:transparent;
     color:var(--text-faint);
     border-radius:var(--radius-pill);
-    min-height:64px;
+    min-height:var(--tap-min);
+    height:56px;
     display:flex;
-    flex-direction:column;
     align-items:center;
     justify-content:center;
-    gap:4px;
-    padding:6px 4px;
-    font-size:var(--fs-2xs);
-    font-weight:700;
-    line-height:1.1;
-    transition:background .28s var(--ease-out),color .2s var(--ease-out),transform .18s var(--ease-out);
+    transition:color .24s var(--ease-out),transform .18s var(--ease-out);
   }
   .mobile-nav button i{
     font-size:30px;
-    flex:none;
+    line-height:1;
     transition:color .2s var(--ease-out);
   }
   .mobile-nav button:active{transform:scale(.94)}
-  .mobile-nav button .label{
-    opacity:0;
-	font-size: 14px;
-    max-height:0;
-    overflow:hidden;
-    transform:translateY(-3px);
-    transition:opacity .22s var(--ease-out),max-height .26s var(--ease-out),transform .26s var(--ease-out);
-  }
-  .mobile-nav button.active{
-    color:#fff;
-    background:linear-gradient(135deg,var(--primary),var(--primary-dark));
-    box-shadow:0 6px 16px rgba(146,132,244,.4),var(--glass-edge-strong);
-  }
+  .mobile-nav button.active{color:#fff}
   .mobile-nav button.active i{color:#fff}
-  .mobile-nav button.active .label{
-    opacity:1;
-    max-height:16px;
-    transform:none;
-  }
 }
 
 @media(max-width:620px){
@@ -1374,7 +1397,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     display:flex;
     justify-content:space-between;
     align-items:center;
-    gap:10px;
+    gap:var(--space-3);
   }
   .hero-stat span{margin:0}
   .entry-actions{flex-direction:column}
@@ -1389,7 +1412,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   .history-head{
     align-items:flex-start;
     flex-direction:column;
-    padding:18px 16px 13px;
+    padding:var(--space-4) var(--space-4) var(--space-3);
   }
   .history-tools{width:100%;flex-wrap:wrap}
   .search{width:100%}
@@ -1407,7 +1430,6 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   .date-long{display:none}
   .date-short{display:inline}
   td strong{font-size:var(--fs-xs)}
-  .row-actions button{width:30px;height:30px}
   .modal-grid{grid-template-columns:1fr}
   .full{grid-column:auto}
 }
@@ -1417,11 +1439,11 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     padding-left:calc(12px + var(--safe-left));
     padding-right:calc(12px + var(--safe-right));
   }
-  .topbar{gap:10px}
+  .topbar{gap:var(--space-3)}
   .page-heading{grid-column:span 7}
   .top-actions{grid-column:span 5}
   .card{border-radius:var(--radius-lg)}
-  .card.pad{padding:17px}
+  .card.pad{padding:var(--space-4)}
   .stats-grid{grid-template-columns:1fr}
 }
 
@@ -1504,9 +1526,13 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 
     <nav class="nav">
       <span class="nav-indicator" aria-hidden="true"></span>
-      <button class="active" data-scroll="dashboard">
+      <button class="active" data-scroll="dashboard" aria-current="page">
         <i class="ph ph-squares-four"></i>
-        <span class="label">Home</span>
+        <span class="label">Dashboard</span>
+      </button>
+      <button data-scroll="add">
+        <i class="ph ph-plus-circle"></i>
+        <span class="label">Add</span>
       </button>
       <button data-scroll="charts">
         <i class="ph ph-chart-line"></i>
@@ -1538,7 +1564,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   <main class="main">
     <header class="topbar">
       <div class="page-heading">
-        <h1>Portfolio overview</h1>
+        <h1 id="pageTitle">Dashboard</h1>
         <p id="todayLong"></p>
       </div>
 
@@ -1557,7 +1583,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     </header>
 
     <section class="screen grid active" id="screen-dashboard">
-      <article class="card pad hero span-7">
+      <article class="card pad hero span-12">
         <div class="eyebrow">
           <i class="ph ph-wallet"></i>
           Current portfolio value
@@ -1587,43 +1613,6 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
             <strong class="money-value" id="allChange">Not enough data</strong>
           </div>
         </div>
-      </article>
-
-      <article class="card pad entry-card span-5" id="entryCard">
-        <div class="card-head">
-          <div>
-            <h2>Record a value</h2>
-            <p>Enter the total shown in Desjardins.</p>
-          </div>
-          <div class="date-chip">
-            <i class="ph ph-calendar-blank"></i>
-            <span id="todayChip"></span>
-          </div>
-        </div>
-
-        <form class="entry-form" id="entryForm">
-          <div class="field">
-            <label for="entryDate">Date</label>
-            <input id="entryDate" type="date" required>
-          </div>
-
-          <div class="field">
-            <label for="entryValue">Total investment value</label>
-            <div class="input-wrap">
-              <span class="prefix">$</span>
-              <input class="money-input" id="entryValue" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00" required>
-            </div>
-            <span class="form-help" id="entryHint">Today is selected automatically.</span>
-          </div>
-
-          <div class="entry-actions">
-            <button class="btn primary" type="submit">
-              <i class="ph ph-check"></i>
-              Save value
-            </button>
-            <button class="btn" type="button" id="clearBtn">Clear</button>
-          </div>
-        </form>
       </article>
 
       <section class="stats-grid span-12">
@@ -1663,6 +1652,56 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
           <div class="stat-sub" id="trackingSince">No history yet</div>
         </article>
       </section>
+    </section>
+
+    <section class="screen grid" id="screen-add">
+      <article class="card pad entry-card span-7" id="entryCard">
+        <div class="card-head">
+          <div>
+            <h2>Record a value</h2>
+            <p>Enter the total shown in Desjardins.</p>
+          </div>
+          <div class="date-chip">
+            <i class="ph ph-calendar-blank"></i>
+            <span id="todayChip"></span>
+          </div>
+        </div>
+
+        <form class="entry-form" id="entryForm">
+          <div class="field">
+            <label for="entryDate">Date</label>
+            <input id="entryDate" type="date" required>
+          </div>
+
+          <div class="field">
+            <label for="entryValue">Total investment value</label>
+            <div class="input-wrap">
+              <span class="prefix">$</span>
+              <input class="money-input" id="entryValue" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00" required>
+            </div>
+            <span class="form-help" id="entryHint">Today is selected automatically.</span>
+          </div>
+
+          <div class="entry-actions">
+            <button class="btn primary" type="submit">
+              <i class="ph ph-check"></i>
+              Save value
+            </button>
+            <button class="btn" type="button" id="clearBtn">Clear</button>
+          </div>
+        </form>
+      </article>
+
+      <article class="card pad recent-card span-5">
+        <div class="section-title">
+          <div>
+            <h2>Recently recorded</h2>
+            <p>Your last few saved values.</p>
+          </div>
+        </div>
+
+        <div class="recent-list" id="recentList"></div>
+      </article>
     </section>
 
     <section class="screen grid" id="screen-charts">
@@ -1762,26 +1801,22 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   </main>
 </div>
 
-<nav class="mobile-nav">
-  <button class="active" data-mobile-scroll="dashboard">
-    <i class="ph ph-squares-four"></i>
-    <span class="label">Home</span>
+<nav class="mobile-nav" aria-label="Primary">
+  <span class="nav-indicator" aria-hidden="true"></span>
+  <button class="active" data-mobile-scroll="dashboard" aria-label="Dashboard" aria-current="page">
+    <i class="ph ph-squares-four" aria-hidden="true"></i>
   </button>
-  <button data-mobile-scroll="add">
-    <i class="ph ph-plus-circle"></i>
-    <span class="label">Add</span>
+  <button data-mobile-scroll="add" aria-label="Add a value">
+    <i class="ph ph-plus-circle" aria-hidden="true"></i>
   </button>
-  <button data-mobile-scroll="charts">
-    <i class="ph ph-chart-line"></i>
-    <span class="label">Charts</span>
+  <button data-mobile-scroll="charts" aria-label="Charts">
+    <i class="ph ph-chart-line" aria-hidden="true"></i>
   </button>
-  <button data-mobile-scroll="returns">
-    <i class="ph ph-percent"></i>
-    <span class="label">Returns</span>
+  <button data-mobile-scroll="returns" aria-label="Returns">
+    <i class="ph ph-percent" aria-hidden="true"></i>
   </button>
-  <button data-mobile-scroll="history">
-    <i class="ph ph-clock-counter-clockwise"></i>
-    <span class="label">History</span>
+  <button data-mobile-scroll="history" aria-label="History">
+    <i class="ph ph-clock-counter-clockwise" aria-hidden="true"></i>
   </button>
 </nav>
 
@@ -2255,6 +2290,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     renderStats();
     renderHistory();
     renderReturnsSection();
+    renderRecentList();
     renderValueChart();
     renderDeltaChart();
     updateEntryHint();
@@ -2421,6 +2457,34 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     const def = PERIOD_DEFS.find(item => item.key === key);
     if (!def) return [];
     return entriesInRange(daysBefore(current.date, def.days), current.date);
+  }
+
+  function renderRecentList() {
+    const host = $("#recentList");
+    if (!host) return;
+
+    if (!state.entries.length) {
+      host.innerHTML = `<p class="return-row-empty">Nothing recorded yet — save your first value above.</p>`;
+      return;
+    }
+
+    const recent = [...state.entries].reverse().slice(0, 6);
+
+    host.innerHTML = recent.map((entry, index) => {
+      const previous = state.entries[state.entries.length - 1 - index - 1];
+      const change = previous ? changeBetween(entry, previous) : null;
+      const cls = change ? valueClass(change.amount) : "";
+
+      return `
+        <div class="recent-row">
+          <span class="recent-row-date">${formatDate(entry.date)}</span>
+          <span class="recent-row-value">
+            ${change ? `<span class="${cls}">${signedMoney(change.amount)}</span>` : ""}
+            <strong class="money-value">${money(entry.value)}</strong>
+          </span>
+        </div>
+      `;
+    }).join("");
   }
 
   function renderReturnsSection() {
@@ -2902,11 +2966,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     render();
   });
 
-  $("#addTodayBtn").addEventListener("click", () => {
-    resetEntryToToday();
-    $("#entryCard").scrollIntoView({ behavior: "smooth", block: "center" });
-    setTimeout(() => $("#entryValue").focus(), 320);
-  });
+  $("#addTodayBtn").addEventListener("click", () => activateScreen("add"));
 
   $("#dataBtn").addEventListener("click", () => openModal("dataModal"));
   $("#sidebarDataBtn").addEventListener("click", () => openModal("dataModal"));
@@ -2944,10 +3004,22 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   function refreshIndicators(instant = false) {
     moveIndicator($("#periods"), $("#periods button.active"), instant);
     moveIndicator($(".nav"), $(".nav button.active"), instant);
+    moveIndicator($(".mobile-nav"), $(".mobile-nav button.active"), instant);
   }
 
-  const SCREEN_KEYS = ["dashboard", "charts", "returns", "history"];
+  const SCREEN_KEYS = ["dashboard", "add", "charts", "returns", "history"];
   let currentScreen = "dashboard";
+
+  // Removing the mobile nav's text labels means the header is now the only
+  // place that names the current screen, so every destination gets its own
+  // title + one-line description here.
+  const SCREEN_META = {
+    dashboard: { title: "Dashboard", subtitle: null },
+    add: { title: "Add a value", subtitle: "Log today's total, or backfill an earlier date." },
+    charts: { title: "Charts", subtitle: "Your portfolio's value and day-to-day movement." },
+    returns: { title: "Returns", subtitle: "Performance by period, and by month." },
+    history: { title: "History", subtitle: "Every recorded value, editable anytime." }
+  };
 
   // Each nav destination is its own screen: switching hides every other
   // screen and marks the matching button active in both navs, rather than
@@ -2962,12 +3034,31 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 
     window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
 
-    $$(".nav button[data-scroll]").forEach(btn => btn.classList.toggle("active", btn.dataset.scroll === key));
+    const meta = SCREEN_META[key];
+    $("#pageTitle").textContent = meta.title;
+    $("#todayLong").textContent = meta.subtitle || formatDateLong(localToday());
+
+    $$(".nav button[data-scroll]").forEach(btn => {
+      const isActive = btn.dataset.scroll === key;
+      btn.classList.toggle("active", isActive);
+      if (isActive) btn.setAttribute("aria-current", "page");
+      else btn.removeAttribute("aria-current");
+    });
+
     $$(".mobile-nav button[data-mobile-scroll]").forEach(btn => {
-      btn.classList.toggle("active", btn.dataset.mobileScroll === key);
+      const isActive = btn.dataset.mobileScroll === key;
+      btn.classList.toggle("active", isActive);
+      if (isActive) btn.setAttribute("aria-current", "page");
+      else btn.removeAttribute("aria-current");
     });
 
     moveIndicator($(".nav"), $(".nav button.active"));
+    moveIndicator($(".mobile-nav"), $(".mobile-nav button.active"));
+
+    if (key === "add") {
+      resetEntryToToday();
+      setTimeout(() => $("#entryValue").focus(), 320);
+    }
   }
 
   $("#periods").addEventListener("click", event => {
@@ -2993,16 +3084,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     if (sideScroll) activateScreen(sideScroll.dataset.scroll);
 
     const mobileScroll = event.target.closest("[data-mobile-scroll]");
-    if (mobileScroll) {
-      const key = mobileScroll.dataset.mobileScroll;
-      if (key === "add") {
-        activateScreen("dashboard");
-        resetEntryToToday();
-        setTimeout(() => $("#entryValue").focus(), 320);
-      } else {
-        activateScreen(key);
-      }
-    }
+    if (mobileScroll) activateScreen(mobileScroll.dataset.mobileScroll);
 
     const periodRow = event.target.closest("[data-period]");
     if (periodRow) openPeriodDetail(periodRow.dataset.period);

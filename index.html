@@ -464,6 +464,17 @@ button:focus-visible,input:focus-visible{
   gap:clamp(14px,1.25vw,20px);
 }
 
+.screen{display:none}
+.screen.active{
+  display:grid;
+  animation:screen-in .32s var(--ease-out) both;
+}
+
+@keyframes screen-in{
+  from{opacity:0;transform:translateY(6px)}
+  to{opacity:1;transform:none}
+}
+
 .span-12{grid-column:span 12}
 .span-8{grid-column:span 8}
 .span-7{grid-column:span 7}
@@ -1280,7 +1291,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     padding:
       calc(16px + var(--safe-top))
       calc(14px + var(--safe-right))
-      calc(96px + var(--safe-bottom))
+      calc(106px + var(--safe-bottom))
       calc(14px + var(--safe-left));
   }
   .page-heading{grid-column:span 8}
@@ -1299,11 +1310,10 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     right:calc(10px + var(--safe-right));
     bottom:calc(10px + var(--safe-bottom));
     z-index:60;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:3px;
-    padding:6px;
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:4px;
+    padding:8px;
     border-radius:var(--radius-pill);
     border:1px solid var(--border-strong);
     background:var(--glass-2);
@@ -1313,41 +1323,37 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   }
   .mobile-nav button{
     position:relative;
-    flex:0 0 auto;
     border:0;
     background:transparent;
     color:var(--text-faint);
     border-radius:var(--radius-pill);
-    height:42px;
-    width:42px;
-    max-width:42px;
-    padding:0;
+    min-height:64px;
     display:flex;
+    flex-direction:column;
     align-items:center;
     justify-content:center;
-    gap:6px;
-    overflow:hidden;
-    white-space:nowrap;
+    gap:4px;
+    padding:6px 4px;
     font-size:var(--fs-2xs);
     font-weight:700;
-    transition:max-width .42s var(--ease-spring),width .42s var(--ease-spring),padding .42s var(--ease-spring),background .32s var(--ease-out),color .2s var(--ease-out),box-shadow .32s var(--ease-out),transform .18s var(--ease-out);
+    line-height:1.1;
+    transition:background .28s var(--ease-out),color .2s var(--ease-out),transform .18s var(--ease-out);
   }
   .mobile-nav button i{
-    font-size:18px;
+    font-size:30px;
     flex:none;
     transition:color .2s var(--ease-out);
   }
   .mobile-nav button:active{transform:scale(.94)}
   .mobile-nav button .label{
     opacity:0;
-    max-width:0;
+	font-size: 14px;
+    max-height:0;
     overflow:hidden;
-    transition:opacity .22s var(--ease-out),max-width .32s var(--ease-out);
+    transform:translateY(-3px);
+    transition:opacity .22s var(--ease-out),max-height .26s var(--ease-out),transform .26s var(--ease-out);
   }
   .mobile-nav button.active{
-    width:auto;
-    max-width:120px;
-    padding:0 14px 0 11px;
     color:#fff;
     background:linear-gradient(135deg,var(--primary),var(--primary-dark));
     box-shadow:0 6px 16px rgba(146,132,244,.4),var(--glass-edge-strong);
@@ -1355,7 +1361,8 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   .mobile-nav button.active i{color:#fff}
   .mobile-nav button.active .label{
     opacity:1;
-    max-width:74px;
+    max-height:16px;
+    transform:none;
   }
 }
 
@@ -1499,7 +1506,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
       <span class="nav-indicator" aria-hidden="true"></span>
       <button class="active" data-scroll="dashboard">
         <i class="ph ph-squares-four"></i>
-        <span class="label">Dashboard</span>
+        <span class="label">Home</span>
       </button>
       <button data-scroll="charts">
         <i class="ph ph-chart-line"></i>
@@ -1549,7 +1556,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
       </div>
     </header>
 
-    <section class="grid" id="dashboard">
+    <section class="screen grid active" id="screen-dashboard">
       <article class="card pad hero span-7">
         <div class="eyebrow">
           <i class="ph ph-wallet"></i>
@@ -1656,7 +1663,9 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
           <div class="stat-sub" id="trackingSince">No history yet</div>
         </article>
       </section>
+    </section>
 
+    <section class="screen grid" id="screen-charts">
       <article class="card pad chart-card span-8" id="charts">
         <div class="section-title">
           <div>
@@ -1704,7 +1713,9 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
           </div>
         </div>
       </article>
+    </section>
 
+    <section class="screen grid" id="screen-returns">
       <article class="card pad returns-card span-7" id="returns">
         <div class="section-title">
           <div>
@@ -1726,7 +1737,9 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 
         <div class="month-list" id="monthList"></div>
       </article>
+    </section>
 
+    <section class="screen grid" id="screen-history">
       <article class="card history-card span-12" id="history">
         <div class="history-head">
           <div>
@@ -1752,9 +1765,9 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 <nav class="mobile-nav">
   <button class="active" data-mobile-scroll="dashboard">
     <i class="ph ph-squares-four"></i>
-    <span class="label">Dashboard</span>
+    <span class="label">Home</span>
   </button>
-  <button data-mobile-scroll="entryCard">
+  <button data-mobile-scroll="add">
     <i class="ph ph-plus-circle"></i>
     <span class="label">Add</span>
   </button>
@@ -2637,7 +2650,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
       ctx.textAlign = "right";
       ctx.fillText(formatDate(points.at(-1).date), width - pad.right, height - 7);
 
-      ctx.font = '600 11px "Inter", system-ui, sans-serif';
+      ctx.font = '600 14px "Inter", system-ui, sans-serif';
       ctx.textAlign = "right";
       gridLabels.forEach((value, i) => {
         const y = pad.top + innerH * (i / 2);
@@ -2933,6 +2946,30 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     moveIndicator($(".nav"), $(".nav button.active"), instant);
   }
 
+  const SCREEN_KEYS = ["dashboard", "charts", "returns", "history"];
+  let currentScreen = "dashboard";
+
+  // Each nav destination is its own screen: switching hides every other
+  // screen and marks the matching button active in both navs, rather than
+  // scrolling a single long page.
+  function activateScreen(key) {
+    if (!SCREEN_KEYS.includes(key)) return;
+
+    currentScreen = key;
+    $$(".screen").forEach(screen => {
+      screen.classList.toggle("active", screen.id === `screen-${key}`);
+    });
+
+    window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+
+    $$(".nav button[data-scroll]").forEach(btn => btn.classList.toggle("active", btn.dataset.scroll === key));
+    $$(".mobile-nav button[data-mobile-scroll]").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.mobileScroll === key);
+    });
+
+    moveIndicator($(".nav"), $(".nav button.active"));
+  }
+
   $("#periods").addEventListener("click", event => {
     const button = event.target.closest("button[data-days]");
     if (!button) return;
@@ -2953,21 +2990,17 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     if (event.target.closest("[data-close]")) closeModals();
 
     const sideScroll = event.target.closest("[data-scroll]");
-    if (sideScroll) {
-      const target = document.getElementById(sideScroll.dataset.scroll);
-      if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
-      $$(".nav button[data-scroll]").forEach(btn => btn.classList.toggle("active", btn === sideScroll));
-      moveIndicator($(".nav"), sideScroll);
-    }
+    if (sideScroll) activateScreen(sideScroll.dataset.scroll);
 
     const mobileScroll = event.target.closest("[data-mobile-scroll]");
     if (mobileScroll) {
-      const target = document.getElementById(mobileScroll.dataset.mobileScroll);
-      if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
-      $$(".mobile-nav button").forEach(btn => btn.classList.toggle("active", btn === mobileScroll));
-      if (mobileScroll.dataset.mobileScroll === "entryCard") {
+      const key = mobileScroll.dataset.mobileScroll;
+      if (key === "add") {
+        activateScreen("dashboard");
         resetEntryToToday();
         setTimeout(() => $("#entryValue").focus(), 320);
+      } else {
+        activateScreen(key);
       }
     }
 

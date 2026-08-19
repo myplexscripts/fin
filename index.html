@@ -92,19 +92,17 @@
   --violet:var(--chart-6);
   --violet-soft:rgba(190,144,232,.15);
 
-  /* Liquid Glass: translucent material + specular edge.
-     Glass reads as glass only when something shows through it, so surfaces
-     stay semi-transparent and lean on backdrop blur + saturation instead of
-     opaque fills. The doubled border (outer hairline, inner top highlight)
-     mimics light catching the lens edge. */
-  --glass-1:rgba(20,20,27,.44);
-  --glass-2:rgba(30,30,40,.52);
-  --glass-3:rgba(46,46,60,.58);
+  /* Liquid Glass: translucent material + specular edge. Surfaces stay
+     semi-transparent and lean on backdrop blur + saturation so whatever
+     scrolls beneath them shows through. The doubled hairline border (outer
+     edge, brighter top edge) is what catches the light — no gradients. */
+  --glass-1:rgba(24,24,32,.58);
+  --glass-2:rgba(34,34,45,.62);
+  --glass-3:rgba(50,50,64,.66);
   --glass-blur:saturate(190%) blur(30px);
   --glass-blur-strong:saturate(210%) blur(44px);
   --glass-edge:inset 0 1px 0 rgba(255,255,255,.10),inset 0 0 0 1px rgba(255,255,255,.025);
   --glass-edge-strong:inset 0 1px 0 rgba(255,255,255,.17),inset 0 0 0 1px rgba(255,255,255,.04);
-  --glass-sheen:linear-gradient(148deg,rgba(255,255,255,.10) 0%,rgba(255,255,255,.03) 34%,rgba(255,255,255,0) 62%);
 
   --shadow-sm:0 8px 24px rgba(0,0,0,.5);
   --shadow-md:0 24px 60px rgba(0,0,0,.62);
@@ -158,15 +156,7 @@ html{
 body{
   margin:0;
   min-height:100vh;
-  /* Colour pooled behind the glass — the blurred layers pick this up, which is
-     what makes the material read as translucent rather than merely dark. */
-  background:
-    radial-gradient(46rem 34rem at 78% -6%, rgba(146,132,244,.42), transparent 68%),
-    radial-gradient(38rem 30rem at 6% 12%, rgba(109,168,223,.22), transparent 66%),
-    radial-gradient(42rem 34rem at 96% 52%, rgba(190,144,232,.20), transparent 68%),
-    radial-gradient(40rem 34rem at 14% 92%, rgba(58,188,182,.20), transparent 68%),
-    var(--app-bg);
-  background-attachment:fixed;
+  background:var(--app-bg);
   color:var(--text);
   font-family:"Inter",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   font-size:var(--fs-sm);
@@ -180,6 +170,22 @@ button{cursor:pointer;transition:transform .18s var(--ease-out)}
 button:focus-visible,input:focus-visible{
   outline:3px solid rgba(146,132,244,.32);
   outline-offset:2px;
+}
+
+/* Launched from the home screen the page scrolls beneath the translucent
+   status bar, so the clock collides with whatever passes under it. This frosts
+   that strip. It collapses to zero height wherever there is no inset. */
+.status-scrim{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  height:var(--safe-top);
+  z-index:80;
+  pointer-events:none;
+  background:rgba(0,0,0,.5);
+  backdrop-filter:saturate(180%) blur(20px);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
 }
 
 .app{
@@ -215,9 +221,9 @@ button:focus-visible,input:focus-visible{
   display:grid;
   place-items:center;
   border-radius:var(--radius-md);
-  background:linear-gradient(145deg,var(--primary-hover),var(--primary-dark));
+  background:var(--primary);
   color:var(--accent-on);
-  box-shadow:0 9px 26px rgba(146,132,244,.28),var(--glass-edge-strong);
+  box-shadow:var(--glass-edge-strong);
   transition:transform .4s var(--ease-spring);
 }
 
@@ -395,16 +401,16 @@ button:focus-visible,input:focus-visible{
 }
 
 .btn.primary{
-  background:linear-gradient(180deg,var(--primary-hover),var(--primary));
+  background:var(--primary);
   border-color:rgba(255,255,255,.16);
   color:var(--accent-on);
-  box-shadow:var(--glass-edge-strong),0 6px 20px rgba(146,132,244,.28);
+  box-shadow:var(--glass-edge-strong);
 }
 
 .btn.primary:hover{
-  background:linear-gradient(180deg,#C6BEFB,var(--primary-hover));
+  background:var(--primary-hover);
   border-color:rgba(255,255,255,.24);
-  box-shadow:var(--glass-edge-strong),0 10px 26px rgba(146,132,244,.36);
+  box-shadow:var(--glass-edge-strong);
 }
 
 .btn.soft{
@@ -450,19 +456,6 @@ button:focus-visible,input:focus-visible{
   border-radius:var(--radius-xl);
   box-shadow:var(--shadow-sm),var(--glass-edge);
   animation:rise .5s var(--ease-out) both;
-  isolation:isolate;
-}
-
-/* Specular sheen: a fixed diagonal highlight, as if one light source were
-   grazing every pane in the layout. */
-.card::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  border-radius:inherit;
-  background:var(--glass-sheen);
-  pointer-events:none;
-  z-index:-1;
 }
 
 .card.pad{padding:clamp(18px,2vw,28px)}
@@ -471,18 +464,6 @@ button:focus-visible,input:focus-visible{
   position:relative;
   min-height:318px;
   overflow:hidden;
-}
-
-.hero::after{
-  content:"";
-  position:absolute;
-  width:300px;
-  height:300px;
-  border-radius:50%;
-  top:-150px;
-  right:-70px;
-  background:radial-gradient(circle,rgba(146,132,244,.2),rgba(146,132,244,0) 66%);
-  pointer-events:none;
 }
 
 .eyebrow{
@@ -640,9 +621,32 @@ input:focus{
   box-shadow:inset 0 1px 2px rgba(0,0,0,.4),0 0 0 4px rgba(146,132,244,.16);
 }
 
+/* iOS gives date inputs their own intrinsic sizing and centres the value,
+   so it drifts out of line with every other field. Force it back to a
+   normal block that fills its row and reads from the left edge. */
 input[type="date"]{
   color-scheme:dark;
+  -webkit-appearance:none;
+  appearance:none;
+  display:block;
+  width:100%;
+  min-width:0;
+  text-align:left;
 }
+
+input[type="date"]::-webkit-date-and-time-value{
+  text-align:left;
+  margin:0;
+}
+
+/* The picker glyph sits flush right instead of floating mid-field. */
+input[type="date"]::-webkit-calendar-picker-indicator{
+  margin-left:auto;
+  opacity:.65;
+  cursor:pointer;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator:hover{opacity:1}
 
 .input-wrap{position:relative}
 
@@ -1262,6 +1266,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 </head>
 
 <body>
+<div class="status-scrim" aria-hidden="true"></div>
 <div class="app" id="app">
   <aside class="sidebar">
     <div class="brand">
@@ -2117,10 +2122,6 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
       ctx.rect(pad.left, 0, Math.max(0, innerW * progress), height);
       ctx.clip();
 
-      const fill = ctx.createLinearGradient(0, pad.top, 0, height);
-      fill.addColorStop(0, "rgba(146,132,244,.22)");
-      fill.addColorStop(1, "rgba(146,132,244,0)");
-
       ctx.beginPath();
       coords.forEach((c, i) => {
         if (i === 0) ctx.moveTo(c.x, c.y);
@@ -2129,7 +2130,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
       ctx.lineTo(coords.at(-1).x, height - pad.bottom);
       ctx.lineTo(coords[0].x, height - pad.bottom);
       ctx.closePath();
-      ctx.fillStyle = fill;
+      ctx.fillStyle = "rgba(146,132,244,.13)";
       ctx.fill();
 
       ctx.beginPath();

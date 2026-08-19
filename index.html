@@ -244,7 +244,7 @@ button:focus-visible,input:focus-visible{
 
 .brand-copy span{
   display:block;
-  margin-top:var(--space-1)
+  margin-top:var(--space-1);
   font-size:var(--fs-2xs);
   color:var(--text-faint);
   letter-spacing:.045em;
@@ -328,12 +328,12 @@ button:focus-visible,input:focus-visible{
 
 .sidebar-foot strong{
   display:block;
-  margin-top:var(--space-2)
+  margin-top:var(--space-2);
   font-size:var(--fs-2xs);
 }
 
 .sidebar-foot p{
-  margin:var(--space-1) 0 0
+  margin:var(--space-1) 0 0;
   color:var(--text-faint);
   font-size:var(--fs-2xs);
   line-height:1.55;
@@ -353,7 +353,7 @@ button:focus-visible,input:focus-visible{
   grid-template-columns:repeat(12,minmax(0,1fr));
   gap:clamp(14px,1.25vw,20px);
   align-items:center;
-  margin-bottom:var(--space-6)
+  margin-bottom:var(--space-6);
 }
 
 .page-heading{
@@ -369,7 +369,7 @@ button:focus-visible,input:focus-visible{
 }
 
 .page-heading p{
-  margin:var(--space-1) 0 0
+  margin:var(--space-1) 0 0;
   color:var(--text-muted);
   font-size:var(--fs-2xs);
 }
@@ -514,7 +514,7 @@ button:focus-visible,input:focus-visible{
 .eyebrow i{color:var(--accent)}
 
 .balance{
-  margin-top:var(--space-3)
+  margin-top:var(--space-3);
   font-size:clamp(38px,4.7vw,62px);
   line-height:1.05;
   letter-spacing:-.017em;
@@ -526,7 +526,7 @@ button:focus-visible,input:focus-visible{
   gap:var(--space-2);
   flex-wrap:wrap;
   align-items:center;
-  margin-top:var(--space-4)
+  margin-top:var(--space-4);
 }
 
 .change-chip{
@@ -570,7 +570,7 @@ button:focus-visible,input:focus-visible{
   display:block;
   color:var(--text-faint);
   font-size:var(--fs-2xs);
-  margin-bottom:var(--space-1)
+  margin-bottom:var(--space-1);
 }
 
 .hero-stat strong{
@@ -598,7 +598,7 @@ button:focus-visible,input:focus-visible{
 }
 
 .card-head p{
-  margin:var(--space-1) 0 0
+  margin:var(--space-1) 0 0;
   color:var(--text-muted);
   font-size:var(--fs-2xs);
 }
@@ -620,7 +620,7 @@ button:focus-visible,input:focus-visible{
 .entry-form{
   display:grid;
   gap:var(--space-3);
-  margin-top:var(--space-6)
+  margin-top:var(--space-6);
   flex:1;
 }
 
@@ -719,7 +719,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{opacity:1}
   justify-content:space-between;
   gap:var(--space-4);
   align-items:center;
-  margin-bottom:var(--space-5)
+  margin-bottom:var(--space-5);
 }
 
 .section-title h2{
@@ -729,7 +729,7 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{opacity:1}
 }
 
 .section-title p{
-  margin:var(--space-1) 0 0
+  margin:var(--space-1) 0 0;
   color:var(--text-faint);
   font-size:var(--fs-2xs);
 }
@@ -766,14 +766,23 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{opacity:1}
   border:0;
   background:transparent;
   color:var(--text-faint);
-  min-width:42px;
+  flex:1 1 0;
+  min-width:0;
   min-height:var(--tap-min);
   padding:var(--space-2) var(--space-3);
   border-radius:var(--radius-2xs);
   font-size:var(--fs-2xs);
   font-weight:640;
+  white-space:nowrap;
   transition:color .2s var(--ease-out);
 }
+
+.periods button:disabled{
+  opacity:.32;
+  cursor:not-allowed;
+}
+
+.periods button:disabled:hover{color:var(--text-faint)}
 
 .periods button.active{
   color:var(--text);
@@ -806,7 +815,7 @@ canvas{
 
 .chart-empty i{
   display:block;
-  margin-bottom:var(--space-2)
+  margin-bottom:var(--space-2);
   color:var(--accent);
   font-size:22px;
 }
@@ -849,14 +858,14 @@ canvas{
 }
 
 .stat-value{
-  margin-top:var(--space-4)
+  margin-top:var(--space-4);
   font-size:var(--fs-lg);
   font-weight:640;
   letter-spacing:-.014em;
 }
 
 .stat-sub{
-  margin-top:var(--space-1)
+  margin-top:var(--space-1);
   color:var(--text-faint);
   font-size:var(--fs-2xs);
 }
@@ -924,16 +933,24 @@ canvas{
 
 .return-row:hover,.month-row:hover{
   background:rgba(255,255,255,.03);
-  padding-left:12px;
+  padding-left:var(--space-3);
 }
 
 .return-row-label,.month-row-label{
-  display:flex;
-  align-items:center;
-  gap:var(--space-3);
+  min-width:0;
   color:var(--text-secondary);
   font-size:var(--fs-2xs);
   font-weight:640;
+}
+
+.return-row-label{
+  display:flex;
+  align-items:center;
+  gap:var(--space-3);
+}
+
+.month-row-label{
+  display:block;
 }
 
 .month-row-label strong{
@@ -945,7 +962,7 @@ canvas{
 
 .month-row-label span{
   display:block;
-  margin-top:var(--space-1)
+  margin-top:var(--space-1);
   color:var(--text-faint);
   font-size:var(--fs-2xs);
 }
@@ -976,7 +993,7 @@ canvas{
   display:flex;
   align-items:center;
   gap:var(--space-3);
-  margin-bottom:var(--space-5)
+  margin-bottom:var(--space-5);
 }
 
 .period-detail-value{
@@ -986,7 +1003,7 @@ canvas{
 }
 
 .period-detail-grid{
-  margin-top:var(--space-5)
+  margin-top:var(--space-5);
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
   gap:var(--space-3);
@@ -1007,7 +1024,7 @@ canvas{
 
 .period-stat strong{
   display:block;
-  margin-top:var(--space-1)
+  margin-top:var(--space-1);
   font-size:var(--fs-sm);
   font-variant-numeric:tabular-nums;
 }
@@ -1037,7 +1054,7 @@ canvas{
   display:block;
   color:var(--text-faint);
   font-weight:600;
-  margin-bottom:var(--space-1)
+  margin-bottom:var(--space-1);
 }
 
 .chart-tooltip .tt-value{
@@ -1048,7 +1065,7 @@ canvas{
 
 .chart-tooltip .tt-change{
   display:block;
-  margin-top:var(--space-1)
+  margin-top:var(--space-1);
   font-weight:600;
 }
 
@@ -1069,7 +1086,7 @@ canvas{
 }
 
 .history-head p{
-  margin:var(--space-1) 0 0
+  margin:var(--space-1) 0 0;
   color:var(--text-faint);
   font-size:var(--fs-2xs);
 }
@@ -1167,7 +1184,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 
 .empty i{
   display:block;
-  margin-bottom:var(--space-2)
+  margin-bottom:var(--space-2);
   font-size:24px;
   color:var(--accent);
 }
@@ -1176,7 +1193,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   display:block;
   color:var(--text);
   font-size:var(--fs-md);
-  margin-bottom:var(--space-1)
+  margin-bottom:var(--space-1);
 }
 
 .privacy .money-value{
@@ -1243,7 +1260,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 }
 
 .modal-head p{
-  margin:var(--space-1) 0 0
+  margin:var(--space-1) 0 0;
   color:var(--text-muted);
   font-size:var(--fs-2xs);
 }
@@ -1262,12 +1279,12 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   display:flex;
   justify-content:flex-end;
   gap:var(--space-2);
-  margin-top:var(--space-4)
+  margin-top:var(--space-4);
 }
 
 .notice{
   padding:var(--space-3);
-  margin-bottom:var(--space-4)
+  margin-bottom:var(--space-4);
   border:1px solid var(--border);
   border-radius:var(--radius-sm);
   background:rgba(0,0,0,.28);
@@ -1331,7 +1348,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   .hero,.entry-card{min-height:auto}
   .hero-stats{
     position:static;
-    margin-top:var(--space-7)
+    margin-top:var(--space-7);
   }
   .chart-wrap{height:245px}
   .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -1407,8 +1424,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     align-items:flex-start;
     flex-direction:column;
   }
-  .periods{width:100%;overflow:auto}
-  .periods button{flex:1}
+  .periods{width:100%}
   .history-head{
     align-items:flex-start;
     flex-direction:column;
@@ -1714,11 +1730,10 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 
           <div class="periods" id="periods">
             <span class="nav-indicator" aria-hidden="true"></span>
-            <button data-days="30">1M</button>
+            <button data-days="30" class="active">1M</button>
             <button data-days="90">3M</button>
             <button data-days="180">6M</button>
-            <button data-days="365" class="active">1Y</button>
-            <button data-days="99999">All</button>
+            <button data-days="365">1Y</button>
           </div>
         </div>
 
@@ -1987,7 +2002,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   });
 
   let state = loadState();
-  let chartDays = 365;
+  let chartDays = 30;
   let historySearch = "";
   let lastBalance = null;
 
@@ -2291,6 +2306,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     renderHistory();
     renderReturnsSection();
     renderRecentList();
+    syncPeriodAvailability();
     renderValueChart();
     renderDeltaChart();
     updateEntryHint();
@@ -2599,6 +2615,14 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     openModal("periodModal");
   }
 
+  // A canvas inside a hidden screen measures 0x0. Drawing into it produces a
+  // 1px bitmap that CSS then stretches into a solid colour block once the
+  // screen is shown, so every draw path checks this first and defers.
+  function canvasReady(canvas) {
+    const rect = canvas.getBoundingClientRect();
+    return rect.width > 2 && rect.height > 2;
+  }
+
   function setupCanvas(canvas) {
     const rect = canvas.getBoundingClientRect();
     const dpr = window.devicePixelRatio || 1;
@@ -2625,6 +2649,8 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
       return;
     }
 
+    if (!canvasReady(canvas)) return;
+
     const values = points.map(point => point.value);
     const min = Math.min(...values);
     const max = Math.max(...values);
@@ -2650,7 +2676,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     // Three evenly spaced value labels (top / middle / bottom of the grid)
     // give the eye a way to read approximate magnitude without cluttering
     // every gridline with a number.
-    const gridLabels = [chartMax, (chartMax + chartMin) / 2, chartMin];
+    const gridLabels = [max, (max + min) / 2, min];
 
     animate(750, progress => {
       ctx.clearRect(0, 0, width, height);
@@ -2716,9 +2742,9 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 
       ctx.font = '600 14px "Inter", system-ui, sans-serif';
       ctx.textAlign = "right";
-      gridLabels.forEach((value, i) => {
-        const y = pad.top + innerH * (i / 2);
-        ctx.fillText(money(value), width - pad.right, Math.max(11, y - 5));
+      gridLabels.forEach(value => {
+        const y = pad.top + innerH * (1 - (value - chartMin) / range);
+        ctx.fillText(money(value), width - pad.right, Math.max(14, y - 6));
       });
       ctx.globalAlpha = 1;
     }, instant);
@@ -2785,6 +2811,53 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   attachChartTooltip($("#valueChart"), $("#valueChartWrap"), $("#valueChartTooltip"));
   attachChartTooltip($("#periodModalChart"), $("#periodModalChartWrap"), $("#periodModalChartTooltip"));
 
+  // Offering a 6M button when only seven weeks exist just renders the same
+  // line as 1M, so any range wider than the recorded history is disabled and
+  // the selection falls back to the widest range that actually has data.
+  function syncPeriodAvailability() {
+    const entries = state.entries;
+    const buttons = $$("#periods button[data-days]");
+    if (!entries.length) {
+      buttons.forEach(btn => btn.disabled = true);
+      return;
+    }
+
+    const first = entries[0].date;
+    const last = entries.at(-1).date;
+    const spanDays = Math.round(
+      (new Date(`${last}T12:00:00`) - new Date(`${first}T12:00:00`)) / 86400000
+    );
+
+    const available = [];
+    let overshootUsed = false;
+
+    buttons.forEach(btn => {
+      const days = Number(btn.dataset.days);
+      // Ranges within the recorded span are always offered. The first range
+      // that exceeds the span is kept too, so the complete history stays
+      // reachable; every wider range after it would draw the same line.
+      let isUsable = days <= spanDays;
+      if (!isUsable && !overshootUsed) {
+        isUsable = true;
+        overshootUsed = true;
+      }
+
+      btn.disabled = !isUsable;
+      btn.setAttribute("aria-disabled", String(!isUsable));
+      if (isUsable) available.push(btn);
+    });
+
+    if (!available.length) return;
+
+    const activeStillValid = available.some(btn => Number(btn.dataset.days) === chartDays);
+    if (!activeStillValid) {
+      const fallback = available.at(-1);
+      chartDays = Number(fallback.dataset.days);
+      buttons.forEach(btn => btn.classList.toggle("active", btn === fallback));
+      moveIndicator($("#periods"), fallback, true);
+    }
+  }
+
   function renderValueChart(instant = false) {
     const canvas = $("#valueChart");
     const empty = $("#valueChartEmpty");
@@ -2793,7 +2866,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     let points = [];
 
     if (current) {
-      const cutoff = chartDays > 10000 ? "0000-01-01" : daysBefore(current.date, chartDays);
+      const cutoff = daysBefore(current.date, chartDays);
       points = state.entries.filter(entry => entry.date >= cutoff);
     }
 
@@ -2821,6 +2894,8 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     changes = changes.slice(-30);
     empty.classList.toggle("show", !changes.length);
     if (!changes.length) return;
+
+    if (!canvasReady(canvas)) return;
 
     const maxAbs = Math.max(...changes.map(item => Math.abs(item.amount)), 1);
     const pad = { left: 4, right: 4, top: 9, bottom: 22 };
@@ -3059,11 +3134,21 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
       resetEntryToToday();
       setTimeout(() => $("#entryValue").focus(), 320);
     }
+
+    // The canvases only have a real size once their screen is displayed, so
+    // the first paint has to wait for layout rather than happening at load.
+    if (key === "charts") {
+      requestAnimationFrame(() => {
+        renderValueChart(true);
+        renderDeltaChart(true);
+        moveIndicator($("#periods"), $("#periods button.active"), true);
+      });
+    }
   }
 
   $("#periods").addEventListener("click", event => {
     const button = event.target.closest("button[data-days]");
-    if (!button) return;
+    if (!button || button.disabled) return;
 
     chartDays = Number(button.dataset.days);
     $$("#periods button").forEach(item => item.classList.toggle("active", item === button));

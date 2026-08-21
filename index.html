@@ -1318,6 +1318,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 .modal-actions{
   display:flex;
   justify-content:flex-end;
+  flex-wrap:wrap;
   gap:var(--space-2);
   margin-top:var(--space-4);
 }
@@ -1587,33 +1588,18 @@ textarea{resize:vertical;min-height:82px}
 .calendar-controls{display:flex;flex:0 0 auto;gap:var(--space-2)}
 .calendar-controls button{width:48px;height:48px;min-height:48px;display:grid;place-items:center;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface-2)}
 .calendar-controls button i{font-size:20px}
-.calendar-scroll{width:100%;overflow-x:auto;overscroll-behavior-inline:contain;padding-bottom:2px;scrollbar-width:thin}
+.calendar-scroll{width:100%;display:flex;justify-content:center;overflow-x:auto;overscroll-behavior-inline:contain;padding-bottom:2px;scrollbar-width:thin}
 .calendar-scroll:focus-visible{outline:3px solid rgba(146,132,244,.32);outline-offset:3px;border-radius:var(--radius-sm)}
-
 .calendar-grid{
   display:grid;
-  grid-template-columns:repeat(7,minmax(92px,1fr));
+  grid-template-columns:repeat(7,minmax(44px,1fr));
   gap:6px;
-  width:100%;
-  min-width:0;
+  width:min(100%,760px,calc(max(360px,100vh - 230px) * 7 / 6));
+  min-width:332px;
+  max-width:760px;
 }
-
 .calendar-weekday{text-align:center;color:var(--text-faint);font-size:14px;font-weight:700;text-transform:uppercase}
-
-.calendar-day{
-  position:relative;
-  display:grid;
-  align-content:space-between;
-  gap:var(--space-1);
-  min-height:74px;
-  padding:9px 10px;
-  border:1px solid var(--border);
-  border-radius:var(--radius-xs);
-  background:rgba(0,0,0,.17);
-  overflow:hidden;
-  text-align:left;
-}
-
+.calendar-day{position:relative;display:grid;align-content:space-between;gap:var(--space-1);aspect-ratio:1;min-width:44px;min-height:44px;padding:8px;border:1px solid var(--border);border-radius:var(--radius-xs);background:rgba(0,0,0,.17);overflow:hidden;text-align:left}
 .calendar-day.blank{visibility:hidden}
 .calendar-day .day-number{font-size:14px;line-height:1;color:var(--text-muted);font-variant-numeric:tabular-nums}
 .calendar-day .day-detail{align-self:end;display:grid;gap:2px;min-width:0}
@@ -1773,21 +1759,8 @@ button.calendar-day:active{transform:scale(.97)}
   .periods{width:100%}
   .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .calendar-scroll{display:block}
-  .calendar-grid{
-    grid-template-columns:repeat(7,minmax(44px,1fr));
-    width:100%;
-    min-width:332px;
-    max-width:none;
-    gap:4px;
-  }
-  .calendar-day{
-    aspect-ratio:1;
-    min-height:44px;
-    place-items:center;
-    align-content:center;
-    padding:5px;
-    text-align:center;
-  }
+  .calendar-grid{width:100%;max-width:none;gap:4px}
+  .calendar-day{place-items:center;align-content:center;padding:5px;text-align:center}
   .calendar-day .day-number{position:absolute;top:4px;left:6px}
   .calendar-day .day-detail{display:none}
   .mobile-nav{
@@ -2634,6 +2607,34 @@ button.calendar-day:active{transform:scale(.97)}
           Your entries are stored locally in this browser. Export a backup before clearing browser data or moving to another device.
         </div>
 
+        <form id="cloudBackupForm" class="setting-section" style="padding-top:0">
+          <h4>Google Sheets backup</h4>
+          <p>Append raw save events to your Apps Script sheet endpoint. Keep the URL and key private.</p>
+          <div class="setting-grid">
+            <div class="field">
+              <label for="sheetBackupEnabled">Automatic backup</label>
+              <select id="sheetBackupEnabled">
+                <option value="off">Off</option>
+                <option value="on">On</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="sheetBackupKey">Backup key</label>
+              <input id="sheetBackupKey" type="password" autocomplete="new-password" placeholder="Paste your private key">
+            </div>
+          </div>
+          <div class="field" style="margin-top:var(--space-3)">
+            <label for="sheetBackupUrl">Apps Script web app URL</label>
+            <input id="sheetBackupUrl" type="url" inputmode="url" placeholder="https://script.google.com/macros/s/.../exec">
+          </div>
+          <p class="form-help" id="sheetBackupStatus" style="margin-top:var(--space-2)">Google Sheets backup is off.</p>
+          <div class="modal-actions">
+            <button class="btn" type="submit">Save backup settings</button>
+            <button class="btn" type="button" id="testSheetBackupBtn">Send test row</button>
+            <button class="btn primary" type="button" id="snapshotSheetBackupBtn">Back up current entries</button>
+          </div>
+        </form>
+
         <div class="field" style="margin-bottom:var(--space-4)">
           <label for="backupPassword">Backup password, optional</label>
           <input id="backupPassword" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters">
@@ -2765,7 +2766,12 @@ button.calendar-day:active{transform:scale(.97)}
     benchmarkName: "Annual target",
     benchmarkRate: 6,
     backupReminderDays: 14,
-    lastBackupDate: ""
+    lastBackupDate: "",
+    googleSheetBackupEnabled: false,
+    googleSheetBackupUrl: "",
+    googleSheetBackupKey: "",
+    googleSheetBackupDeviceId: "",
+    googleSheetLastBackupAt: ""
   });
 
   const emptyState = () => ({
@@ -2868,6 +2874,21 @@ button.calendar-day:active{transform:scale(.97)}
     return String(value || "").replace(/\s+/g, " ").trim().slice(0, 40);
   }
 
+  function makeId(prefix = "event") {
+    if (window.crypto && typeof window.crypto.randomUUID === "function") return window.crypto.randomUUID();
+    return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+  }
+
+  function cleanBackupUrl(value) {
+    const url = String(value || "").trim().slice(0, 500);
+    if (!url) return "";
+    return url.startsWith("https://script.google.com/macros/s/") ? url : "";
+  }
+
+  function cleanBackupKey(value) {
+    return String(value || "").trim().slice(0, 200);
+  }
+
   function cleanAvatarSeed(seed) {
     const cleaned = String(seed || "").trim().replace(/[^a-z0-9_-]/gi, "").slice(0, 50);
     return AVATAR_SEEDS.includes(cleaned) ? cleaned : DEFAULT_AVATAR_SEED;
@@ -2887,8 +2908,85 @@ button.calendar-day:active{transform:scale(.97)}
       ...merged,
       userName: cleanName(merged.userName),
       avatarSeed: cleanAvatarSeed(merged.avatarSeed),
-      onboardingComplete: merged.onboardingComplete === true
+      onboardingComplete: merged.onboardingComplete === true,
+      googleSheetBackupEnabled: merged.googleSheetBackupEnabled === true,
+      googleSheetBackupUrl: cleanBackupUrl(merged.googleSheetBackupUrl),
+      googleSheetBackupKey: cleanBackupKey(merged.googleSheetBackupKey),
+      googleSheetBackupDeviceId: String(merged.googleSheetBackupDeviceId || "").trim().slice(0, 80),
+      googleSheetLastBackupAt: String(merged.googleSheetLastBackupAt || "").trim().slice(0, 40)
     };
+  }
+
+  function ensureSheetDeviceId() {
+    if (!state.settings.googleSheetBackupDeviceId) {
+      state.settings.googleSheetBackupDeviceId = makeId("device");
+      saveState();
+    }
+    return state.settings.googleSheetBackupDeviceId;
+  }
+
+  function sheetBackupReady() {
+    return !!(
+      state.settings.googleSheetBackupEnabled &&
+      state.settings.googleSheetBackupUrl &&
+      state.settings.googleSheetBackupKey
+    );
+  }
+
+  function entryBackupShape(entry) {
+    if (!entry) return null;
+    return {
+      date: entry.date || "",
+      value: Number(entry.value) || 0,
+      cashFlow: Number(entry.cashFlow) || 0,
+      fee: Math.max(0, Number(entry.fee) || 0),
+      note: String(entry.note || "").slice(0, 240),
+      accounts: entry.accounts && typeof entry.accounts === "object" ? entry.accounts : {}
+    };
+  }
+
+  async function postSheetBackup(action, entry = null, raw = {}) {
+    if (!sheetBackupReady()) return false;
+
+    try {
+      const sentAt = new Date().toISOString();
+      await fetch(state.settings.googleSheetBackupUrl, {
+        method: "POST",
+        mode: "no-cors",
+        keepalive: true,
+        body: JSON.stringify({
+          backupKey: state.settings.googleSheetBackupKey,
+          eventId: makeId("sheet-event"),
+          action,
+          entry: entryBackupShape(entry),
+          appVersion: `ledger-${state.version}`,
+          deviceId: ensureSheetDeviceId(),
+          raw: {
+            sentAt,
+            ...raw
+          }
+        })
+      });
+      state.settings.googleSheetLastBackupAt = sentAt;
+      saveState();
+      renderCloudBackupStatus();
+      return true;
+    } catch (error) {
+      console.warn("Google Sheets backup failed", error);
+      toast("Google Sheets backup could not send");
+      return false;
+    }
+  }
+
+  async function postSheetBackupEntries(action, entries, raw = {}) {
+    if (!sheetBackupReady() || !entries.length) return false;
+    const batchId = makeId("sheet-batch");
+    await postSheetBackup(`${action}_start`, null, { ...raw, batchId, entryCount: entries.length });
+    for (const entry of entries) {
+      await postSheetBackup(action, entry, { ...raw, batchId });
+    }
+    await postSheetBackup(`${action}_done`, null, { ...raw, batchId, entryCount: entries.length });
+    return true;
   }
 
   const TERMS = {
@@ -4530,6 +4628,7 @@ button.calendar-day:active{transform:scale(.97)}
     if (date > localToday() && !confirm("This date is in the future. Save it anyway?")) return false;
 
     const existing = state.entries.find(entry => entry.date === date);
+    const previous = existing ? structuredClone(existing) : null;
     const merged = {
       ...(existing || { date, cashFlow: 0, fee: 0, note: "", accounts: {} }),
       ...(details || {}),
@@ -4543,6 +4642,7 @@ button.calendar-day:active{transform:scale(.97)}
     else state.entries.push(merged);
 
     saveState();
+    postSheetBackup(existing ? "entry_update" : "entry_create", merged, { previous });
     return true;
   }
 
@@ -4572,8 +4672,10 @@ button.calendar-day:active{transform:scale(.97)}
     if (!confirm(`Delete the value saved for ${formatDate(date)}?`)) return;
 
     rememberUndo("Entry restored");
+    const deleted = state.entries.find(entry => entry.date === date);
     state.entries = state.entries.filter(entry => entry.date !== date);
     saveState();
+    postSheetBackup("entry_delete", deleted, { deletedDate: date });
     render();
     toast("Entry deleted", true);
   }
@@ -4613,6 +4715,7 @@ button.calendar-day:active{transform:scale(.97)}
     if (entryLooksUnusual(date, value, cashFlow) && !confirm("This value changes investment performance by more than 25% from the previous entry. Save it anyway?")) return;
 
     rememberUndo("Edit undone");
+    const previousEntrySnapshot = state.entries.find(entry => entry.date === originalDate);
     const accountValues = {};
     $$("#editAccountList [data-edit-account-id]").forEach(input => {
       if (!String(input.value).trim()) return;
@@ -4620,17 +4723,20 @@ button.calendar-day:active{transform:scale(.97)}
       if (Number.isFinite(amount) && amount >= 0) accountValues[input.dataset.editAccountId] = amount;
     });
 
-    state.entries = state.entries.filter(entry => entry.date !== originalDate && entry.date !== date);
-    state.entries.push({
+    const editedEntry = {
       date,
       value,
       cashFlow,
       fee: Math.max(0, parseCurrency($("#editFee").value) || 0),
       note: $("#editNote").value.trim(),
       accounts: accountValues
-    });
+    };
+
+    state.entries = state.entries.filter(entry => entry.date !== originalDate && entry.date !== date);
+    state.entries.push(editedEntry);
 
     saveState();
+    postSheetBackup("entry_update", editedEntry, { originalDate, previous: previousEntrySnapshot });
     closeModals();
     render();
     toast("Entry updated", true);
@@ -4675,6 +4781,40 @@ button.calendar-day:active{transform:scale(.97)}
     $("#benchmarkRate").value = Number(state.settings.benchmarkRate) || 0;
     $("#accountNames").value = state.accounts.map(account => account.name).join("\n");
     $("#backupReminderDays").value = String(Number(state.settings.backupReminderDays) || 0);
+    $("#sheetBackupEnabled").value = state.settings.googleSheetBackupEnabled ? "on" : "off";
+    $("#sheetBackupUrl").value = state.settings.googleSheetBackupUrl || "";
+    $("#sheetBackupKey").value = state.settings.googleSheetBackupKey || "";
+    renderCloudBackupStatus();
+  }
+
+  function renderCloudBackupStatus() {
+    const node = $("#sheetBackupStatus");
+    if (!node) return;
+    const hasUrl = !!state.settings.googleSheetBackupUrl;
+    const hasKey = !!state.settings.googleSheetBackupKey;
+    if (!state.settings.googleSheetBackupEnabled) {
+      node.textContent = "Google Sheets backup is off.";
+      return;
+    }
+    if (!hasUrl || !hasKey) {
+      node.textContent = "Add the Apps Script URL and backup key to turn this on.";
+      return;
+    }
+    node.textContent = state.settings.googleSheetLastBackupAt
+      ? `Backup is on. Last attempted ${new Date(state.settings.googleSheetLastBackupAt).toLocaleString("en-CA")}.`
+      : "Backup is on. No rows have been sent yet.";
+  }
+
+  function saveCloudBackupSettings() {
+    state.settings.googleSheetBackupEnabled = $("#sheetBackupEnabled").value === "on";
+    state.settings.googleSheetBackupUrl = cleanBackupUrl($("#sheetBackupUrl").value);
+    state.settings.googleSheetBackupKey = cleanBackupKey($("#sheetBackupKey").value);
+    ensureSheetDeviceId();
+    saveState();
+    $("#sheetBackupUrl").value = state.settings.googleSheetBackupUrl || "";
+    $("#sheetBackupKey").value = state.settings.googleSheetBackupKey || "";
+    renderCloudBackupStatus();
+    return sheetBackupReady();
   }
 
   function renderTerminologyToggle() {
@@ -4766,6 +4906,41 @@ button.calendar-day:active{transform:scale(.97)}
   $("#editGoalBtn").addEventListener("click", openSettings);
   $("#editAccountsBtn").addEventListener("click", openSettings);
 
+  $("#cloudBackupForm").addEventListener("submit", event => {
+    event.preventDefault();
+    saveCloudBackupSettings();
+    toast(sheetBackupReady() ? "Google Sheets backup saved" : "Add the URL and key before turning backup on");
+  });
+
+  $("#testSheetBackupBtn").addEventListener("click", async () => {
+    saveCloudBackupSettings();
+    if (!sheetBackupReady()) {
+      toast("Add the URL and key first");
+      return;
+    }
+    await postSheetBackup("test", null, { note: "Manual test from Ledger settings" });
+    toast("Test row sent");
+  });
+
+  $("#snapshotSheetBackupBtn").addEventListener("click", async () => {
+    saveCloudBackupSettings();
+    if (!sheetBackupReady()) {
+      toast("Add the URL and key first");
+      return;
+    }
+    if (!state.entries.length) {
+      toast("No entries to back up yet");
+      return;
+    }
+    $("#snapshotSheetBackupBtn").disabled = true;
+    try {
+      await postSheetBackupEntries("snapshot_entry", state.entries, { note: "Manual current entries backup" });
+      toast("Current entries sent to Google Sheets");
+    } finally {
+      $("#snapshotSheetBackupBtn").disabled = false;
+    }
+  });
+
   $("#settingsForm").addEventListener("submit", event => {
     event.preventDefault();
     const goalValue = parseCurrency($("#goalValue").value);
@@ -4816,8 +4991,14 @@ button.calendar-day:active{transform:scale(.97)}
     if (!undoSnapshot) return;
     const restored = undoSnapshot;
     undoSnapshot = null;
+    const currentEntryCount = state.entries.length;
     state = structuredClone(restored.state);
     saveState();
+    postSheetBackup("undo_restore", null, {
+      label: restored.label,
+      previousEntryCount: currentEntryCount,
+      restoredEntryCount: state.entries.length
+    });
     renderAccountInputs();
     render();
     $("#toast").classList.remove("show", "has-action");
@@ -5154,8 +5335,26 @@ button.calendar-day:active{transform:scale(.97)}
 
       if (confirm("Replace your current history with this backup?")) {
         rememberUndo("Backup restore undone");
-        state = restoredState;
+        const previousEntryCount = state.entries.length;
+        const sheetBackupSettings = {
+          googleSheetBackupEnabled: state.settings.googleSheetBackupEnabled,
+          googleSheetBackupUrl: state.settings.googleSheetBackupUrl,
+          googleSheetBackupKey: state.settings.googleSheetBackupKey,
+          googleSheetBackupDeviceId: state.settings.googleSheetBackupDeviceId,
+          googleSheetLastBackupAt: state.settings.googleSheetLastBackupAt
+        };
+        state = {
+          ...restoredState,
+          settings: {
+            ...restoredState.settings,
+            ...sheetBackupSettings
+          }
+        };
         saveState();
+        postSheetBackup("backup_restore", null, {
+          previousEntryCount,
+          restoredEntryCount: state.entries.length
+        });
         closeModals();
         resetEntryToToday();
         render();
@@ -5173,8 +5372,10 @@ button.calendar-day:active{transform:scale(.97)}
     if (!confirm("Clear every saved daily value from this browser?")) return;
 
     rememberUndo("Tracking data restored");
+    const deletedEntryCount = state.entries.length;
     state = { ...emptyState(), settings: { ...state.settings }, accounts: [...state.accounts] };
     saveState();
+    postSheetBackup("tracking_clear", null, { deletedEntryCount });
     closeModals();
     resetEntryToToday();
     render();
@@ -5233,6 +5434,10 @@ button.calendar-day:active{transform:scale(.97)}
       ? [...state.entries, ...incoming]
       : [...state.entries, ...incoming]);
     saveState();
+    postSheetBackupEntries("import_entry", incoming, {
+      duplicatePolicy: replace ? "replace" : "keep",
+      importedEntryCount: incoming.length
+    });
     const count = incoming.length;
     pendingImport = null;
     $("#importPreview").classList.remove("show");

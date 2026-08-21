@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#000000">
 <meta name="color-scheme" content="dark">
 <title>Ledger</title>
@@ -14,9 +14,9 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Ledger">
-<link rel="apple-touch-icon" href="icons/icon-180.png">
-<link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32.png">
-<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="app-icon-180.png">
+<link rel="icon" type="image/png" sizes="32x32" href="app-icon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="app-icon-192.png">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -173,6 +173,7 @@ body{
 button,input,select,textarea{font:inherit;color:inherit}
 button{
   cursor:pointer;
+  min-height:var(--tap-min);
   transition:transform .18s var(--ease-out);
   appearance:none;
   -webkit-appearance:none;
@@ -427,6 +428,23 @@ button:focus-visible,input:focus-visible{
   padding:0;
   font-size:20px;
 }
+
+.icon-btn.has-avatar{
+  overflow:hidden;
+  border-radius:50%;
+  padding:4px;
+}
+
+.profile-avatar-small{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  display:block;
+  background:var(--surface-3);
+}
+
+.profile-avatar-small[hidden]{display:none}
+.icon-btn.has-avatar i{display:none}
 
 .btn{
   padding:var(--space-3) var(--space-4);
@@ -1156,6 +1174,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 .row-actions button{
   width:var(--tap-min);
   height:var(--tap-min);
+  flex:0 0 var(--tap-min);
   border:1px solid var(--border);
   background:var(--glass-2);
   box-shadow:var(--glass-edge);
@@ -1195,7 +1214,29 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   margin-bottom:var(--space-1);
 }
 
-.privacy .money-value{
+.privacy .money-value,
+.privacy #ytdSub,
+.privacy #highDate,
+.privacy .goal-row,
+.privacy .period-stat strong,
+.privacy .insight small,
+.privacy .flow-chip,
+.privacy .history-detail,
+.privacy .return-row-value,
+.privacy .review-row span,
+.privacy canvas,
+.privacy .chart-tooltip{
+  filter:blur(7px);
+  user-select:none;
+}
+
+.privacy .calendar-day.positive,
+.privacy .calendar-day.negative{
+  background:var(--surface-2);
+  border-color:var(--border);
+}
+
+.privacy .calendar-day .day-detail{
   filter:blur(7px);
   user-select:none;
 }
@@ -1294,6 +1335,380 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 
 .file-input{display:none}
 
+.sr-only{
+  position:absolute!important;
+  width:1px!important;
+  height:1px!important;
+  padding:0!important;
+  margin:-1px!important;
+  overflow:hidden!important;
+  clip:rect(0,0,0,0)!important;
+  white-space:nowrap!important;
+  border:0!important;
+}
+
+.profile-summary{
+  display:flex;
+  align-items:center;
+  gap:var(--space-3);
+  padding:var(--space-3);
+  margin-bottom:var(--space-3);
+  border:1px solid var(--border);
+  border-radius:var(--radius-md);
+  background:rgba(0,0,0,.22);
+}
+
+.profile-summary img{
+  width:56px;
+  height:56px;
+  border-radius:50%;
+  flex:none;
+  background:var(--surface-3);
+}
+
+.profile-summary strong{
+  display:block;
+  font-size:var(--fs-sm);
+}
+
+.profile-summary span{
+  display:block;
+  margin-top:2px;
+  color:var(--text-muted);
+  font-size:var(--fs-2xs);
+}
+
+.avatar-fieldset{
+  min-width:0;
+  margin:0;
+  padding:0;
+  border:0;
+}
+
+.avatar-fieldset legend{
+  margin-bottom:var(--space-2);
+  color:var(--text-muted);
+  font-size:var(--fs-2xs);
+  font-weight:600;
+}
+
+.avatar-picker{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(64px,1fr));
+  gap:var(--space-2);
+}
+
+.avatar-choice{
+  position:relative;
+  display:block;
+  min-width:64px;
+  min-height:64px;
+}
+
+.avatar-choice input{
+  position:absolute;
+  inset:0;
+  opacity:0;
+  cursor:pointer;
+}
+
+.avatar-option{
+  min-height:64px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--border);
+  border-radius:var(--radius-md);
+  background:rgba(0,0,0,.24);
+  transition:border-color .18s var(--ease-out),background .18s var(--ease-out),transform .18s var(--ease-out),box-shadow .18s var(--ease-out);
+}
+
+.avatar-option img{
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  background:var(--surface-3);
+}
+
+.avatar-choice input:checked + .avatar-option{
+  border-color:rgba(146,132,244,.78);
+  background:var(--accent-soft);
+  box-shadow:0 0 0 3px rgba(146,132,244,.14);
+}
+
+.avatar-choice input:focus-visible + .avatar-option{
+  outline:3px solid rgba(146,132,244,.32);
+  outline-offset:2px;
+}
+
+.avatar-choice input:active + .avatar-option{transform:scale(.96)}
+
+.onboarding-modal{width:min(520px,100%)}
+
+.onboarding-intro{
+  display:grid;
+  justify-items:center;
+  gap:var(--space-3);
+  text-align:center;
+  margin-bottom:var(--space-5);
+}
+
+.onboarding-intro img{
+  width:82px;
+  height:82px;
+  border-radius:50%;
+  background:var(--surface-3);
+  box-shadow:0 10px 32px rgba(0,0,0,.42),var(--glass-edge-strong);
+}
+
+.onboarding-intro p{
+  margin:0;
+  color:var(--text-muted);
+  font-size:var(--fs-2xs);
+}
+
+.backup-reminder{
+  display:none;
+  grid-column:span 12;
+  align-items:center;
+  justify-content:space-between;
+  gap:var(--space-4);
+  padding:var(--space-3) var(--space-4);
+  border:1px solid rgba(236,175,76,.3);
+  border-radius:var(--radius-md);
+  background:var(--warning-soft);
+  color:var(--warning-light);
+  font-size:var(--fs-2xs);
+}
+
+.backup-reminder.show{display:flex}
+.backup-reminder p{margin:0}
+
+.backup-reminder button{
+  min-height:var(--tap-min);
+  padding:var(--space-2) var(--space-3);
+  border-radius:var(--radius-sm);
+  background:rgba(0,0,0,.24);
+  font-weight:700;
+  white-space:nowrap;
+}
+
+.details-panel{
+  margin-top:var(--space-2);
+  border:1px solid var(--border);
+  border-radius:var(--radius-md);
+  background:rgba(0,0,0,.18);
+  overflow:hidden;
+}
+
+.details-panel summary{
+  min-height:var(--tap-min);
+  padding:var(--space-3) var(--space-4);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:var(--space-3);
+  cursor:pointer;
+  color:var(--text-secondary);
+  font-size:var(--fs-2xs);
+  font-weight:700;
+  list-style:none;
+}
+
+.details-panel summary::-webkit-details-marker{display:none}
+.details-panel summary::after{content:"+";font-size:20px;color:var(--primary)}
+.details-panel[open] summary::after{content:"\2212"}
+.details-content{display:grid;gap:var(--space-3);padding:0 var(--space-4) var(--space-4)}
+.details-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3)}
+
+select,textarea{
+  width:100%;
+  min-height:46px;
+  border:1px solid var(--border);
+  background:rgba(0,0,0,.34);
+  color:var(--text);
+  border-radius:var(--radius-md);
+  padding:var(--space-3) var(--space-4);
+  outline:0;
+}
+
+select:focus,textarea:focus{
+  border-color:rgba(146,132,244,.6);
+  box-shadow:0 0 0 4px rgba(146,132,244,.16);
+}
+
+textarea{resize:vertical;min-height:82px}
+
+.account-entry-list{display:grid;gap:var(--space-2)}
+.account-entry-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(120px,.75fr);gap:var(--space-3);align-items:center}
+.account-entry-row label{color:var(--text-secondary)}
+.account-reconcile{font-size:var(--fs-2xs);color:var(--text-faint)}
+.account-reconcile.ok{color:var(--positive)}
+.account-reconcile.warn{color:var(--warning)}
+
+.dashboard-secondary{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:var(--space-4);
+}
+
+.goal-card,.accounts-card{min-height:190px}
+.progress-track{height:9px;margin-top:var(--space-5);border-radius:var(--radius-pill);background:var(--surface-3);overflow:hidden}
+.progress-fill{height:100%;width:0;border-radius:inherit;background:var(--primary);transition:width .55s var(--ease-out)}
+.goal-row{display:flex;justify-content:space-between;gap:var(--space-4);align-items:flex-end;margin-top:var(--space-4)}
+.goal-row strong{font-size:var(--fs-xl)}
+.goal-row span{font-size:var(--fs-2xs);color:var(--text-faint);text-align:right}
+.goal-empty{color:var(--text-muted);font-size:var(--fs-2xs);margin:var(--space-5) 0 0}
+
+.account-summary-list{display:grid;gap:var(--space-2);margin-top:var(--space-4)}
+.account-summary-row{display:flex;justify-content:space-between;gap:var(--space-4);padding:var(--space-2) 0;border-bottom:1px solid var(--border)}
+.account-summary-row:last-child{border:0}
+.account-summary-row span{color:var(--text-secondary);font-size:var(--fs-2xs)}
+.account-summary-row strong{font-variant-numeric:tabular-nums}
+
+.insight-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:var(--space-3);
+}
+
+.insight{
+  padding:var(--space-4);
+  border:1px solid var(--border);
+  border-radius:var(--radius-md);
+  background:rgba(0,0,0,.18);
+}
+
+.insight span{display:block;color:var(--text-faint);font-size:var(--fs-2xs)}
+.insight strong{display:block;margin-top:var(--space-2);font-size:var(--fs-lg)}
+.insight small{display:block;margin-top:var(--space-1);color:var(--text-muted);font-size:var(--fs-2xs)}
+
+.calendar-head{display:flex;justify-content:space-between;align-items:center;gap:var(--space-4);margin-bottom:var(--space-4)}
+.calendar-head > div:first-child{min-width:0}
+.calendar-controls{display:flex;flex:0 0 auto;gap:var(--space-2)}
+.calendar-controls button{width:48px;height:48px;min-height:48px;display:grid;place-items:center;border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--surface-2)}
+.calendar-controls button i{font-size:20px}
+.calendar-scroll{width:100%;overflow-x:auto;overscroll-behavior-inline:contain;padding-bottom:2px;scrollbar-width:thin}
+.calendar-scroll:focus-visible{outline:3px solid rgba(146,132,244,.32);outline-offset:3px;border-radius:var(--radius-sm)}
+
+.calendar-grid{
+  display:grid;
+  grid-template-columns:repeat(7,minmax(92px,1fr));
+  gap:6px;
+  width:100%;
+  min-width:0;
+}
+
+.calendar-weekday{text-align:center;color:var(--text-faint);font-size:14px;font-weight:700;text-transform:uppercase}
+
+.calendar-day{
+  position:relative;
+  display:grid;
+  align-content:space-between;
+  gap:var(--space-1);
+  min-height:74px;
+  padding:9px 10px;
+  border:1px solid var(--border);
+  border-radius:var(--radius-xs);
+  background:rgba(0,0,0,.17);
+  overflow:hidden;
+  text-align:left;
+}
+
+.calendar-day.blank{visibility:hidden}
+.calendar-day .day-number{font-size:14px;line-height:1;color:var(--text-muted);font-variant-numeric:tabular-nums}
+.calendar-day .day-detail{align-self:end;display:grid;gap:2px;min-width:0}
+.calendar-day .day-detail strong,.calendar-day .day-detail span{display:block;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px;line-height:1.15;font-variant-numeric:tabular-nums}
+.calendar-day .day-detail strong{color:var(--heat-ink,var(--text));font-weight:800}
+.calendar-day .day-detail span{color:var(--heat-ink,var(--text));font-weight:700}
+.calendar-day.positive,.calendar-day.negative{background:var(--heat-bg);border-color:var(--heat-border)}
+.calendar-day.positive .day-number,.calendar-day.negative .day-number{color:var(--heat-ink,var(--text))}
+.calendar-day.neutral-recorded{border-color:var(--border-strong);background:var(--surface-2)}
+.calendar-day.neutral-recorded .day-detail span{color:var(--text-soft)}
+button.calendar-day:hover{border-color:var(--text-soft);filter:brightness(1.1)}
+button.calendar-day:active{transform:scale(.97)}
+
+.review-list{display:grid;gap:var(--space-2)}
+.review-row{display:grid;grid-template-columns:minmax(0,1fr) repeat(3,minmax(110px,.5fr));gap:var(--space-3);align-items:center;padding:var(--space-3);border-bottom:1px solid var(--border)}
+.review-row span{color:var(--text-muted);font-size:var(--fs-2xs)}
+.review-row strong{font-size:var(--fs-sm)}
+
+.history-detail{display:block;margin-top:4px;color:var(--text-faint);font-size:14px;max-width:250px;overflow:hidden;text-overflow:ellipsis}
+.flow-chip{display:inline-flex;margin-top:6px;padding:4px 8px;border-radius:var(--radius-pill);background:var(--info-soft);color:var(--info-light);font-size:14px;font-weight:700}
+
+.import-preview{display:none;margin-top:var(--space-4)}
+.import-preview.show{display:block}
+.preview-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-2);margin-bottom:var(--space-3)}
+.preview-stat{padding:var(--space-3);border:1px solid var(--border);border-radius:var(--radius-sm);background:rgba(0,0,0,.2)}
+.preview-stat span{display:block;color:var(--text-faint);font-size:14px}
+.preview-stat strong{display:block;margin-top:var(--space-1)}
+.preview-list{max-height:170px;overflow:auto;border:1px solid var(--border);border-radius:var(--radius-sm)}
+.preview-row{display:flex;justify-content:space-between;gap:var(--space-3);padding:var(--space-2) var(--space-3);border-bottom:1px solid var(--border);font-size:var(--fs-2xs)}
+.preview-row:last-child{border:0}
+
+.setting-section{padding:var(--space-4) 0;border-bottom:1px solid var(--border)}
+.setting-section:first-child{padding-top:0}
+.setting-section:last-child{border-bottom:0;padding-bottom:0}
+.setting-section h4{margin:0 0 var(--space-1);font-size:var(--fs-sm)}
+.setting-section > p{margin:0 0 var(--space-3);color:var(--text-faint);font-size:var(--fs-2xs)}
+.setting-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3)}
+
+.settings-modal{width:min(760px,100%)}
+
+.settings-tabs{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:var(--space-2);
+  margin-bottom:var(--space-4);
+}
+
+.settings-tabs button{
+  min-height:var(--tap-min);
+  padding:var(--space-2) var(--space-3);
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  background:rgba(0,0,0,.22);
+  color:var(--text-muted);
+  font-size:var(--fs-2xs);
+  font-weight:800;
+  text-align:center;
+}
+
+.settings-tabs button.active{
+  background:var(--primary);
+  border-color:rgba(255,255,255,.18);
+  color:var(--accent-on);
+}
+
+.settings-tab-panel{display:none}
+.settings-tab-panel.active{display:block}
+
+.terminology-toggle{
+  width:100%;
+  min-height:64px;
+  padding:var(--space-3) var(--space-4);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:var(--space-4);
+  border:1px solid var(--border);
+  border-radius:var(--radius-md);
+  background:rgba(0,0,0,.24);
+  text-align:left;
+}
+
+.terminology-toggle:hover{border-color:var(--border-strong);background:var(--surface-2)}
+.terminology-copy{min-width:0}
+.terminology-copy strong{display:block;font-size:var(--fs-sm)}
+.terminology-copy small{display:block;margin-top:2px;color:var(--text-muted);font-size:var(--fs-2xs);line-height:1.4}
+.switch-track{position:relative;flex:0 0 52px;width:52px;height:32px;border-radius:var(--radius-pill);background:var(--surface-3);border:1px solid var(--border-strong);transition:background .2s var(--ease-out)}
+.switch-thumb{position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:var(--text-soft);box-shadow:0 2px 8px rgba(0,0,0,.4);transition:transform .24s var(--ease-out),background .2s var(--ease-out)}
+.terminology-toggle[aria-checked="true"] .switch-track{background:var(--primary)}
+.terminology-toggle[aria-checked="true"] .switch-thumb{transform:translateX(20px);background:var(--accent-on)}
+
+.toast{display:flex;align-items:center;gap:var(--space-3)}
+.toast button{display:none;min-height:32px;padding:var(--space-1) var(--space-3);border-radius:var(--radius-xs);background:var(--primary);color:var(--accent-on);font-weight:800}
+.toast.has-action button{display:block}
+
 .toast{
   position:fixed;
   right:calc(18px + var(--safe-right));
@@ -1326,6 +1741,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   .span-7,.span-5,.span-8,.span-4{grid-column:span 12}
   .stats-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
   .stat-card{min-height:106px}
+  .insight-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
 
 @media(max-width:840px){
@@ -1356,6 +1772,24 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   }
   .periods{width:100%}
   .stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .calendar-scroll{display:block}
+  .calendar-grid{
+    grid-template-columns:repeat(7,minmax(44px,1fr));
+    width:100%;
+    min-width:332px;
+    max-width:none;
+    gap:4px;
+  }
+  .calendar-day{
+    aspect-ratio:1;
+    min-height:44px;
+    place-items:center;
+    align-content:center;
+    padding:5px;
+    text-align:center;
+  }
+  .calendar-day .day-number{position:absolute;top:4px;left:6px}
+  .calendar-day .day-detail{display:none}
   .mobile-nav{
     position:fixed;
     left:calc(10px + var(--safe-left));
@@ -1372,6 +1806,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     backdrop-filter:var(--glass-blur-strong);
     -webkit-backdrop-filter:var(--glass-blur-strong);
     box-shadow:var(--shadow-md),var(--glass-edge-strong);
+    overflow:hidden;
   }
   .mobile-nav .nav-indicator{
     position:absolute;
@@ -1383,7 +1818,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     opacity:0;
     pointer-events:none;
     z-index:0;
-    transition:transform .42s var(--ease-spring),width .38s var(--ease-out),height .38s var(--ease-out),opacity .2s var(--ease-out);
+    transition:transform .34s var(--ease-out),width .3s var(--ease-out),height .3s var(--ease-out),opacity .2s var(--ease-out);
   }
   .mobile-nav .nav-indicator.ready{opacity:1}
   .mobile-nav button{
@@ -1431,22 +1866,39 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   }
   .history-tools{width:100%;flex-wrap:wrap}
   .search{width:100%}
-  /* The 5-column table can't fit a phone without sideways scrolling, which
-     pushed the row actions off-screen. Drop the percentage column (the dollar
-     change beside it carries the same story), shorten the date, and let the
-     table size to the viewport so every row stays reachable. */
-  table{min-width:0;table-layout:fixed}
-  th:nth-child(4),td:nth-child(4){display:none}
-  th:nth-child(1),td:nth-child(1){width:21%}
-  th:nth-child(2),td:nth-child(2){width:33%}
-  th:nth-child(3),td:nth-child(3){width:28%;text-align:right}
-  th:nth-child(5),td:nth-child(5){width:18%}
-  th,td{padding-left:10px;padding-right:10px}
+  .table-wrap{overflow:visible}
+  table,tbody{display:block;width:100%;min-width:0}
+  thead{display:none}
+  tbody{display:grid}
+  tbody tr{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    grid-template-areas:
+      "date value"
+      "change actions";
+    gap:var(--space-3) var(--space-4);
+    align-items:center;
+    padding:var(--space-4);
+    border-bottom:1px solid var(--border);
+  }
+  tbody td{display:block;width:auto!important;padding:0;border:0;white-space:normal;min-width:0}
+  tbody td:nth-child(1){grid-area:date}
+  tbody td:nth-child(2){grid-area:value;text-align:right;white-space:nowrap}
+  tbody td:nth-child(3){grid-area:change;text-align:left;white-space:nowrap}
+  tbody td:nth-child(4){display:none}
+  tbody td:nth-child(5){grid-area:actions}
+  .row-actions{min-width:96px}
   .date-long{display:none}
   .date-short{display:inline}
   td strong{font-size:var(--fs-xs)}
   .modal-grid{grid-template-columns:1fr}
   .full{grid-column:auto}
+  .details-grid,.setting-grid,.dashboard-secondary{grid-template-columns:1fr}
+  .account-entry-row{grid-template-columns:1fr}
+  .insight-grid{grid-template-columns:1fr 1fr}
+  .calendar-grid{gap:4px;min-width:332px}
+  .review-row{grid-template-columns:1fr 1fr}
+  .backup-reminder{align-items:flex-start;flex-direction:column}
 }
 
 @media(max-width:420px){
@@ -1460,15 +1912,18 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   .card{border-radius:var(--radius-lg)}
   .card.pad{padding:var(--space-4)}
   .stats-grid{grid-template-columns:1fr}
+  .insight-grid{grid-template-columns:1fr}
+  .preview-stats{grid-template-columns:1fr}
+  .calendar-head{align-items:stretch;flex-direction:column}
+  .calendar-controls{display:grid;grid-template-columns:1fr 1fr;width:100%}
+  .calendar-controls button{width:100%}
+  .calendar-card{padding-inline:8px!important}
+  .calendar-card .calendar-head{padding-inline:8px}
+  .periods{grid-template-columns:repeat(2,1fr)}
 }
 
-/* Narrowest phones only: the dollar change goes too, leaving date and total. */
 @media(max-width:369px){
-  th:nth-child(3),td:nth-child(3){display:none}
-  th:nth-child(1),td:nth-child(1){width:30%}
-  th:nth-child(2),td:nth-child(2){width:44%}
-  th:nth-child(5),td:nth-child(5){width:26%}
-  th,td{padding-left:14px;padding-right:14px}
+  tbody tr{padding-left:var(--space-3);padding-right:var(--space-3)}
 }
 
 /* Entrance + micro-interaction animations */
@@ -1535,7 +1990,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
       <div class="brand-mark"><i class="ph-fill ph-chart-line-up"></i></div>
       <div class="brand-copy">
         <strong>Ledger</strong>
-        <span>Portfolio Journal</span>
+        <span data-term="brandSubtitle">Portfolio Journal</span>
       </div>
     </div>
 
@@ -1555,7 +2010,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
       </button>
       <button data-scroll="returns">
         <i class="ph ph-percent"></i>
-        <span class="label">Returns</span>
+        <span class="label" data-term="returnsNav">Returns</span>
       </button>
       <button data-scroll="history">
         <i class="ph ph-clock-counter-clockwise"></i>
@@ -1564,6 +2019,10 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
       <button id="sidebarDataBtn">
         <i class="ph ph-database"></i>
         <span class="label">Data</span>
+      </button>
+      <button id="sidebarSettingsBtn">
+        <i class="ph ph-gear-six"></i>
+        <span class="label">Settings</span>
       </button>
     </nav>
 
@@ -1590,6 +2049,10 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
         <button class="icon-btn" id="dataBtn" aria-label="Data tools" title="Data tools">
           <i class="ph ph-database"></i>
         </button>
+        <button class="icon-btn" id="settingsBtn" aria-label="Settings" title="Settings">
+          <img class="profile-avatar-small" id="headerAvatar" alt="" hidden>
+          <i class="ph ph-gear-six" id="settingsIcon"></i>
+        </button>
         <button class="btn primary" id="addTodayBtn">
           <i class="ph ph-plus"></i>
           Add today
@@ -1598,17 +2061,20 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     </header>
 
     <section class="screen grid active" id="screen-dashboard">
+      <div class="backup-reminder" id="backupReminder">
+        <p><strong>Your history has not been backed up recently.</strong> Save a backup so a browser reset cannot erase it.</p>
+        <button type="button" id="backupReminderBtn">Back up now</button>
+      </div>
       <article class="card pad hero span-12">
         <div class="eyebrow">
           <i class="ph ph-wallet"></i>
-          Current portfolio value
+          <span data-term="currentValueLabel">Current portfolio value</span>
         </div>
 
         <div class="balance money-value" id="currentValue">$0.00</div>
 
         <div class="balance-row">
           <span class="change-chip neutral" id="dailyChange">
-            <i class="ph ph-minus"></i>
             No previous entry
           </span>
           <span class="as-of" id="asOfLabel">No values recorded yet</span>
@@ -1616,15 +2082,15 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 
         <div class="hero-stats">
           <div class="hero-stat">
-            <span>7 day change</span>
+            <span data-term="sevenDayGain">7 day investment gain</span>
             <strong class="money-value" id="weekChange">Not enough data</strong>
           </div>
           <div class="hero-stat">
-            <span>30 day change</span>
+            <span data-term="thirtyDayGain">30 day investment gain</span>
             <strong class="money-value" id="monthChange">Not enough data</strong>
           </div>
           <div class="hero-stat">
-            <span>Since tracking</span>
+            <span data-term="sinceTrackingGain">Investment growth since tracking</span>
             <strong class="money-value" id="allChange">Not enough data</strong>
           </div>
         </div>
@@ -1633,7 +2099,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
       <section class="stats-grid span-12">
         <article class="card stat-card">
           <div class="stat-top">
-            <div class="stat-label">Year to date</div>
+            <div class="stat-label" data-term="ytdReturn">Year-to-date return</div>
             <div class="stat-icon green"><i class="ph ph-calendar-dots"></i></div>
           </div>
           <div class="stat-value money-value" id="ytdChange">Not enough data</div>
@@ -1642,29 +2108,53 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 
         <article class="card stat-card">
           <div class="stat-top">
-            <div class="stat-label">Highest value</div>
+            <div class="stat-label" data-term="drawdown">Current drawdown</div>
             <div class="stat-icon blue"><i class="ph ph-crown-simple"></i></div>
           </div>
-          <div class="stat-value money-value" id="highValue">$0.00</div>
+          <div class="stat-value money-value" id="highValue">0.00%</div>
           <div class="stat-sub" id="highDate">No data yet</div>
         </article>
 
         <article class="card stat-card">
           <div class="stat-top">
-            <div class="stat-label">Best day</div>
+            <div class="stat-label" data-term="netContributions">Net contributions</div>
             <div class="stat-icon amber"><i class="ph ph-trend-up"></i></div>
           </div>
-          <div class="stat-value money-value" id="bestDay">Not enough data</div>
-          <div class="stat-sub" id="bestDayDate">Daily balance change</div>
+          <div class="stat-value money-value" id="bestDay">$0.00</div>
+          <div class="stat-sub" id="bestDayDate">Since tracking began</div>
         </article>
 
         <article class="card stat-card">
           <div class="stat-top">
-            <div class="stat-label">Days recorded</div>
+            <div class="stat-label" data-term="investmentGrowth">Investment growth</div>
             <div class="stat-icon violet"><i class="ph ph-calendar-check"></i></div>
           </div>
-          <div class="stat-value" id="daysRecorded">0</div>
-          <div class="stat-sub" id="trackingSince">No history yet</div>
+          <div class="stat-value money-value" id="daysRecorded">$0.00</div>
+          <div class="stat-sub" id="trackingSince">After cash flows</div>
+        </article>
+      </section>
+
+      <section class="dashboard-secondary span-12">
+        <article class="card pad goal-card">
+          <div class="section-title">
+            <div>
+              <h2 data-term="goalProgress">Goal progress</h2>
+              <p id="goalSubtitle">Set a target for your portfolio.</p>
+            </div>
+            <button class="btn small" type="button" id="editGoalBtn">Set goal</button>
+          </div>
+          <div id="goalContent"></div>
+        </article>
+
+        <article class="card pad accounts-card">
+          <div class="section-title">
+            <div>
+              <h2 data-term="accountBreakdown">Account breakdown</h2>
+              <p>Optional detail from your latest entry.</p>
+            </div>
+            <button class="btn small" type="button" id="editAccountsBtn">Setup</button>
+          </div>
+          <div class="account-summary-list" id="accountSummary"></div>
         </article>
       </section>
     </section>
@@ -1673,7 +2163,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
       <article class="card pad entry-card span-7" id="entryCard">
         <div class="card-head">
           <div>
-            <h2>Record a value</h2>
+            <h2 data-term="recordValue">Record a value</h2>
             <p>Enter the total shown in Desjardins.</p>
           </div>
           <div class="date-chip">
@@ -1689,13 +2179,55 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
           </div>
 
           <div class="field">
-            <label for="entryValue">Total investment value</label>
+            <label for="entryValue" data-term="totalInvestmentValue">Total investment value</label>
             <div class="input-wrap">
               <span class="prefix">$</span>
-              <input class="money-input" id="entryValue" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0.00" required>
+              <input class="money-input" id="entryValue" type="text" inputmode="decimal" placeholder="0.00" autocomplete="off" required>
             </div>
             <span class="form-help" id="entryHint">Today is selected automatically.</span>
           </div>
+
+          <details class="details-panel" id="entryDetails">
+            <summary data-term="entryDetailsSummary">Contribution, withdrawal, note, or account details</summary>
+            <div class="details-content">
+              <div class="details-grid">
+                <div class="field">
+                  <label for="entryFlowType" data-term="moneyMoved">Money moved</label>
+                  <select id="entryFlowType">
+                    <option value="none" data-term="noMoneyMoved">No money moved</option>
+                    <option value="contribution" data-term="contribution">Contribution</option>
+                    <option value="withdrawal" data-term="withdrawal">Withdrawal</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="entryFlowAmount">Amount</label>
+                  <div class="input-wrap">
+                    <span class="prefix">$</span>
+                    <input id="entryFlowAmount" type="text" inputmode="decimal" placeholder="0.00" style="padding-left:32px" disabled>
+                  </div>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="entryFee">Fees paid, optional</label>
+                <div class="input-wrap">
+                  <span class="prefix">$</span>
+                  <input id="entryFee" type="text" inputmode="decimal" placeholder="0.00" style="padding-left:32px">
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="entryNote">Note, optional</label>
+                <textarea id="entryNote" maxlength="240" placeholder="What changed today?"></textarea>
+              </div>
+
+              <div class="field" id="accountEntrySection">
+                <label>Account values, optional</label>
+                <div class="account-entry-list" id="accountEntryList"></div>
+                <span class="account-reconcile" id="accountReconcile">Account values can be left blank.</span>
+              </div>
+            </div>
+          </details>
 
           <div class="entry-actions">
             <button class="btn primary" type="submit">
@@ -1723,8 +2255,8 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
       <article class="card pad chart-card span-8" id="charts">
         <div class="section-title">
           <div>
-            <h2>Portfolio value</h2>
-            <p>Your total recorded balance over time.</p>
+            <h2 data-term="portfolioValue">Portfolio value</h2>
+            <p data-term="portfolioValueHelp">Your recorded balance over real calendar time.</p>
           </div>
 
           <div class="periods" id="periods">
@@ -1736,7 +2268,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
         </div>
 
         <div class="chart-wrap" id="valueChartWrap">
-          <canvas id="valueChart"></canvas>
+          <canvas id="valueChart" tabindex="0" role="img" aria-label="Portfolio value chart. Use left and right arrow keys to inspect values."></canvas>
           <div class="chart-empty" id="valueChartEmpty">
             <div>
               <i class="ph ph-chart-line"></i>
@@ -1744,19 +2276,20 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
             </div>
           </div>
           <div class="chart-tooltip" id="valueChartTooltip"></div>
+          <p class="sr-only" id="valueChartSummary"></p>
         </div>
       </article>
 
       <article class="card pad delta-card span-4">
         <div class="section-title">
           <div>
-            <h2>Daily movement</h2>
-            <p>Change from one recorded day to the next.</p>
+            <h2 data-term="movementTitle">Movement between entries</h2>
+            <p data-term="movementHelp">Change from one recorded entry to the next.</p>
           </div>
         </div>
 
         <div class="delta-wrap">
-          <canvas id="deltaChart"></canvas>
+          <canvas id="deltaChart" role="img" aria-label="Changes between recorded entries"></canvas>
           <div class="chart-empty" id="deltaChartEmpty">
             <div>
               <i class="ph ph-chart-bar"></i>
@@ -1768,10 +2301,20 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     </section>
 
     <section class="screen grid" id="screen-returns">
+      <article class="card pad span-12">
+        <div class="section-title">
+          <div>
+            <h2 data-term="performanceSnapshot">Performance snapshot</h2>
+            <p data-term="performanceSnapshotHelp">Returns account for your recorded contributions and withdrawals.</p>
+          </div>
+        </div>
+        <div class="insight-grid" id="insightGrid"></div>
+      </article>
+
       <article class="card pad returns-card span-7" id="returns">
         <div class="section-title">
           <div>
-            <h2>Rate of return</h2>
+            <h2 data-term="rateOfReturn">Rate of return</h2>
             <p>Tap a period to open its detail.</p>
           </div>
         </div>
@@ -1789,6 +2332,32 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 
         <div class="month-list" id="monthList"></div>
       </article>
+
+      <article class="card pad span-12">
+        <div class="section-title">
+          <div>
+            <h2 data-term="annualReviews">Annual reviews</h2>
+            <p data-term="annualReviewsHelp">Yearly growth, cash flows, and cash-flow-adjusted return.</p>
+          </div>
+        </div>
+        <div class="review-list" id="annualList"></div>
+      </article>
+
+      <article class="card pad calendar-card span-12">
+        <div class="calendar-head">
+          <div>
+            <h2 id="calendarTitle" style="margin:0">Performance calendar</h2>
+            <p data-term="calendarHelp" style="margin:4px 0 0;color:var(--text-faint);font-size:var(--fs-2xs)">Daily cash-flow-adjusted movement. Deeper colour means a larger change.</p>
+          </div>
+          <div class="calendar-controls">
+            <button type="button" id="calendarPrev" aria-label="Previous month"><i class="ph ph-caret-left"></i></button>
+            <button type="button" id="calendarNext" aria-label="Next month"><i class="ph ph-caret-right"></i></button>
+          </div>
+        </div>
+        <div class="calendar-scroll" tabindex="0" aria-label="Scrollable performance calendar">
+          <div class="calendar-grid" id="calendarGrid"></div>
+        </div>
+      </article>
     </section>
 
     <section class="screen grid" id="screen-history">
@@ -1800,10 +2369,11 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
           </div>
 
           <div class="history-tools">
-            <input class="search" id="historySearch" placeholder="Search date">
+            <label class="sr-only" for="historySearch">Search history by date or note</label>
+            <input class="search" id="historySearch" placeholder="Search date or note">
             <button class="btn small" id="importBtn">
               <i class="ph ph-upload-simple"></i>
-              Import CSV
+              <span data-term="importCsv">Import CSV</span>
             </button>
           </div>
         </div>
@@ -1819,11 +2389,11 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   <button class="active" data-mobile-scroll="dashboard" aria-label="Dashboard" aria-current="page">
     <i class="ph ph-squares-four" aria-hidden="true"></i>
   </button>
-  <button data-mobile-scroll="add" aria-label="Add a value">
-    <i class="ph ph-plus-circle" aria-hidden="true"></i>
-  </button>
   <button data-mobile-scroll="charts" aria-label="Charts">
     <i class="ph ph-chart-line" aria-hidden="true"></i>
+  </button>
+  <button data-mobile-scroll="add" aria-label="Add a value">
+    <i class="ph ph-plus-circle" aria-hidden="true"></i>
   </button>
   <button data-mobile-scroll="returns" aria-label="Returns">
     <i class="ph ph-percent" aria-hidden="true"></i>
@@ -1833,11 +2403,46 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   </button>
 </nav>
 
-<div class="modal-backdrop" id="editModal">
-  <div class="modal">
+<div class="modal-backdrop" id="onboardingModal" aria-hidden="true">
+  <div class="modal onboarding-modal" role="dialog" aria-modal="true" aria-labelledby="onboardingModalTitle" tabindex="-1">
     <div class="modal-head">
       <div>
-        <h3>Edit value</h3>
+        <h3 id="onboardingModalTitle">Make Ledger yours</h3>
+        <p>Name and avatar are saved only in this browser.</p>
+      </div>
+    </div>
+
+    <div class="modal-body">
+      <form id="onboardingForm">
+        <div class="onboarding-intro">
+          <img id="onboardingAvatarPreview" alt="Selected avatar">
+          <p>This helps the app greet you and makes Settings feel personal.</p>
+        </div>
+
+        <div class="field">
+          <label for="onboardingUserName">Your name</label>
+          <input id="onboardingUserName" maxlength="40" autocomplete="given-name" placeholder="David">
+        </div>
+
+        <fieldset class="avatar-fieldset" style="margin-top:var(--space-4)">
+          <legend>Pick an avatar</legend>
+          <div class="avatar-picker" id="onboardingAvatarPicker"></div>
+        </fieldset>
+
+        <div class="modal-actions">
+          <button class="btn" type="button" id="onboardingSkipBtn">Skip for now</button>
+          <button class="btn primary" type="submit">Save profile</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="editModal" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="editModalTitle" tabindex="-1">
+    <div class="modal-head">
+      <div>
+        <h3 id="editModalTitle">Edit value</h3>
         <p>Change the date or total for this entry.</p>
       </div>
       <button class="icon-btn close-modal" aria-label="Close">
@@ -1857,8 +2462,37 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
             <label for="editValue">Total value</label>
             <div class="input-wrap">
               <span class="prefix">$</span>
-              <input id="editValue" type="number" min="0" step="0.01" required style="padding-left:32px">
+              <input id="editValue" type="text" inputmode="decimal" required style="padding-left:32px">
             </div>
+          </div>
+        </div>
+
+        <div class="setting-section">
+          <div class="modal-grid">
+            <div class="field">
+              <label for="editFlowType" data-term="moneyMoved">Money moved</label>
+              <select id="editFlowType">
+                <option value="none" data-term="noMoneyMoved">No money moved</option>
+                <option value="contribution" data-term="contribution">Contribution</option>
+                <option value="withdrawal" data-term="withdrawal">Withdrawal</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="editFlowAmount">Amount</label>
+              <input id="editFlowAmount" type="text" inputmode="decimal" placeholder="0.00">
+            </div>
+            <div class="field">
+              <label for="editFee">Fees paid</label>
+              <input id="editFee" type="text" inputmode="decimal" placeholder="0.00">
+            </div>
+            <div class="field">
+              <label for="editNote">Note</label>
+              <textarea id="editNote" maxlength="240" placeholder="What changed?"></textarea>
+            </div>
+          </div>
+          <div class="field" id="editAccountSection" style="margin-top:var(--space-3)">
+            <label>Account values</label>
+            <div class="account-entry-list" id="editAccountList"></div>
           </div>
         </div>
 
@@ -1871,12 +2505,12 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   </div>
 </div>
 
-<div class="modal-backdrop" id="dataModal">
-  <div class="modal">
+<div class="modal-backdrop" id="settingsModal" aria-hidden="true">
+  <div class="modal settings-modal" role="dialog" aria-modal="true" aria-labelledby="settingsModalTitle" tabindex="-1">
     <div class="modal-head">
       <div>
-        <h3>Data tools</h3>
-        <p>Back up, import, or export your portfolio history.</p>
+        <h3 id="settingsModalTitle">Settings</h3>
+        <p id="settingsModalSubtitle">Profile, data tools, imports, and portfolio setup.</p>
       </div>
       <button class="icon-btn close-modal" aria-label="Close">
         <i class="ph ph-x"></i>
@@ -1884,64 +2518,190 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     </div>
 
     <div class="modal-body">
-      <div class="notice">
-        Your entries are stored locally in this browser. Export a backup before clearing browser data or moving to another device.
+      <div class="settings-tabs" role="tablist" aria-label="Settings sections">
+        <button class="active" type="button" role="tab" id="settingsTabOnboardingButton" data-settings-tab="onboarding" aria-selected="true" aria-controls="settingsTabOnboarding">Onboarding</button>
+        <button type="button" role="tab" id="settingsTabDataButton" data-settings-tab="data" aria-selected="false" aria-controls="settingsTabData">Data tools</button>
+        <button type="button" role="tab" id="settingsTabImportButton" data-settings-tab="import" aria-selected="false" aria-controls="settingsTabImport">Importing</button>
       </div>
 
-      <div class="modal-grid">
-        <button class="btn full" id="exportCsvBtn" type="button">
+      <section class="settings-tab-panel active" id="settingsTabOnboarding" role="tabpanel" aria-labelledby="settingsTabOnboardingButton">
+        <form id="settingsForm">
+          <section class="setting-section">
+            <h4>Your profile</h4>
+            <p>Your name and avatar personalize the dashboard and stay local to this browser.</p>
+            <div class="profile-summary">
+              <img id="settingsAvatarPreview" alt="Selected avatar">
+              <div>
+                <strong id="settingsProfileNamePreview">Your profile</strong>
+                <span>Tap Save settings after changing these details.</span>
+              </div>
+            </div>
+            <div class="field">
+              <label for="settingsUserName">Your name</label>
+              <input id="settingsUserName" maxlength="40" autocomplete="given-name" placeholder="David">
+            </div>
+            <fieldset class="avatar-fieldset" style="margin-top:var(--space-4)">
+              <legend>Pick an avatar</legend>
+              <div class="avatar-picker" id="settingsAvatarPicker"></div>
+            </fieldset>
+          </section>
+
+          <section class="setting-section">
+            <h4>Language style</h4>
+            <p>Switch the entire app between standard investing terminology and wording anyone can understand.</p>
+            <button class="terminology-toggle" id="terminologyToggle" type="button" role="switch" aria-checked="false">
+              <span class="terminology-copy">
+                <strong id="terminologyLabel">Plain language</strong>
+                <small id="terminologyDescription">Uses simple explanations instead of investing jargon.</small>
+              </span>
+              <span class="switch-track" aria-hidden="true"><span class="switch-thumb"></span></span>
+            </button>
+          </section>
+
+          <section class="setting-section">
+            <h4 data-term="portfolioSetupSection">Portfolio</h4>
+            <p>Use a name that makes sense when you export reports.</p>
+            <div class="field">
+              <label for="portfolioName" data-term="portfolioName">Portfolio name</label>
+              <input id="portfolioName" maxlength="60" placeholder="My portfolio">
+            </div>
+          </section>
+
+          <section class="setting-section">
+            <h4>Goal</h4>
+            <p>Leave either field blank if you do not want a dated goal.</p>
+            <div class="setting-grid">
+              <div class="field">
+                <label for="goalValue">Target value</label>
+                <input id="goalValue" type="text" inputmode="decimal" placeholder="100000">
+              </div>
+              <div class="field">
+                <label for="goalDate">Target date</label>
+                <input id="goalDate" type="date">
+              </div>
+            </div>
+          </section>
+
+          <section class="setting-section">
+            <h4 data-term="benchmark">Benchmark</h4>
+            <p data-term="benchmarkHelp">This is an offline annual target, used for period comparisons and goal estimates.</p>
+            <div class="setting-grid">
+              <div class="field">
+                <label for="benchmarkName" data-term="benchmarkName">Benchmark name</label>
+                <input id="benchmarkName" maxlength="50" placeholder="Annual target">
+              </div>
+              <div class="field">
+                <label for="benchmarkRate" data-term="annualRate">Annual rate</label>
+                <div class="input-wrap">
+                  <input id="benchmarkRate" type="number" inputmode="decimal" min="-99" max="100" step="0.1" placeholder="6" style="padding-right:34px">
+                  <span class="prefix" style="left:auto;right:15px">%</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="setting-section">
+            <h4>Accounts</h4>
+            <p>Optional. Enter one account name per line. Account values remain optional on every entry.</p>
+            <div class="field">
+              <label for="accountNames">Account names</label>
+              <textarea id="accountNames" placeholder="RRSP&#10;TFSA"></textarea>
+            </div>
+          </section>
+
+          <section class="setting-section">
+            <h4>Backup reminder</h4>
+            <div class="field">
+              <label for="backupReminderDays">Remind me after</label>
+              <select id="backupReminderDays">
+                <option value="7">7 days</option>
+                <option value="14">14 days</option>
+                <option value="30">30 days</option>
+                <option value="0">Do not remind me</option>
+              </select>
+            </div>
+          </section>
+
+          <div class="modal-actions">
+            <button class="btn" type="button" data-close>Cancel</button>
+            <button class="btn primary" type="submit">Save settings</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="settings-tab-panel" id="settingsTabData" role="tabpanel" aria-labelledby="settingsTabDataButton" hidden>
+        <div class="notice">
+          Your entries are stored locally in this browser. Export a backup before clearing browser data or moving to another device.
+        </div>
+
+        <div class="field" style="margin-bottom:var(--space-4)">
+          <label for="backupPassword">Backup password, optional</label>
+          <input id="backupPassword" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters">
+          <span class="form-help">Enter a password before exporting to create an encrypted backup.</span>
+        </div>
+
+        <div class="modal-grid">
+          <button class="btn full" id="exportCsvBtn" type="button">
+            <i class="ph ph-file-csv"></i>
+            <span data-term="exportCsv">Export history as CSV</span>
+          </button>
+
+          <button class="btn full" id="exportBackupBtn" type="button">
+            <i class="ph ph-download-simple"></i>
+            Export full backup
+          </button>
+
+          <button class="btn full" id="exportEncryptedBtn" type="button">
+            <i class="ph ph-lock-key"></i>
+            Export encrypted backup
+          </button>
+
+          <label class="btn full" for="backupFile">
+            <i class="ph ph-upload-simple"></i>
+            Restore full backup
+          </label>
+          <input class="file-input" id="backupFile" type="file" accept=".json,.ledger,application/json">
+
+          <button class="btn danger full" id="resetBtn" type="button">
+            <i class="ph ph-trash"></i>
+            Clear all tracking data
+          </button>
+        </div>
+      </section>
+
+      <section class="settings-tab-panel" id="settingsTabImport" role="tabpanel" aria-labelledby="settingsTabImportButton" hidden>
+        <div class="notice">
+          CSV works best with a date column and a value, amount, balance, or total column. Imported dates replace existing values for the same day.
+        </div>
+
+        <label class="btn" for="csvFile" style="width:100%">
           <i class="ph ph-file-csv"></i>
-          Export history as CSV
-        </button>
-
-        <button class="btn full" id="exportBackupBtn" type="button">
-          <i class="ph ph-download-simple"></i>
-          Export full backup
-        </button>
-
-        <label class="btn full" for="backupFile">
-          <i class="ph ph-upload-simple"></i>
-          Restore full backup
+          <span data-term="chooseCsv">Choose CSV file</span>
         </label>
-        <input class="file-input" id="backupFile" type="file" accept=".json,application/json">
+        <input class="file-input" id="csvFile" type="file" accept=".csv,text/csv">
 
-        <button class="btn danger full" id="resetBtn" type="button">
-          <i class="ph ph-trash"></i>
-          Clear all tracking data
-        </button>
-      </div>
+        <div class="import-preview" id="importPreview">
+          <div class="preview-stats" id="importPreviewStats"></div>
+          <div class="preview-list" id="importPreviewList"></div>
+          <div class="field" style="margin-top:var(--space-3)">
+            <label for="duplicatePolicy">When a date already exists</label>
+            <select id="duplicatePolicy">
+              <option value="replace">Replace the existing value</option>
+              <option value="keep">Keep the existing value</option>
+            </select>
+          </div>
+          <div class="modal-actions">
+            <button class="btn" type="button" id="cancelImportBtn">Cancel</button>
+            <button class="btn primary" type="button" id="confirmImportBtn">Import entries</button>
+          </div>
+        </div>
+      </section>
     </div>
   </div>
 </div>
 
-<div class="modal-backdrop" id="importModal">
-  <div class="modal">
-    <div class="modal-head">
-      <div>
-        <h3>Import spreadsheet history</h3>
-        <p>Bring over the dates and totals you already track.</p>
-      </div>
-      <button class="icon-btn close-modal" aria-label="Close">
-        <i class="ph ph-x"></i>
-      </button>
-    </div>
-
-    <div class="modal-body">
-      <div class="notice">
-        CSV works best with a date column and a value, amount, balance, or total column. Imported dates replace existing values for the same day.
-      </div>
-
-      <label class="btn" for="csvFile" style="width:100%">
-        <i class="ph ph-file-csv"></i>
-        Choose CSV file
-      </label>
-      <input class="file-input" id="csvFile" type="file" accept=".csv,text/csv">
-    </div>
-  </div>
-</div>
-
-<div class="modal-backdrop" id="periodModal">
-  <div class="modal">
+<div class="modal-backdrop" id="periodModal" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="periodModalTitle" tabindex="-1">
     <div class="modal-head">
       <div>
         <h3 id="periodModalTitle">Period detail</h3>
@@ -1974,35 +2734,61 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true">
+  <span id="toastMessage"></span>
+  <button type="button" id="undoBtn">Undo</button>
+</div>
 
 <script>
 (() => {
-  const STORAGE_KEY = "ledger-portfolio-journal-v3";
+  const STORAGE_KEY = "ledger-portfolio-journal-v4";
+  const AVATAR_SEEDS = [
+    "tmo1feju",
+    "ledger",
+    "northstar",
+    "steady-growth",
+    "maple-market",
+    "cashflow",
+    "moonshot",
+    "rainy-day"
+  ];
+  const DEFAULT_AVATAR_SEED = AVATAR_SEEDS[0];
 
-  // A realistic 54-day starter history so a fresh install isn't a blank
-  // slate. Mirrors a real recorded run: started at $80,000, peaked at
-  // $83,346.34, and has settled at $82,667.68 after a recent pullback.
-  const SEED_VALUES = [80000,80191.01,80140.93,80323.65,80416.25,80663.08,80746.4,80904.3,80774.32,80961.83,80944.2,81087.86,81257.7,81212.07,81347.74,81560.53,81616.77,81610.75,81798.1,81943.14,81801.05,82106.97,82158.35,82139.12,82167.83,82472.26,82377.96,82388.69,82468.38,82756.75,82766.25,82900.56,82955.88,82978.33,83176.94,83086.4,83210.6,83345.34,83346.34,83343.34,83343.34,83299.84,83302.6,83163.88,83176.52,83167.44,83109.58,83116.98,83073.11,83084.83,83129.07,83060.18,83064.37,82667.68];
-
-  function seedEntries() {
-    const today = localToday();
-    return SEED_VALUES.map((value, index) => ({
-      date: daysBefore(today, SEED_VALUES.length - 1 - index),
-      value
-    }));
-  }
+  const defaultSettings = () => ({
+    userName: "",
+    avatarSeed: DEFAULT_AVATAR_SEED,
+    onboardingComplete: false,
+    portfolioName: "My portfolio",
+    terminology: "plain",
+    goalValue: null,
+    goalDate: "",
+    benchmarkName: "Annual target",
+    benchmarkRate: 6,
+    backupReminderDays: 14,
+    lastBackupDate: ""
+  });
 
   const emptyState = () => ({
-    version: 3,
+    version: 4,
     entries: [],
-    privacy: false
+    privacy: false,
+    settings: defaultSettings(),
+    accounts: []
   });
 
   let state = loadState();
   let chartDays = 30;
   let historySearch = "";
   let lastBalance = null;
+  let currentScreen = "dashboard";
+  let calendarMonth = "";
+  let pendingImport = null;
+  let periodModalEntries = [];
+  let undoSnapshot = null;
+  let lastModalTrigger = null;
+  let pendingTerminology = "plain";
+  let resizeFrame = 0;
+  const animationFrames = new Map();
 
   const $ = selector => document.querySelector(selector);
   const $$ = selector => [...document.querySelectorAll(selector)];
@@ -2017,6 +2803,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     primaryHover: cssVar("--primary-hover"),
     positive: cssVar("--positive"),
     negative: cssVar("--negative"),
+    warning: cssVar("--warning"),
     textMuted: cssVar("--text-muted"),
     grid: "rgba(255,255,255,.06)",
     zeroLine: "rgba(255,255,255,.09)"
@@ -2024,7 +2811,9 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 
   const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
 
-  function animate(duration, onFrame, instant = false) {
+  function animate(key, duration, onFrame, instant = false) {
+    if (animationFrames.has(key)) cancelAnimationFrame(animationFrames.get(key));
+
     if (reduceMotion || instant) {
       onFrame(1);
       return;
@@ -2035,10 +2824,11 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     function tick(now) {
       const progress = Math.max(0, Math.min(1, (now - start) / duration));
       onFrame(easeOutCubic(progress));
-      if (progress < 1) requestAnimationFrame(tick);
+      if (progress < 1) animationFrames.set(key, requestAnimationFrame(tick));
+      else animationFrames.delete(key);
     }
 
-    requestAnimationFrame(tick);
+    animationFrames.set(key, requestAnimationFrame(tick));
   }
 
   function animateNumber(el, from, to, formatter, duration = 550) {
@@ -2047,17 +2837,23 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
       return;
     }
 
-    animate(duration, progress => {
+    animate(`number-${el.id}`, duration, progress => {
       el.textContent = formatter(from + (to - from) * progress);
     });
   }
 
-  const money = value => new Intl.NumberFormat("en-CA", {
+  const moneyFormatter = new Intl.NumberFormat("en-CA", {
     style: "currency",
     currency: "CAD",
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
-  }).format(Number(value) || 0);
+  });
+  const dateFormatter = new Intl.DateTimeFormat("en-CA", { month: "short", day: "numeric", year: "numeric" });
+  const shortDateFormatter = new Intl.DateTimeFormat("en-CA", { month: "short", day: "numeric" });
+  const longDateFormatter = new Intl.DateTimeFormat("en-CA", { weekday: "long", month: "long", day: "numeric", year: "numeric" });
+  const monthFormatter = new Intl.DateTimeFormat("en-CA", { month: "long", year: "numeric" });
+
+  const money = value => moneyFormatter.format(Number(value) || 0);
 
   const signedMoney = value => {
     const n = Number(value) || 0;
@@ -2066,39 +2862,234 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   };
 
   const pct = value => `${Math.abs(Number(value) || 0).toFixed(2)}%`;
+  const signedPct = value => `${Number(value) > 0 ? "+" : Number(value) < 0 ? "-" : ""}${pct(value)}`;
+
+  function cleanName(value) {
+    return String(value || "").replace(/\s+/g, " ").trim().slice(0, 40);
+  }
+
+  function cleanAvatarSeed(seed) {
+    const cleaned = String(seed || "").trim().replace(/[^a-z0-9_-]/gi, "").slice(0, 50);
+    return AVATAR_SEEDS.includes(cleaned) ? cleaned : DEFAULT_AVATAR_SEED;
+  }
+
+  function avatarUrl(seed) {
+    return `https://api.dicebear.com/10.x/glyphs/svg?borderRadius=50&seed=${encodeURIComponent(cleanAvatarSeed(seed))}`;
+  }
+
+  function displayName() {
+    return cleanName(state.settings.userName);
+  }
+
+  function normaliseSettings(settings) {
+    const merged = { ...defaultSettings(), ...(settings || {}) };
+    return {
+      ...merged,
+      userName: cleanName(merged.userName),
+      avatarSeed: cleanAvatarSeed(merged.avatarSeed),
+      onboardingComplete: merged.onboardingComplete === true
+    };
+  }
+
+  const TERMS = {
+    brandSubtitle: ["Portfolio Journal", "Investment Tracker"],
+    returnsNav: ["Returns", "Growth"],
+    currentValueLabel: ["Current portfolio value", "Your investments right now"],
+    sevenDayGain: ["7 day investment gain", "Money made or lost in 7 days"],
+    thirtyDayGain: ["30 day investment gain", "Money made or lost in 30 days"],
+    sinceTrackingGain: ["Investment growth since tracking", "Money made or lost since you started"],
+    ytdReturn: ["Year-to-date (YTD) return", "Growth since January 1"],
+    drawdown: ["Current drawdown", "Below your highest value"],
+    netContributions: ["Net contributions", "Money added minus money taken out"],
+    investmentGrowth: ["Investment growth", "Money made or lost"],
+    goalProgress: ["Goal progress", "Progress toward your goal"],
+    accountBreakdown: ["Account breakdown", "Where your money is"],
+    recordValue: ["Record a portfolio value", "Add an investment value"],
+    totalInvestmentValue: ["Total portfolio value", "What your investments are worth"],
+    entryDetailsSummary: ["Cash flow, note, or account details", "Add money moved, a note, or account details"],
+    moneyMoved: ["Cash flow", "Did you add or take out money?"],
+    noMoneyMoved: ["No cash flow", "No money added or taken out"],
+    contribution: ["Contribution", "Money added"],
+    withdrawal: ["Withdrawal", "Money taken out"],
+    portfolioValue: ["Portfolio value", "Investment value over time"],
+    portfolioValueHelp: ["Your recorded portfolio balance over actual calendar time.", "See how the total you entered has changed over time."],
+    movementTitle: ["Movement between entries", "Changes between check-ins"],
+    movementHelp: ["Cash-flow-adjusted change from one recorded entry to the next.", "How much your investments went up or down each time you checked."],
+    performanceSnapshot: ["Performance snapshot", "How your investments are doing"],
+    performanceSnapshotHelp: ["Returns exclude recorded contributions and withdrawals.", "Money you added or took out is separated from money your investments made or lost."],
+    rateOfReturn: ["Rate of return", "Growth over time"],
+    annualReviews: ["Annual reviews", "Yearly summaries"],
+    annualReviewsHelp: ["Yearly growth, cash flows, and cash-flow-adjusted return.", "A yearly look at money added, money removed, and money made or lost."],
+    calendarHelp: ["Daily cash-flow-adjusted movement. Deeper colour means a larger change.", "Up or down each day. Deeper colour means a bigger change."],
+    portfolioSetupSection: ["Portfolio", "Your investments"],
+    portfolioName: ["Portfolio name", "Investment group name"],
+    benchmark: ["Benchmark", "Comparison goal"],
+    benchmarkHelp: ["An offline annual benchmark used for period comparisons and projections.", "A yearly growth goal used to compare results and estimate goal progress."],
+    benchmarkName: ["Benchmark name", "Comparison name"],
+    annualRate: ["Annual rate", "Yearly growth goal"],
+    cashFlowAdjustedReturn: ["Cash-flow-adjusted return", "Growth after money moved"],
+    annualizedReturn: ["Annualized return", "Average yearly growth"],
+    bestInterval: ["Best recorded interval", "Best change between check-ins"],
+    worstInterval: ["Worst recorded interval", "Worst change between check-ins"],
+    returnLabel: ["Return", "Growth rate"],
+    growthLabel: ["Investment growth", "Money made or lost"],
+    netFlows: ["Net cash flows", "Money added minus money taken out"],
+    startingValue: ["Starting value", "Value at the start"],
+    endingValue: ["Ending value", "Value at the end"],
+    highestValue: ["Highest value", "Highest amount"],
+    lowestValue: ["Lowest value", "Lowest amount"],
+    contributionsLabel: ["Contributions", "Money added"],
+    withdrawalsLabel: ["Withdrawals", "Money taken out"],
+    feesLabel: ["Fees recorded", "Fees you entered"],
+    averageDailyGrowth: ["Average calendar-day growth", "Average made or lost per day"],
+    benchmarkDifference: ["Difference from benchmark", "Difference from your comparison goal"],
+    historyValue: ["Total value", "Investment value"],
+    historyChange: ["Investment change", "Made or lost"],
+    historyRate: ["Return", "Growth rate"],
+    adjustedBadge: ["Cash-flow adjusted", "Money moved removed"],
+    returnsScreenTitle: ["Returns", "Growth"],
+    returnsScreenSubtitle: ["Performance by period and month.", "How much your investments made or lost over time."],
+    chartsScreenSubtitle: ["Portfolio value and cash-flow-adjusted movement.", "How your investments changed between check-ins."],
+    setupTitle: ["Settings", "Settings"],
+    setupSubtitle: ["Profile, data tools, imports, and portfolio setup.", "Profile, backups, imports, and investment setup."],
+    importCsv: ["Import CSV", "Import spreadsheet"],
+    exportCsv: ["Export history as CSV", "Export spreadsheet history"],
+    chooseCsv: ["Choose CSV file", "Choose spreadsheet file"]
+  };
+
+  function usesPlainLanguage() {
+    return (state.settings.terminology || "plain") === "plain";
+  }
+
+  function term(key) {
+    const pair = TERMS[key];
+    if (!pair) return key;
+    return pair[usesPlainLanguage() ? 1 : 0];
+  }
+
+  function applyTerminology() {
+    $$('[data-term]').forEach(node => {
+      const pair = TERMS[node.dataset.term];
+      if (pair) node.textContent = pair[usesPlainLanguage() ? 1 : 0];
+    });
+    document.documentElement.dataset.terminology = usesPlainLanguage() ? "plain" : "financial";
+    $("#settingsModalTitle").textContent = term("setupTitle");
+    $("#settingsModalSubtitle").textContent = term("setupSubtitle");
+    const mobileReturns = $('.mobile-nav [data-mobile-scroll="returns"]');
+    if (mobileReturns) mobileReturns.setAttribute("aria-label", term("returnsNav"));
+    $("#settingsBtn").setAttribute("aria-label", term("setupTitle"));
+    $("#settingsBtn").setAttribute("title", term("setupTitle"));
+    $("#accountNames").placeholder = usesPlainLanguage() ? "Retirement account\nSavings account" : "RRSP\nTFSA";
+    $("#portfolioName").placeholder = usesPlainLanguage() ? "My investments" : "My portfolio";
+    $(".calendar-scroll").setAttribute("aria-label", usesPlainLanguage() ? "Scrollable calendar showing how your investments changed" : "Scrollable portfolio performance calendar");
+    const chartPeriodText = usesPlainLanguage()
+      ? { 30: "30 days", 90: "3 months", 180: "6 months", 365: "1 year" }
+      : { 30: "1M", 90: "3M", 180: "6M", 365: "1Y" };
+    $$("#periods button[data-days]").forEach(button => {
+      button.textContent = chartPeriodText[button.dataset.days];
+    });
+    const meta = screenMeta(currentScreen);
+    if (meta) {
+      $("#pageTitle").textContent = meta.title;
+      $("#todayLong").textContent = meta.subtitle || formatDateLong(localToday());
+    }
+  }
+
+  function dashboardTitle() {
+    const name = displayName();
+    return name ? `Welcome back, ${name}` : "Dashboard";
+  }
+
+  function avatarMarkup(seed, index, groupName, selectedSeed) {
+    const safeSeed = cleanAvatarSeed(seed);
+    const id = `${groupName}-${index}`;
+    const checked = safeSeed === selectedSeed ? " checked" : "";
+    return `
+      <label class="avatar-choice" for="${escapeHtml(id)}">
+        <input id="${escapeHtml(id)}" type="radio" name="${escapeHtml(groupName)}" value="${escapeHtml(safeSeed)}"${checked}>
+        <span class="avatar-option">
+          <img src="${escapeHtml(avatarUrl(safeSeed))}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer">
+          <span class="sr-only">Avatar ${index + 1}</span>
+        </span>
+      </label>
+    `;
+  }
+
+  function renderAvatarPicker(host, selectedSeed, groupName) {
+    if (!host) return;
+    const safeSelected = cleanAvatarSeed(selectedSeed);
+    host.innerHTML = AVATAR_SEEDS.map((seed, index) => avatarMarkup(seed, index, groupName, safeSelected)).join("");
+  }
+
+  function selectedAvatarSeed(groupName) {
+    const selected = $(`input[name="${groupName}"]:checked`);
+    return cleanAvatarSeed(selected && selected.value);
+  }
+
+  function updateAvatarPreview(img, seed) {
+    if (!img) return;
+    img.src = avatarUrl(seed);
+  }
+
+  function updateSettingsProfilePreview() {
+    const name = cleanName($("#settingsUserName").value);
+    const seed = selectedAvatarSeed("settingsAvatar");
+    updateAvatarPreview($("#settingsAvatarPreview"), seed);
+    $("#settingsProfileNamePreview").textContent = name || "Your profile";
+  }
+
+  function updateOnboardingPreview() {
+    updateAvatarPreview($("#onboardingAvatarPreview"), selectedAvatarSeed("onboardingAvatar"));
+  }
+
+  function renderProfile() {
+    const name = displayName();
+    const seed = cleanAvatarSeed(state.settings.avatarSeed);
+    const showAvatar = !!state.settings.onboardingComplete || !!name;
+    const avatar = $("#headerAvatar");
+    const icon = $("#settingsIcon");
+    const settingsButton = $("#settingsBtn");
+
+    if (avatar) {
+      avatar.src = avatarUrl(seed);
+      avatar.hidden = !showAvatar;
+    }
+    if (icon) icon.hidden = showAvatar;
+    if (settingsButton) {
+      settingsButton.classList.toggle("has-avatar", showAvatar);
+      const label = name ? `${name}'s settings` : term("setupTitle");
+      settingsButton.setAttribute("aria-label", label);
+      settingsButton.setAttribute("title", label);
+    }
+  }
+
+  function populateOnboarding() {
+    $("#onboardingUserName").value = displayName();
+    renderAvatarPicker($("#onboardingAvatarPicker"), state.settings.avatarSeed, "onboardingAvatar");
+    updateOnboardingPreview();
+  }
+
+  function maybeOpenOnboarding() {
+    if (state.settings.onboardingComplete) return;
+    populateOnboarding();
+    setTimeout(() => openModal("onboardingModal"), reduceMotion ? 0 : 180);
+  }
 
   function localToday() {
-    const d = new Date();
-    return [
-      d.getFullYear(),
-      String(d.getMonth() + 1).padStart(2, "0"),
-      String(d.getDate()).padStart(2, "0")
-    ].join("-");
+    return localDateKey(new Date());
   }
 
   function formatDate(date) {
-    return new Date(`${date}T12:00:00`).toLocaleDateString("en-CA", {
-      month: "short",
-      day: "numeric",
-      year: "numeric"
-    });
+    return dateFormatter.format(new Date(`${date}T12:00:00`));
   }
 
   // Year dropped so history rows fit a phone without sideways scrolling.
   function formatDateShort(date) {
-    return new Date(`${date}T12:00:00`).toLocaleDateString("en-CA", {
-      month: "short",
-      day: "numeric"
-    });
+    return shortDateFormatter.format(new Date(`${date}T12:00:00`));
   }
 
   function formatDateLong(date) {
-    return new Date(`${date}T12:00:00`).toLocaleDateString("en-CA", {
-      weekday: "long",
-      month: "long",
-      day: "numeric",
-      year: "numeric"
-    });
+    return longDateFormatter.format(new Date(`${date}T12:00:00`));
   }
 
   function loadState() {
@@ -2109,11 +3100,14 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
         return {
           ...emptyState(),
           ...parsed,
-          entries: Array.isArray(parsed.entries) ? parsed.entries : []
+          version: 4,
+          settings: normaliseSettings(parsed.settings),
+          accounts: normaliseAccounts(parsed.accounts),
+          entries: normaliseEntries(Array.isArray(parsed.entries) ? parsed.entries : [])
         };
       }
 
-      const oldKeys = ["portfolio-journal-v2", "northstar-investments-v1"];
+      const oldKeys = ["ledger-portfolio-journal-v3", "portfolio-journal-v2", "northstar-investments-v1"];
       for (const key of oldKeys) {
         const oldRaw = localStorage.getItem(key);
         if (!oldRaw) continue;
@@ -2122,48 +3116,130 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
         if (Array.isArray(old.entries)) {
           return {
             ...emptyState(),
-            entries: old.entries,
+            entries: normaliseEntries(old.entries),
             privacy: !!old.privacy
           };
         }
       }
-    } catch {}
+    } catch (error) {
+      console.error("Could not load saved Ledger data", error);
+    }
 
-    return { ...emptyState(), entries: seedEntries() };
+    return emptyState();
   }
 
   function saveState() {
-    state.entries = normaliseEntries(state.entries);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    try {
+      state.entries = normaliseEntries(state.entries);
+      state.accounts = normaliseAccounts(state.accounts);
+      state.settings = normaliseSettings(state.settings);
+      state.version = 4;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      return true;
+    } catch (error) {
+      console.error("Could not save Ledger data", error);
+      toast("Your changes could not be saved in this browser");
+      return false;
+    }
+  }
+
+  function isValidIsoDate(date) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(String(date || ""))) return false;
+    const test = new Date(`${date}T12:00:00`);
+    return !Number.isNaN(test.getTime()) && localDateKey(test) === date;
+  }
+
+  function localDateKey(date) {
+    return [
+      date.getFullYear(),
+      String(date.getMonth() + 1).padStart(2, "0"),
+      String(date.getDate()).padStart(2, "0")
+    ].join("-");
+  }
+
+  function normaliseAccounts(accounts) {
+    if (!Array.isArray(accounts)) return [];
+    const seen = new Set();
+    return accounts.map((account, index) => {
+      const name = String(account && account.name || "").trim().slice(0, 60);
+      const baseId = String(account && account.id || slugify(name) || `account-${index + 1}`);
+      let id = baseId.replace(/[^a-z0-9_-]/gi, "-").slice(0, 50) || `account-${index + 1}`;
+      while (seen.has(id)) id = `${id}-${index + 1}`;
+      seen.add(id);
+      return name ? { id, name } : null;
+    }).filter(Boolean);
+  }
+
+  function slugify(value) {
+    return String(value || "").toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
   }
 
   function normaliseEntries(entries) {
     const byDate = new Map();
 
     for (const entry of entries) {
-      if (!entry || !entry.date) continue;
+      if (!entry || !isValidIsoDate(entry.date)) continue;
       const value = Number(entry.value);
       if (!Number.isFinite(value) || value < 0) continue;
-      byDate.set(entry.date, { date: entry.date, value });
+      const cashFlow = Number(entry.cashFlow) || 0;
+      const fee = Math.max(0, Number(entry.fee) || 0);
+      const note = String(entry.note || "").trim().slice(0, 240);
+      const accountValues = {};
+
+      if (entry.accounts && typeof entry.accounts === "object") {
+        Object.entries(entry.accounts).forEach(([id, amount]) => {
+          const numeric = Number(amount);
+          if (Number.isFinite(numeric) && numeric >= 0) accountValues[String(id).slice(0, 50)] = numeric;
+        });
+      }
+
+      byDate.set(entry.date, {
+        date: entry.date,
+        value,
+        cashFlow,
+        fee,
+        note,
+        accounts: accountValues
+      });
     }
 
     return [...byDate.values()].sort((a, b) => a.date.localeCompare(b.date));
   }
 
-  function toast(message) {
+  function toast(message, withUndo = false) {
     const node = $("#toast");
-    node.textContent = message;
+    $("#toastMessage").textContent = message;
+    node.classList.toggle("has-action", !!withUndo && !!undoSnapshot);
     node.classList.add("show");
     clearTimeout(toast.timer);
     toast.timer = setTimeout(() => node.classList.remove("show"), 2100);
   }
 
   function openModal(id) {
-    $(`#${id}`).classList.add("open");
+    const backdrop = $(`#${id}`);
+    if (!backdrop) return;
+    lastModalTrigger = document.activeElement;
+    backdrop.classList.add("open");
+    backdrop.setAttribute("aria-hidden", "false");
+    document.body.style.overflow = "hidden";
+    requestAnimationFrame(() => {
+      const target = backdrop.querySelector("input:not([type='hidden']), select, textarea, button, [tabindex='0']");
+      if (target) target.focus();
+    });
   }
 
   function closeModals() {
-    $$(".modal-backdrop").forEach(modal => modal.classList.remove("open"));
+    $$(".modal-backdrop").forEach(modal => {
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden", "true");
+    });
+    document.body.style.overflow = "";
+    if (lastModalTrigger && document.contains(lastModalTrigger)) lastModalTrigger.focus();
+    lastModalTrigger = null;
+  }
+
+  function rememberUndo(label) {
+    undoSnapshot = { state: structuredClone(state), label };
   }
 
   function latestEntry() {
@@ -2197,11 +3273,61 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     ].join("-");
   }
 
-  function changeBetween(current, baseline) {
-    if (!current || !baseline || current.date === baseline.date) return null;
-    const amount = current.value - baseline.value;
-    const percent = baseline.value ? amount / baseline.value * 100 : 0;
-    return { amount, percent, baseline };
+  function dayDifference(start, end) {
+    return Math.max(0, Math.round(
+      (new Date(`${end}T12:00:00`) - new Date(`${start}T12:00:00`)) / 86400000
+    ));
+  }
+
+  function performanceStats(entries) {
+    if (!Array.isArray(entries) || entries.length < 2) return null;
+
+    const startEntry = entries[0];
+    const endEntry = entries.at(-1);
+    if (startEntry.date === endEntry.date) return null;
+
+    const periodDays = Math.max(1, dayDifference(startEntry.date, endEntry.date));
+    const periodFlows = entries.slice(1);
+    const contributions = periodFlows.reduce((sum, entry) => sum + Math.max(0, Number(entry.cashFlow) || 0), 0);
+    const withdrawals = periodFlows.reduce((sum, entry) => sum + Math.abs(Math.min(0, Number(entry.cashFlow) || 0)), 0);
+    const netFlows = contributions - withdrawals;
+    const fees = periodFlows.reduce((sum, entry) => sum + (Number(entry.fee) || 0), 0);
+    const gain = endEntry.value - startEntry.value - netFlows;
+
+    const weightedFlows = periodFlows.reduce((sum, entry) => {
+      const remaining = dayDifference(entry.date, endEntry.date);
+      return sum + (Number(entry.cashFlow) || 0) * (remaining / periodDays);
+    }, 0);
+
+    const denominator = startEntry.value + weightedFlows;
+    const returnPercent = denominator ? gain / denominator * 100 : 0;
+    const balanceChange = endEntry.value - startEntry.value;
+    const high = entries.reduce((a, b) => b.value > a.value ? b : a);
+    const low = entries.reduce((a, b) => b.value < a.value ? b : a);
+
+    return {
+      entries,
+      startEntry,
+      endEntry,
+      periodDays,
+      contributions,
+      withdrawals,
+      netFlows,
+      fees,
+      gain,
+      returnPercent,
+      balanceChange,
+      high,
+      low
+    };
+  }
+
+  function entriesForBoundary(startDate, endDate = latestEntry() && latestEntry().date) {
+    if (!endDate) return [];
+    let baseline = entryOnOrBefore(startDate);
+    if (!baseline) baseline = firstEntryOnOrAfter(startDate);
+    if (!baseline) return [];
+    return state.entries.filter(entry => entry.date >= baseline.date && entry.date <= endDate);
   }
 
   function changeForDays(days) {
@@ -2209,10 +3335,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     if (!current) return null;
 
     const target = daysBefore(current.date, days);
-    let baseline = entryOnOrBefore(target);
-    if (!baseline) baseline = firstEntryOnOrAfter(target);
-
-    return changeBetween(current, baseline);
+    return performanceStats(entriesForBoundary(target, current.date));
   }
 
   function ytdChange() {
@@ -2220,14 +3343,11 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     if (!current) return null;
 
     const start = `${current.date.slice(0, 4)}-01-01`;
-    let baseline = entryOnOrBefore(daysBefore(start, 1));
-    if (!baseline) baseline = firstEntryOnOrAfter(start);
-
-    return changeBetween(current, baseline);
+    return performanceStats(entriesForBoundary(daysBefore(start, 1), current.date));
   }
 
   function allChange() {
-    return changeBetween(latestEntry(), state.entries[0]);
+    return performanceStats(state.entries);
   }
 
   function valueClass(value) {
@@ -2235,21 +3355,38 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   }
 
   function renderChangeText(node, change, fallback = "Not enough data") {
-    node.className = `money-value ${change ? valueClass(change.amount) : ""}`.trim();
-    node.textContent = change ? signedMoney(change.amount) : fallback;
-    node.title = change ? `${signedMoney(change.amount)}, ${pct(change.percent)}` : "";
+    const amount = change && (Number.isFinite(change.gain) ? change.gain : change.amount);
+    const percent = change && (Number.isFinite(change.returnPercent) ? change.returnPercent : change.percent);
+    node.className = `money-value ${change ? valueClass(amount) : ""}`.trim();
+    node.textContent = change ? signedMoney(amount) : fallback;
+    node.title = change ? `${signedMoney(amount)}, ${amount >= 0 ? "+" : "-"}${pct(percent)}` : "";
+  }
+
+  function simpleChangeSummary(stats) {
+    if (!stats) return "No previous entry";
+    if (usesPlainLanguage()) {
+      if (stats.gain === 0) return `${money(0)} unchanged (0.00%)`;
+      return `${money(Math.abs(stats.gain))} ${stats.gain > 0 ? "up" : "down"} (${pct(stats.returnPercent)})`;
+    }
+    return `${signedMoney(stats.gain)} (${signedPct(stats.returnPercent)})`;
   }
 
   function render() {
     state.entries = normaliseEntries(state.entries);
+    applyTerminology();
+    renderProfile();
 
     const current = latestEntry();
     const previous = previousEntry();
 
     $("#app").classList.toggle("privacy", !!state.privacy);
+    document.body.classList.toggle("privacy", !!state.privacy);
     $("#privacyBtn").innerHTML = state.privacy
       ? '<i class="ph ph-eye-slash"></i>'
       : '<i class="ph ph-eye"></i>';
+    $("#privacyBtn").setAttribute("aria-label", state.privacy ? "Show values" : "Hide values");
+    $("#privacyBtn").setAttribute("title", state.privacy ? "Show values" : "Hide values");
+    $("#privacyBtn").setAttribute("aria-pressed", String(state.privacy));
 
     const balanceEl = $("#currentValue");
     const nextBalance = current ? current.value : 0;
@@ -2268,25 +3405,20 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     if (!current) {
       $("#asOfLabel").textContent = "No values recorded yet";
       $("#dailyChange").className = "change-chip neutral";
-      $("#dailyChange").innerHTML = '<i class="ph ph-minus"></i>No previous entry';
+      $("#dailyChange").textContent = "No previous entry";
     } else {
       $("#asOfLabel").textContent = `As of ${formatDateLong(current.date)}`;
 
-      const daily = changeBetween(current, previous);
+      const daily = previous ? performanceStats([previous, current]) : null;
 
       if (!daily) {
         $("#dailyChange").className = "change-chip neutral";
-        $("#dailyChange").innerHTML = '<i class="ph ph-minus"></i>No previous entry';
+        $("#dailyChange").textContent = "No previous entry";
       } else {
-        const cls = daily.amount > 0 ? "positive" : daily.amount < 0 ? "negative" : "neutral";
-        const icon = daily.amount > 0 ? "ph-trend-up" : daily.amount < 0 ? "ph-trend-down" : "ph-minus";
-        const pctSign = daily.amount > 0 ? "+" : daily.amount < 0 ? "-" : "";
+        const cls = daily.gain > 0 ? "positive" : daily.gain < 0 ? "negative" : "neutral";
 
         $("#dailyChange").className = `change-chip ${cls}`;
-        $("#dailyChange").innerHTML = `
-          <i class="ph ${icon}"></i>
-          ${signedMoney(daily.amount)} · ${pctSign}${pct(daily.percent)}
-        `;
+        $("#dailyChange").textContent = simpleChangeSummary(daily);
       }
     }
 
@@ -2295,69 +3427,168 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     renderChangeText($("#allChange"), allChange());
 
     const ytd = ytdChange();
-    renderChangeText($("#ytdChange"), ytd);
+    $("#ytdChange").className = `stat-value money-value ${ytd ? valueClass(ytd.gain) : ""}`.trim();
+    $("#ytdChange").textContent = ytd
+      ? `${ytd.returnPercent >= 0 ? "+" : "-"}${pct(ytd.returnPercent)}`
+      : "Not enough data";
     $("#ytdSub").textContent = ytd
-      ? `Compared with ${formatDate(ytd.baseline.date)}`
-      : "Compared with the start of the year";
+      ? `${signedMoney(ytd.gain)} ${usesPlainLanguage() ? "made or lost" : "investment growth"}`
+      : (usesPlainLanguage() ? "Compared with your value at the start of the year" : "Compared with the start of the year");
 
     renderStats();
-    renderHistory();
-    renderReturnsSection();
     renderRecentList();
+    renderGoal();
+    renderAccountSummary();
+    renderBackupReminder();
     syncPeriodAvailability();
-    renderValueChart();
-    renderDeltaChart();
+    if (currentScreen === "history") renderHistory();
+    if (currentScreen === "returns") renderReturnsSection();
+    if (currentScreen === "charts") {
+      renderValueChart();
+      renderDeltaChart();
+    }
     updateEntryHint();
   }
 
   function renderStats() {
     if (!state.entries.length) {
-      $("#highValue").textContent = money(0);
+      $("#highValue").textContent = "0.00%";
       $("#highDate").textContent = "No data yet";
-      $("#bestDay").textContent = "Not enough data";
-      $("#bestDayDate").textContent = "Daily balance change";
-      $("#daysRecorded").textContent = "0";
+      $("#bestDay").textContent = money(0);
+      $("#bestDayDate").textContent = usesPlainLanguage() ? "Since you started tracking" : "Since tracking began";
+      $("#daysRecorded").textContent = money(0);
       $("#trackingSince").textContent = "No history yet";
       return;
     }
 
     const high = state.entries.reduce((a, b) => b.value > a.value ? b : a);
+    const current = latestEntry();
+    const drawdownAmount = current.value - high.value;
+    const drawdownPercent = high.value ? drawdownAmount / high.value * 100 : 0;
+    const all = allChange();
+    const lifetimeFlows = state.entries.slice(1).reduce((sum, entry) => sum + (Number(entry.cashFlow) || 0), 0);
 
-    $("#highValue").textContent = money(high.value);
-    $("#highDate").textContent = formatDate(high.date);
-    $("#daysRecorded").textContent = String(state.entries.length);
-    $("#trackingSince").textContent = `Since ${formatDate(state.entries[0].date)}`;
+    $("#highValue").className = `stat-value money-value ${valueClass(drawdownAmount)}`;
+    $("#highValue").textContent = `${drawdownPercent > 0 ? "+" : drawdownPercent < 0 ? "-" : ""}${pct(drawdownPercent)}`;
+    $("#highDate").textContent = drawdownAmount === 0
+      ? `At your recorded high of ${money(high.value)}`
+      : `${signedMoney(drawdownAmount)} below ${formatDate(high.date)}`;
 
-    if (state.entries.length < 2) {
-      $("#bestDay").textContent = "Not enough data";
-      $("#bestDayDate").textContent = "Daily balance change";
+    $("#bestDay").className = `stat-value money-value ${valueClass(lifetimeFlows)}`;
+    $("#bestDay").textContent = signedMoney(lifetimeFlows);
+    $("#bestDayDate").textContent = usesPlainLanguage() ? "Money added minus money taken out" : "Contributions less withdrawals";
+
+    $("#daysRecorded").className = `stat-value money-value ${all ? valueClass(all.gain) : ""}`;
+    $("#daysRecorded").textContent = all ? signedMoney(all.gain) : money(0);
+    $("#trackingSince").textContent = `${state.entries.length} values since ${formatDate(state.entries[0].date)}`;
+  }
+
+  function renderGoal() {
+    const host = $("#goalContent");
+    const current = latestEntry();
+    const goal = Number(state.settings.goalValue);
+
+    if (!current || !Number.isFinite(goal) || goal <= 0) {
+      $("#goalSubtitle").textContent = current
+        ? (usesPlainLanguage() ? "Set a target for your investments." : "Set a target for your portfolio.")
+        : "Add your first value, then set a target.";
+      host.innerHTML = `<p class="goal-empty">Your progress and estimated monthly amount will appear here.</p>`;
       return;
     }
 
-    const changes = [];
+    const progress = Math.max(0, Math.min(100, current.value / goal * 100));
+    const remaining = Math.max(0, goal - current.value);
+    const targetDate = state.settings.goalDate;
+    let estimate = "No target date set";
 
-    for (let i = 1; i < state.entries.length; i++) {
-      changes.push({
-        date: state.entries[i].date,
-        amount: state.entries[i].value - state.entries[i - 1].value
-      });
+    if (targetDate && isValidIsoDate(targetDate) && targetDate > current.date && remaining > 0) {
+      const months = Math.max(1, Math.ceil(dayDifference(current.date, targetDate) / 30.4375));
+      const annual = Number(state.settings.benchmarkRate) || 0;
+      const monthlyRate = Math.pow(1 + annual / 100, 1 / 12) - 1;
+      const grownCurrent = current.value * Math.pow(1 + monthlyRate, months);
+      let required = 0;
+      if (monthlyRate === 0) required = Math.max(0, (goal - current.value) / months);
+      else required = Math.max(0, (goal - grownCurrent) * monthlyRate / (Math.pow(1 + monthlyRate, months) - 1));
+      estimate = `${money(required)} per month estimate`;
+    } else if (remaining === 0) {
+      estimate = "Goal reached";
     }
 
-    const best = changes.reduce((a, b) => b.amount > a.amount ? b : a);
-    $("#bestDay").className = `stat-value money-value ${valueClass(best.amount)}`;
-    $("#bestDay").textContent = signedMoney(best.amount);
-    $("#bestDayDate").textContent = formatDate(best.date);
+    $("#goalSubtitle").textContent = targetDate && isValidIsoDate(targetDate)
+      ? `Target date ${formatDate(targetDate)}`
+      : `${money(remaining)} remaining`;
+
+    host.innerHTML = `
+      <div class="goal-row">
+        <strong>${progress.toFixed(1)}%</strong>
+        <span>${money(current.value)} of ${money(goal)}<br>${estimate}</span>
+      </div>
+      <div class="progress-track" aria-label="${progress.toFixed(1)} percent of goal reached">
+        <div class="progress-fill" style="width:${progress}%"></div>
+      </div>
+    `;
+  }
+
+  function renderAccountSummary() {
+    const host = $("#accountSummary");
+    const current = latestEntry();
+    if (!state.accounts.length) {
+      host.innerHTML = `<p class="goal-empty">Add account names in Setup if you want an optional breakdown.</p>`;
+      return;
+    }
+
+    const rows = state.accounts.map(account => ({
+      ...account,
+      value: current && current.accounts ? Number(current.accounts[account.id]) : NaN
+    })).filter(account => Number.isFinite(account.value));
+
+    if (!rows.length) {
+      host.innerHTML = `<p class="goal-empty">No account breakdown was saved with the latest value.</p>`;
+      return;
+    }
+
+    host.innerHTML = rows.map(account => `
+      <div class="account-summary-row">
+        <span>${escapeHtml(account.name)}</span>
+        <strong class="money-value">${money(account.value)}</strong>
+      </div>
+    `).join("");
+  }
+
+  function renderBackupReminder() {
+    const reminder = $("#backupReminder");
+    const days = Number(state.settings.backupReminderDays);
+    if (!days || !state.entries.length) {
+      reminder.classList.remove("show");
+      return;
+    }
+
+    const last = state.settings.lastBackupDate;
+    const due = !isValidIsoDate(last) || dayDifference(last, localToday()) >= days;
+    reminder.classList.toggle("show", due);
+  }
+
+  function escapeHtml(value) {
+    return String(value == null ? "" : value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
   }
 
   function renderHistory() {
     const host = $("#historyTable");
     const query = historySearch.trim().toLowerCase();
+    const indexByDate = new Map(state.entries.map((entry, index) => [entry.date, index]));
 
     const rows = [...state.entries]
       .reverse()
       .filter(entry => {
         if (!query) return true;
-        return entry.date.includes(query) || formatDate(entry.date).toLowerCase().includes(query);
+        return entry.date.includes(query) ||
+          formatDate(entry.date).toLowerCase().includes(query) ||
+          String(entry.note || "").toLowerCase().includes(query);
       });
 
     if (!rows.length) {
@@ -2376,27 +3607,37 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
         <thead>
           <tr>
             <th>Date</th>
-            <th>Total value</th>
-            <th>Change</th>
-            <th>Change %</th>
+            <th>${term("historyValue")}</th>
+            <th>${term("historyChange")}</th>
+            <th>${term("historyRate")}</th>
             <th></th>
           </tr>
         </thead>
         <tbody>
           ${rows.map(entry => {
-            const index = state.entries.findIndex(item => item.date === entry.date);
+            const index = indexByDate.get(entry.date);
             const prev = previousEntry(index);
-            const change = changeBetween(entry, prev);
+            const change = prev ? performanceStats([prev, entry]) : null;
+            const flowText = entry.cashFlow > 0
+              ? `${term("contribution")} ${money(entry.cashFlow)}`
+              : entry.cashFlow < 0
+                ? `${term("withdrawal")} ${money(Math.abs(entry.cashFlow))}`
+                : "";
+            const detail = [entry.note, flowText].filter(Boolean).map(escapeHtml).join(" · ");
 
             return `
               <tr>
-                <td><strong><span class="date-long">${formatDate(entry.date)}</span><span class="date-short">${formatDateShort(entry.date)}</span></strong></td>
-                <td><strong class="money-value">${money(entry.value)}</strong></td>
-                <td class="${change ? valueClass(change.amount) : ""}">
-                  ${change ? `<strong class="money-value">${signedMoney(change.amount)}</strong>` : '<span style="color:var(--text-faint)">First entry</span>'}
+                <td>
+                  <strong><span class="date-long">${formatDate(entry.date)}</span><span class="date-short">${formatDateShort(entry.date)}</span></strong>
+                  ${detail ? `<span class="history-detail" title="${detail}">${detail}</span>` : ""}
                 </td>
-                <td class="${change ? valueClass(change.amount) : ""}">
-                  ${change ? `${change.amount > 0 ? "+" : change.amount < 0 ? "-" : ""}${pct(change.percent)}` : "N/A"}
+                <td><strong class="money-value">${money(entry.value)}</strong></td>
+                <td class="${change ? valueClass(change.gain) : ""}">
+                  ${change ? `<strong class="money-value">${signedMoney(change.gain)}</strong>` : '<span style="color:var(--text-faint)">First entry</span>'}
+                  ${flowText ? `<span class="flow-chip">${term("adjustedBadge")}</span>` : ""}
+                </td>
+                <td class="${change ? valueClass(change.gain) : ""}">
+                  ${change ? `${change.gain > 0 ? "+" : change.gain < 0 ? "-" : ""}${pct(change.returnPercent)}` : "N/A"}
                 </td>
                 <td>
                   <div class="row-actions">
@@ -2417,35 +3658,11 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   }
 
   function monthLabel(ym) {
-    const [year, month] = ym.split("-");
-    return new Date(`${ym}-01T12:00:00`).toLocaleDateString("en-CA", {
-      month: "long",
-      year: "numeric"
-    });
-  }
-
-  function listMonths() {
-    const months = new Set();
-    state.entries.forEach(entry => months.add(entry.date.slice(0, 7)));
-    return [...months].sort().reverse();
-  }
-
-  function entriesInRange(start, end) {
-    return state.entries.filter(entry =>
-      (!start || entry.date >= start) && (!end || entry.date <= end)
-    );
+    return monthFormatter.format(new Date(`${ym}-01T12:00:00`));
   }
 
   function rangeStats(entries) {
-    if (entries.length < 2) return null;
-
-    const startEntry = entries[0];
-    const endEntry = entries.at(-1);
-    const change = changeBetween(endEntry, startEntry);
-    const high = entries.reduce((a, b) => b.value > a.value ? b : a);
-    const low = entries.reduce((a, b) => b.value < a.value ? b : a);
-
-    return { entries, startEntry, endEntry, change, high, low };
+    return performanceStats(entries);
   }
 
   const PERIOD_DEFS = [
@@ -2457,6 +3674,13 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     { key: "all", label: "All time" }
   ];
 
+  function periodLabel(def) {
+    if (!def) return "Period detail";
+    if (def.key === "ytd") return usesPlainLanguage() ? "Since January 1" : "Year to date (YTD)";
+    if (def.key === "all") return usesPlainLanguage() ? "Since you started" : "All time";
+    return def.label;
+  }
+
   function periodEntries(key) {
     const current = latestEntry();
     if (!current) return [];
@@ -2465,12 +3689,20 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 
     if (key === "ytd") {
       const start = `${current.date.slice(0, 4)}-01-01`;
-      return entriesInRange(start, current.date);
+      return entriesForBoundary(daysBefore(start, 1), current.date);
     }
 
     const def = PERIOD_DEFS.find(item => item.key === key);
     if (!def) return [];
-    return entriesInRange(daysBefore(current.date, def.days), current.date);
+    return entriesForBoundary(daysBefore(current.date, def.days), current.date);
+  }
+
+  function monthEntries(ym) {
+    const monthStart = `${ym}-01`;
+    const nextMonth = new Date(`${monthStart}T12:00:00`);
+    nextMonth.setMonth(nextMonth.getMonth() + 1);
+    const monthEnd = daysBefore(localDateKey(nextMonth), 1);
+    return entriesForBoundary(daysBefore(monthStart, 1), monthEnd);
   }
 
   function renderRecentList() {
@@ -2486,14 +3718,14 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 
     host.innerHTML = recent.map((entry, index) => {
       const previous = state.entries[state.entries.length - 1 - index - 1];
-      const change = previous ? changeBetween(entry, previous) : null;
-      const cls = change ? valueClass(change.amount) : "";
+      const change = previous ? performanceStats([previous, entry]) : null;
+      const cls = change ? valueClass(change.gain) : "";
 
       return `
         <div class="recent-row">
           <span class="recent-row-date">${formatDate(entry.date)}</span>
           <span class="recent-row-value">
-            ${change ? `<span class="${cls}">${signedMoney(change.amount)}</span>` : ""}
+            ${change ? `<span class="${cls}">${signedMoney(change.gain)}</span>` : ""}
             <strong class="money-value">${money(entry.value)}</strong>
           </span>
         </div>
@@ -2506,19 +3738,22 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     const months = $("#monthList");
 
     if (state.entries.length < 2) {
-      list.innerHTML = `<p class="return-row-empty">Add at least two values to see period returns.</p>`;
+      list.innerHTML = `<p class="return-row-empty">${usesPlainLanguage() ? "Add at least two values to see how your investments changed." : "Add at least two values to see period returns."}</p>`;
       months.innerHTML = `<p class="return-row-empty">Your months will show up here once you have history.</p>`;
+      renderInsights();
+      renderAnnualReviews();
+      renderCalendar();
       return;
     }
 
     list.innerHTML = PERIOD_DEFS.map(def => {
       const stats = rangeStats(periodEntries(def.key));
-      const valueText = stats ? `${stats.change.amount >= 0 ? "+" : "-"}${pct(stats.change.percent)}` : "\u2013";
-      const cls = stats ? valueClass(stats.change.amount) : "";
+      const valueText = stats ? `${stats.returnPercent >= 0 ? "+" : "-"}${pct(stats.returnPercent)}` : "\u2013";
+      const cls = stats ? valueClass(stats.gain) : "";
 
       return `
         <button class="return-row" data-period="${def.key}" type="button">
-          <span class="return-row-label">${def.label}</span>
+          <span class="return-row-label">${periodLabel(def)}</span>
           <span class="return-row-right">
             <span class="return-row-value ${cls}">${valueText}</span>
             <i class="ph ph-caret-right"></i>
@@ -2527,18 +3762,29 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
       `;
     }).join("");
 
-    const monthKeys = listMonths();
+    const groupedMonths = new Map();
+    const entryIndex = new Map();
+    state.entries.forEach((entry, index) => {
+      const key = entry.date.slice(0, 7);
+      if (!groupedMonths.has(key)) groupedMonths.set(key, []);
+      groupedMonths.get(key).push(entry);
+      entryIndex.set(entry.date, index);
+    });
+    const monthKeys = [...groupedMonths.keys()].sort().reverse();
     months.innerHTML = monthKeys.map(ym => {
-      const entries = entriesInRange(`${ym}-01`, `${ym}-31`);
+      const visibleEntries = groupedMonths.get(ym);
+      const firstIndex = entryIndex.get(visibleEntries[0].date);
+      const baseline = previousEntry(firstIndex);
+      const entries = baseline ? [baseline, ...visibleEntries] : visibleEntries;
       const stats = rangeStats(entries);
-      const valueText = stats ? `${stats.change.amount >= 0 ? "+" : "-"}${pct(stats.change.percent)}` : "\u2013";
-      const cls = stats ? valueClass(stats.change.amount) : "";
+      const valueText = stats ? `${stats.returnPercent >= 0 ? "+" : "-"}${pct(stats.returnPercent)}` : "\u2013";
+      const cls = stats ? valueClass(stats.gain) : "";
 
       return `
         <button class="month-row" data-month="${ym}" type="button">
           <span class="month-row-label">
             <strong>${monthLabel(ym)}</strong>
-            <span>${entries.length} value${entries.length === 1 ? "" : "s"} recorded</span>
+            <span>${visibleEntries.length} value${visibleEntries.length === 1 ? "" : "s"} recorded</span>
           </span>
           <span class="return-row-right">
             <span class="return-row-value ${cls}">${valueText}</span>
@@ -2547,18 +3793,171 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
         </button>
       `;
     }).join("");
+
+    renderInsights();
+    renderAnnualReviews();
+    renderCalendar();
+  }
+
+  function renderInsights() {
+    const host = $("#insightGrid");
+    if (state.entries.length < 2) {
+      host.innerHTML = `<p class="return-row-empty">Add at least two values to build performance insights.</p>`;
+      return;
+    }
+
+    const all = allChange();
+    const intervals = [];
+    for (let i = 1; i < state.entries.length; i++) {
+      const stats = performanceStats([state.entries[i - 1], state.entries[i]]);
+      if (stats) intervals.push({ date: state.entries[i].date, ...stats });
+    }
+
+    const best = intervals.reduce((a, b) => b.returnPercent > a.returnPercent ? b : a);
+    const worst = intervals.reduce((a, b) => b.returnPercent < a.returnPercent ? b : a);
+    const annualized = all.periodDays >= 365 && all.startEntry.value > 0 && 1 + all.returnPercent / 100 > 0
+      ? (Math.pow(1 + all.returnPercent / 100, 365 / all.periodDays) - 1) * 100
+      : null;
+    const target = benchmarkReturn(all.periodDays);
+
+    host.innerHTML = `
+      <div class="insight">
+        <span>${term("cashFlowAdjustedReturn")}</span>
+        <strong class="${valueClass(all.gain)}">${all.returnPercent >= 0 ? "+" : "-"}${pct(all.returnPercent)}</strong>
+        <small>${signedMoney(all.gain)} since tracking</small>
+      </div>
+      <div class="insight">
+        <span>${term("annualizedReturn")}</span>
+        <strong class="${annualized == null ? "" : valueClass(annualized)}">${annualized == null ? "After one year" : `${annualized >= 0 ? "+" : "-"}${pct(annualized)}`}</strong>
+        <small>${annualized == null ? `${all.periodDays} calendar days recorded` : `${state.settings.benchmarkName}: ${target >= 0 ? "+" : "-"}${pct(target)}`}</small>
+      </div>
+      <div class="insight">
+        <span>${term("bestInterval")}</span>
+        <strong class="${valueClass(best.returnPercent)}">${signedPct(best.returnPercent)}</strong>
+        <small>${formatDate(best.date)}, ${dayDifference(best.startEntry.date, best.endEntry.date)} day interval</small>
+      </div>
+      <div class="insight">
+        <span>${term("worstInterval")}</span>
+        <strong class="${valueClass(worst.returnPercent)}">${signedPct(worst.returnPercent)}</strong>
+        <small>${formatDate(worst.date)}, ${dayDifference(worst.startEntry.date, worst.endEntry.date)} day interval</small>
+      </div>
+    `;
+  }
+
+  function benchmarkReturn(days) {
+    const annual = Number(state.settings.benchmarkRate) || 0;
+    return (Math.pow(1 + annual / 100, Math.max(0, days) / 365) - 1) * 100;
+  }
+
+  function renderAnnualReviews() {
+    const host = $("#annualList");
+    const years = [...new Set(state.entries.map(entry => entry.date.slice(0, 4)))].sort().reverse();
+
+    if (!years.length) {
+      host.innerHTML = `<p class="return-row-empty">Annual summaries will appear here.</p>`;
+      return;
+    }
+
+    host.innerHTML = years.map(year => {
+      const end = year === latestEntry().date.slice(0, 4) ? latestEntry().date : `${year}-12-31`;
+      const entries = entriesForBoundary(`${Number(year) - 1}-12-31`, end);
+      const stats = performanceStats(entries);
+      if (!stats) return `
+        <div class="review-row"><strong>${year}</strong><span>Not enough data</span><span></span><span></span></div>
+      `;
+
+      return `
+        <button class="review-row" type="button" data-year="${year}">
+          <strong>${year}</strong>
+          <span>${term("returnLabel")}<br><strong class="${valueClass(stats.gain)}">${stats.returnPercent >= 0 ? "+" : "-"}${pct(stats.returnPercent)}</strong></span>
+          <span>${term("growthLabel")}<br><strong class="money-value ${valueClass(stats.gain)}">${signedMoney(stats.gain)}</strong></span>
+          <span>${term("netFlows")}<br><strong class="money-value">${signedMoney(stats.netFlows)}</strong></span>
+        </button>
+      `;
+    }).join("");
+  }
+
+  function renderCalendar() {
+    const host = $("#calendarGrid");
+    if (!calendarMonth) calendarMonth = latestEntry() ? latestEntry().date.slice(0, 7) : localToday().slice(0, 7);
+    $("#calendarTitle").textContent = monthLabel(calendarMonth);
+
+    const first = new Date(`${calendarMonth}-01T12:00:00`);
+    const daysInMonth = new Date(first.getFullYear(), first.getMonth() + 1, 0).getDate();
+    const entries = new Map(state.entries.map((entry, index) => [entry.date, { entry, index }]));
+    const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const cells = weekdays.map(day => `<div class="calendar-weekday">${day}</div>`);
+
+    const visibleMovements = [];
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = `${calendarMonth}-${String(day).padStart(2, "0")}`;
+      const match = entries.get(date);
+      if (!match) continue;
+      const previous = previousEntry(match.index);
+      const stats = previous ? performanceStats([previous, match.entry]) : null;
+      if (stats && stats.gain !== 0) visibleMovements.push(Math.abs(stats.gain));
+    }
+
+    visibleMovements.sort((a, b) => a - b);
+    const scaleIndex = Math.max(0, Math.ceil(visibleMovements.length * .9) - 1);
+    const heatScale = visibleMovements[scaleIndex] || 1;
+
+    for (let i = 0; i < first.getDay(); i++) cells.push('<div class="calendar-day blank"></div>');
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = `${calendarMonth}-${String(day).padStart(2, "0")}`;
+      const match = entries.get(date);
+
+      if (!match) {
+        cells.push(`<div class="calendar-day"><span class="day-number">${day}</span></div>`);
+        continue;
+      }
+
+      const previous = previousEntry(match.index);
+      const stats = previous ? performanceStats([previous, match.entry]) : null;
+      const cls = stats ? (stats.gain > 0 ? "positive" : stats.gain < 0 ? "negative" : "neutral-recorded") : "neutral-recorded";
+      const magnitude = stats ? Math.min(Math.abs(stats.gain) / heatScale, 1) : 0;
+      const heatAlpha = (.16 + magnitude * .46).toFixed(3);
+      const borderAlpha = (.30 + magnitude * .48).toFixed(3);
+      const heatRgb = stats?.gain < 0 ? "224,113,141" : "58,188,182";
+      const heatStyle = stats && stats.gain !== 0
+        ? `style="--heat-bg:rgba(${heatRgb},${heatAlpha});--heat-border:rgba(${heatRgb},${borderAlpha});--heat-ink:#F7F7FA"`
+        : "";
+      const detail = [
+        money(match.entry.value),
+        stats ? signedMoney(stats.gain) : "First recorded value",
+        match.entry.note
+      ].filter(Boolean).join(". ");
+
+      cells.push(`
+        <button class="calendar-day ${cls}" type="button" data-calendar-date="${date}" ${heatStyle} title="${escapeHtml(detail)}" aria-label="${escapeHtml(`${formatDateLong(date)}. ${detail}. Tap to edit.`)}">
+          <span class="day-number">${day}</span>
+          <span class="day-detail" aria-hidden="true">
+            <strong>${escapeHtml(money(match.entry.value))}</strong>
+            <span>${escapeHtml(stats ? signedMoney(stats.gain) : "First")}</span>
+          </span>
+        </button>
+      `);
+    }
+
+    host.innerHTML = cells.join("");
   }
 
   function openPeriodDetail(key, type = "preset") {
     const entries = type === "month"
-      ? entriesInRange(`${key}-01`, `${key}-31`)
-      : periodEntries(key);
+      ? monthEntries(key)
+      : type === "year"
+        ? entriesForBoundary(`${Number(key) - 1}-12-31`, key === latestEntry().date.slice(0, 4) ? latestEntry().date : `${key}-12-31`)
+        : periodEntries(key);
 
     const stats = rangeStats(entries);
+    periodModalEntries = entries;
 
     const title = type === "month"
       ? monthLabel(key)
-      : (PERIOD_DEFS.find(item => item.key === key) || {}).label || "Period detail";
+      : type === "year"
+        ? `${key} annual review`
+      : periodLabel(PERIOD_DEFS.find(item => item.key === key));
 
     $("#periodModalTitle").textContent = title;
 
@@ -2569,48 +3968,67 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
       $("#periodModalPercent").className = "change-chip neutral";
       $("#periodModalPercent").textContent = "No data";
       $("#periodModalStats").innerHTML = "";
-      drawValueLineChart($("#periodModalChart"), $("#periodModalChartEmpty"), [], true);
       openModal("periodModal");
+      requestAnimationFrame(() => drawValueLineChart($("#periodModalChart"), $("#periodModalChartEmpty"), [], true));
       return;
     }
 
     $("#periodModalRange").textContent = `${formatDate(stats.startEntry.date)} \u2013 ${formatDate(stats.endEntry.date)}`;
-    $("#periodModalChange").textContent = signedMoney(stats.change.amount);
-    $("#periodModalChange").className = `period-detail-value money-value ${valueClass(stats.change.amount)}`;
+    $("#periodModalChange").textContent = signedMoney(stats.gain);
+    $("#periodModalChange").className = `period-detail-value money-value ${valueClass(stats.gain)}`;
 
-    const pctCls = stats.change.amount > 0 ? "positive" : stats.change.amount < 0 ? "negative" : "neutral";
+    const pctCls = stats.gain > 0 ? "positive" : stats.gain < 0 ? "negative" : "neutral";
     $("#periodModalPercent").className = `change-chip ${pctCls}`;
-    $("#periodModalPercent").innerHTML = `<i class="ph ${stats.change.amount > 0 ? "ph-trend-up" : stats.change.amount < 0 ? "ph-trend-down" : "ph-minus"}"></i>${stats.change.amount >= 0 ? "+" : "-"}${pct(stats.change.percent)}`;
+    $("#periodModalPercent").innerHTML = `<i class="ph ${stats.gain > 0 ? "ph-trend-up" : stats.gain < 0 ? "ph-trend-down" : "ph-minus"}"></i>${stats.returnPercent >= 0 ? "+" : "-"}${pct(stats.returnPercent)}`;
+
+    const targetReturn = benchmarkReturn(stats.periodDays);
+    const benchmarkDifference = stats.returnPercent - targetReturn;
 
     $("#periodModalStats").innerHTML = `
       <div class="period-stat">
-        <span>Starting value</span>
+        <span>${term("startingValue")}</span>
         <strong>${money(stats.startEntry.value)}</strong>
       </div>
       <div class="period-stat">
-        <span>Ending value</span>
+        <span>${term("endingValue")}</span>
         <strong>${money(stats.endEntry.value)}</strong>
       </div>
       <div class="period-stat">
-        <span>Highest</span>
+        <span>${term("highestValue")}</span>
         <strong>${money(stats.high.value)} \u00b7 ${formatDate(stats.high.date)}</strong>
       </div>
       <div class="period-stat">
-        <span>Lowest</span>
+        <span>${term("lowestValue")}</span>
         <strong>${money(stats.low.value)} \u00b7 ${formatDate(stats.low.date)}</strong>
       </div>
       <div class="period-stat">
-        <span>Values recorded</span>
-        <strong>${stats.entries.length}</strong>
+        <span>${term("contributionsLabel")}</span>
+        <strong>${money(stats.contributions)}</strong>
       </div>
       <div class="period-stat">
-        <span>Avg. daily change</span>
-        <strong>${signedMoney(stats.change.amount / Math.max(1, stats.entries.length - 1))}</strong>
+        <span>${term("withdrawalsLabel")}</span>
+        <strong>${money(stats.withdrawals)}</strong>
+      </div>
+      <div class="period-stat">
+        <span>${term("feesLabel")}</span>
+        <strong>${money(stats.fees)}</strong>
+      </div>
+      <div class="period-stat">
+        <span>${term("averageDailyGrowth")}</span>
+        <strong>${signedMoney(stats.gain / stats.periodDays)}</strong>
+      </div>
+      <div class="period-stat">
+        <span>${escapeHtml(state.settings.benchmarkName)}</span>
+        <strong>${targetReturn >= 0 ? "+" : "-"}${pct(targetReturn)}</strong>
+      </div>
+      <div class="period-stat">
+        <span>${term("benchmarkDifference")}</span>
+        <strong class="${valueClass(benchmarkDifference)}">${benchmarkDifference >= 0 ? "+" : "-"}${pct(benchmarkDifference)}</strong>
       </div>
     `;
 
-    drawValueLineChart($("#periodModalChart"), $("#periodModalChartEmpty"), stats.entries, true);
     openModal("periodModal");
+    requestAnimationFrame(() => drawValueLineChart($("#periodModalChart"), $("#periodModalChartEmpty"), stats.entries, true));
   }
 
   // A canvas inside a hidden screen measures 0x0. Drawing into it produces a
@@ -2640,6 +4058,24 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   // the data on every mousemove.
   const chartCoordsStore = {};
 
+  function sampleChartPoints(points, maxPoints) {
+    if (points.length <= maxPoints) return points;
+    const bucketSize = Math.ceil(points.length / maxPoints);
+    const sampled = [points[0]];
+
+    for (let start = 1; start < points.length - 1; start += bucketSize) {
+      const bucket = points.slice(start, Math.min(points.length - 1, start + bucketSize));
+      if (!bucket.length) continue;
+      const low = bucket.reduce((a, b) => b.value < a.value ? b : a);
+      const high = bucket.reduce((a, b) => b.value > a.value ? b : a);
+      const important = bucket.filter(point => point.note || point.cashFlow || point.fee);
+      sampled.push(...[low, high, ...important].sort((a, b) => a.date.localeCompare(b.date)));
+    }
+
+    sampled.push(points.at(-1));
+    return sampled.filter((point, index, all) => index === 0 || point.date !== all[index - 1].date);
+  }
+
   function drawValueLineChart(canvas, empty, points, instant = false) {
     empty.classList.toggle("show", points.length < 2);
     if (points.length < 2) {
@@ -2649,6 +4085,8 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 
     if (!canvasReady(canvas)) return;
 
+    const rect = canvas.getBoundingClientRect();
+    points = sampleChartPoints(points, Math.max(120, Math.floor(rect.width * .75)));
     const values = points.map(point => point.value);
     const min = Math.min(...values);
     const max = Math.max(...values);
@@ -2658,14 +4096,17 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     const chartMax = max + padValue;
     const range = chartMax - chartMin;
 
-    const pad = { left: 8, right: 8, top: 12, bottom: 26 };
+    const pad = { left: 8, right: Math.min(92, Math.max(68, rect.width * .18)), top: 12, bottom: 26 };
     const { ctx, width, height } = setupCanvas(canvas);
     const innerW = width - pad.left - pad.right;
     const innerH = height - pad.top - pad.bottom;
+    const firstTime = new Date(`${points[0].date}T12:00:00`).getTime();
+    const lastTime = new Date(`${points.at(-1).date}T12:00:00`).getTime();
+    const timeSpan = Math.max(1, lastTime - firstTime);
 
-    const coords = points.map((point, index) => ({
+    const coords = points.map(point => ({
       point,
-      x: pad.left + innerW * (index / (points.length - 1)),
+      x: pad.left + innerW * ((new Date(`${point.date}T12:00:00`).getTime() - firstTime) / timeSpan),
       y: pad.top + innerH * (1 - (point.value - chartMin) / range)
     }));
 
@@ -2674,9 +4115,9 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     // Three evenly spaced value labels (top / middle / bottom of the grid)
     // give the eye a way to read approximate magnitude without cluttering
     // every gridline with a number.
-    const gridLabels = [max, (max + min) / 2, min];
+    const gridLabels = Array.from({ length: 4 }, (_, index) => chartMax - range * (index / 3));
 
-    animate(750, progress => {
+    animate(`chart-${canvas.id}`, 750, progress => {
       ctx.clearRect(0, 0, width, height);
 
       ctx.strokeStyle = palette.grid;
@@ -2740,12 +4181,25 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 
       ctx.font = '600 14px "Inter", system-ui, sans-serif';
       ctx.textAlign = "right";
-      gridLabels.forEach(value => {
-        const y = pad.top + innerH * (1 - (value - chartMin) / range);
-        ctx.fillText(money(value), width - pad.right, Math.max(14, y - 6));
+      gridLabels.forEach((value, index) => {
+        const y = pad.top + innerH * (index / 3);
+        ctx.fillText(money(value), width - 4, Math.max(14, y + (index === 0 ? 12 : -5)));
       });
+
+      if (progress === 1) {
+        coords.forEach(coord => {
+          if (!coord.point.note && !coord.point.cashFlow && !coord.point.fee) return;
+          ctx.beginPath();
+          ctx.arc(coord.x, coord.y, 3.5, 0, Math.PI * 2);
+          ctx.fillStyle = palette.warning || cssVar("--warning");
+          ctx.fill();
+        });
+      }
       ctx.globalAlpha = 1;
     }, instant);
+
+    const summary = canvas.id === "valueChart" ? $("#valueChartSummary") : null;
+    if (summary) summary.textContent = `${usesPlainLanguage() ? "Investment value" : "Portfolio value"} from ${formatDate(points[0].date)} to ${formatDate(points.at(-1).date)}, starting at ${money(points[0].value)} and ending at ${money(points.at(-1).value)}.`;
   }
 
   function nearestCoord(store, offsetX) {
@@ -2765,26 +4219,25 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   }
 
   function attachChartTooltip(canvas, wrap, tooltip) {
-    function show(event) {
-      const store = chartCoordsStore[canvas.id];
-      if (!store) return;
+    tooltip.innerHTML = '<span class="tt-date"></span><span class="tt-value money-value"></span><span class="tt-change"></span>';
+    let keyboardIndex = 0;
 
-      const rect = canvas.getBoundingClientRect();
-      const offsetX = (event.touches ? event.touches[0].clientX : event.clientX) - rect.left;
-      const coord = nearestCoord(store, offsetX);
+    function present(coord, store) {
       if (!coord) return;
-
       const idx = store.coords.indexOf(coord);
       const prev = store.coords[idx - 1];
-      const change = prev ? changeBetween(coord.point, prev.point) : null;
+      const change = prev ? performanceStats([prev.point, coord.point]) : null;
 
       tooltip.querySelector(".tt-date").textContent = formatDateLong(coord.point.date);
       tooltip.querySelector(".tt-value").textContent = money(coord.point.value);
 
       const changeEl = tooltip.querySelector(".tt-change");
       if (change) {
-        changeEl.textContent = `${signedMoney(change.amount)} vs previous entry`;
-        changeEl.className = `tt-change ${valueClass(change.amount)}`;
+        const eventText = coord.point.cashFlow
+          ? `, ${coord.point.cashFlow > 0 ? term("contribution").toLowerCase() : term("withdrawal").toLowerCase()} ${money(Math.abs(coord.point.cashFlow))}`
+          : "";
+        changeEl.textContent = `${signedMoney(change.gain)}${eventText}`;
+        changeEl.className = `tt-change ${valueClass(change.gain)}`;
         changeEl.style.display = "";
       } else {
         changeEl.style.display = "none";
@@ -2793,6 +4246,19 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
       tooltip.style.left = `${coord.x}px`;
       tooltip.style.top = `${coord.y}px`;
       tooltip.classList.add("show");
+      canvas.setAttribute("aria-label", `${formatDateLong(coord.point.date)}, ${money(coord.point.value)}${change ? `, ${signedMoney(change.gain)}` : ""}`);
+    }
+
+    function show(event) {
+      const store = chartCoordsStore[canvas.id];
+      if (!store) return;
+
+      const rect = canvas.getBoundingClientRect();
+      const offsetX = (event.touches ? event.touches[0].clientX : event.clientX) - rect.left;
+      const coord = nearestCoord(store, offsetX);
+      if (!coord) return;
+      keyboardIndex = store.coords.indexOf(coord);
+      present(coord, store);
     }
 
     function hide() {
@@ -2804,6 +4270,19 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     wrap.addEventListener("touchstart", show, { passive: true });
     wrap.addEventListener("touchmove", show, { passive: true });
     wrap.addEventListener("touchend", hide);
+
+    canvas.addEventListener("keydown", event => {
+      if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
+      const store = chartCoordsStore[canvas.id];
+      if (!store || !store.coords.length) return;
+      event.preventDefault();
+      if (event.key === "Home") keyboardIndex = 0;
+      else if (event.key === "End") keyboardIndex = store.coords.length - 1;
+      else keyboardIndex = Math.max(0, Math.min(store.coords.length - 1, keyboardIndex + (event.key === "ArrowRight" ? 1 : -1)));
+      present(store.coords[keyboardIndex], store);
+    });
+
+    canvas.addEventListener("blur", hide);
   }
 
   attachChartTooltip($("#valueChart"), $("#valueChartWrap"), $("#valueChartTooltip"));
@@ -2882,9 +4361,10 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     let changes = [];
 
     for (let i = 1; i < state.entries.length; i++) {
+      const stats = performanceStats([state.entries[i - 1], state.entries[i]]);
       changes.push({
         date: state.entries[i].date,
-        amount: state.entries[i].value - state.entries[i - 1].value
+        amount: stats ? stats.gain : 0
       });
     }
 
@@ -2904,7 +4384,7 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     const slot = innerW / changes.length;
     const barW = Math.max(2, Math.min(12, slot * .58));
 
-    animate(600, progress => {
+    animate(`chart-${canvas.id}`, 600, progress => {
       ctx.clearRect(0, 0, width, height);
 
       ctx.strokeStyle = palette.zeroLine;
@@ -2940,7 +4420,20 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   function roundRect(ctx, x, y, width, height, radius) {
     const r = Math.min(radius, Math.abs(width) / 2, Math.abs(height) / 2);
     ctx.beginPath();
-    ctx.roundRect(x, y, width, height, r);
+    if (typeof ctx.roundRect === "function") {
+      ctx.roundRect(x, y, width, height, r);
+      return;
+    }
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + width - r, y);
+    ctx.quadraticCurveTo(x + width, y, x + width, y + r);
+    ctx.lineTo(x + width, y + height - r);
+    ctx.quadraticCurveTo(x + width, y + height, x + width - r, y + height);
+    ctx.lineTo(x + r, y + height);
+    ctx.quadraticCurveTo(x, y + height, x, y + height - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
   }
 
   function updateEntryHint() {
@@ -2959,18 +4452,95 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   function resetEntryToToday() {
     $("#entryDate").value = localToday();
     $("#entryValue").value = "";
+    $("#entryFlowType").value = "none";
+    $("#entryFlowAmount").value = "";
+    $("#entryFlowAmount").disabled = true;
+    $("#entryFee").value = "";
+    $("#entryNote").value = "";
+    $("#entryDetails").open = false;
+    renderAccountInputs();
     updateEntryHint();
   }
 
-  function saveEntry(date, value) {
-    const numeric = Number(value);
+  function renderAccountInputs(values = {}) {
+    const section = $("#accountEntrySection");
+    const host = $("#accountEntryList");
+    section.style.display = state.accounts.length ? "grid" : "none";
+    host.innerHTML = state.accounts.map(account => `
+      <div class="account-entry-row">
+        <label for="account-${escapeHtml(account.id)}">${escapeHtml(account.name)}</label>
+        <input id="account-${escapeHtml(account.id)}" data-account-id="${escapeHtml(account.id)}" type="text" inputmode="decimal" placeholder="0.00" value="${Number.isFinite(Number(values[account.id])) ? Number(values[account.id]).toFixed(2) : ""}">
+      </div>
+    `).join("");
+    updateAccountReconcile();
+  }
 
-    if (!date || !Number.isFinite(numeric) || numeric < 0) return false;
+  function updateAccountReconcile() {
+    const node = $("#accountReconcile");
+    const inputs = $$("#accountEntryList [data-account-id]");
+    const filled = inputs.filter(input => String(input.value).trim() !== "");
+    if (!filled.length) {
+      node.className = "account-reconcile";
+      node.textContent = "Account values can be left blank.";
+      return;
+    }
+
+    const sum = filled.reduce((total, input) => total + (parseCurrency(input.value) || 0), 0);
+    const portfolio = parseCurrency($("#entryValue").value);
+    const difference = portfolio - sum;
+    const matches = Number.isFinite(portfolio) && Math.abs(difference) < .01;
+    node.className = `account-reconcile ${matches ? "ok" : "warn"}`;
+    node.textContent = matches
+      ? `Account values match ${money(portfolio)}.`
+      : `Accounts total ${money(sum)}. Difference from ${usesPlainLanguage() ? "your investment total" : "portfolio total"}: ${signedMoney(difference)}.`;
+  }
+
+  function readEntryDetails() {
+    if (!$("#entryDetails").open) return null;
+    const type = $("#entryFlowType").value;
+    const flowAmount = Math.abs(parseCurrency($("#entryFlowAmount").value) || 0);
+    const cashFlow = type === "contribution" ? flowAmount : type === "withdrawal" ? -flowAmount : 0;
+    const accounts = {};
+
+    $$("#accountEntryList [data-account-id]").forEach(input => {
+      if (!String(input.value).trim()) return;
+      const value = parseCurrency(input.value);
+      if (Number.isFinite(value) && value >= 0) accounts[input.dataset.accountId] = value;
+    });
+
+    return {
+      cashFlow,
+      fee: Math.max(0, parseCurrency($("#entryFee").value) || 0),
+      note: $("#entryNote").value.trim(),
+      accounts
+    };
+  }
+
+  function entryLooksUnusual(date, value, cashFlow = 0) {
+    const previous = [...state.entries].reverse().find(entry => entry.date < date);
+    if (!previous || !previous.value) return false;
+    const investmentMove = value - previous.value - cashFlow;
+    return Math.abs(investmentMove / previous.value) >= .25;
+  }
+
+  function saveEntry(date, value, details = null) {
+    const numeric = parseCurrency(value);
+
+    if (!isValidIsoDate(date) || !Number.isFinite(numeric) || numeric < 0) return false;
+    if (date > localToday() && !confirm("This date is in the future. Save it anyway?")) return false;
 
     const existing = state.entries.find(entry => entry.date === date);
+    const merged = {
+      ...(existing || { date, cashFlow: 0, fee: 0, note: "", accounts: {} }),
+      ...(details || {}),
+      date,
+      value: numeric
+    };
 
-    if (existing) existing.value = numeric;
-    else state.entries.push({ date, value: numeric });
+    if (entryLooksUnusual(date, numeric, merged.cashFlow) && !confirm("This value changes investment performance by more than 25% from the previous entry. Save it anyway?")) return false;
+
+    if (existing) Object.assign(existing, merged);
+    else state.entries.push(merged);
 
     saveState();
     return true;
@@ -2983,29 +4553,44 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     $("#editOriginalDate").value = entry.date;
     $("#editDate").value = entry.date;
     $("#editValue").value = entry.value.toFixed(2);
+    $("#editFlowType").value = entry.cashFlow > 0 ? "contribution" : entry.cashFlow < 0 ? "withdrawal" : "none";
+    $("#editFlowAmount").value = entry.cashFlow ? Math.abs(entry.cashFlow).toFixed(2) : "";
+    $("#editFlowAmount").disabled = !entry.cashFlow;
+    $("#editFee").value = entry.fee ? entry.fee.toFixed(2) : "";
+    $("#editNote").value = entry.note || "";
+    $("#editAccountSection").style.display = state.accounts.length ? "grid" : "none";
+    $("#editAccountList").innerHTML = state.accounts.map(account => `
+      <div class="account-entry-row">
+        <label for="edit-account-${escapeHtml(account.id)}">${escapeHtml(account.name)}</label>
+        <input id="edit-account-${escapeHtml(account.id)}" data-edit-account-id="${escapeHtml(account.id)}" type="text" inputmode="decimal" placeholder="0.00" value="${Number.isFinite(Number(entry.accounts && entry.accounts[account.id])) ? Number(entry.accounts[account.id]).toFixed(2) : ""}">
+      </div>
+    `).join("");
     openModal("editModal");
   }
 
   function deleteEntry(date) {
     if (!confirm(`Delete the value saved for ${formatDate(date)}?`)) return;
 
+    rememberUndo("Entry restored");
     state.entries = state.entries.filter(entry => entry.date !== date);
     saveState();
     render();
-    toast("Entry deleted");
+    toast("Entry deleted", true);
   }
 
   $("#entryForm").addEventListener("submit", event => {
     event.preventDefault();
 
-    if (!saveEntry($("#entryDate").value, $("#entryValue").value)) {
+    rememberUndo("Saved value undone");
+    if (!saveEntry($("#entryDate").value, $("#entryValue").value, readEntryDetails())) {
+      undoSnapshot = null;
       toast("Enter a valid value");
       return;
     }
 
+    resetEntryToToday();
     render();
-    $("#entryValue").value = "";
-    toast("Value saved");
+    toast("Value saved", true);
   });
 
   $("#editForm").addEventListener("submit", event => {
@@ -3013,23 +4598,55 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 
     const originalDate = $("#editOriginalDate").value;
     const date = $("#editDate").value;
-    const value = Number($("#editValue").value);
+    const value = parseCurrency($("#editValue").value);
+    const flowType = $("#editFlowType").value;
+    const flowAmount = Math.abs(parseCurrency($("#editFlowAmount").value) || 0);
+    const cashFlow = flowType === "contribution" ? flowAmount : flowType === "withdrawal" ? -flowAmount : 0;
 
-    if (!date || !Number.isFinite(value) || value < 0) {
+    if (!isValidIsoDate(date) || !Number.isFinite(value) || value < 0) {
       toast("Enter a valid date and value");
       return;
     }
 
+    if (date > localToday() && !confirm("This date is in the future. Save it anyway?")) return;
+    if (date !== originalDate && state.entries.some(entry => entry.date === date) && !confirm("Another value already exists on this date. Replace it?")) return;
+    if (entryLooksUnusual(date, value, cashFlow) && !confirm("This value changes investment performance by more than 25% from the previous entry. Save it anyway?")) return;
+
+    rememberUndo("Edit undone");
+    const accountValues = {};
+    $$("#editAccountList [data-edit-account-id]").forEach(input => {
+      if (!String(input.value).trim()) return;
+      const amount = parseCurrency(input.value);
+      if (Number.isFinite(amount) && amount >= 0) accountValues[input.dataset.editAccountId] = amount;
+    });
+
     state.entries = state.entries.filter(entry => entry.date !== originalDate && entry.date !== date);
-    state.entries.push({ date, value });
+    state.entries.push({
+      date,
+      value,
+      cashFlow,
+      fee: Math.max(0, parseCurrency($("#editFee").value) || 0),
+      note: $("#editNote").value.trim(),
+      accounts: accountValues
+    });
 
     saveState();
     closeModals();
     render();
-    toast("Entry updated");
+    toast("Entry updated", true);
   });
 
   $("#entryDate").addEventListener("change", updateEntryHint);
+  $("#entryValue").addEventListener("input", updateAccountReconcile);
+  $("#accountEntryList").addEventListener("input", updateAccountReconcile);
+  $("#entryFlowType").addEventListener("change", event => {
+    $("#entryFlowAmount").disabled = event.target.value === "none";
+    if (event.target.value === "none") $("#entryFlowAmount").value = "";
+  });
+  $("#editFlowType").addEventListener("change", event => {
+    $("#editFlowAmount").disabled = event.target.value === "none";
+    if (event.target.value === "none") $("#editFlowAmount").value = "";
+  });
   $("#clearBtn").addEventListener("click", resetEntryToToday);
 
   $("#privacyBtn").addEventListener("click", () => {
@@ -3040,9 +4657,172 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 
   $("#addTodayBtn").addEventListener("click", () => activateScreen("add"));
 
-  $("#dataBtn").addEventListener("click", () => openModal("dataModal"));
-  $("#sidebarDataBtn").addEventListener("click", () => openModal("dataModal"));
-  $("#importBtn").addEventListener("click", () => openModal("importModal"));
+  $("#dataBtn").addEventListener("click", () => openSettings("data"));
+  $("#sidebarDataBtn").addEventListener("click", () => openSettings("data"));
+  $("#importBtn").addEventListener("click", () => openSettings("import"));
+  $("#backupReminderBtn").addEventListener("click", () => openSettings("data"));
+
+  function populateSettings() {
+    pendingTerminology = state.settings.terminology || "plain";
+    renderTerminologyToggle();
+    $("#settingsUserName").value = displayName();
+    renderAvatarPicker($("#settingsAvatarPicker"), state.settings.avatarSeed, "settingsAvatar");
+    updateSettingsProfilePreview();
+    $("#portfolioName").value = state.settings.portfolioName || "My portfolio";
+    $("#goalValue").value = Number(state.settings.goalValue) > 0 ? Number(state.settings.goalValue).toFixed(2) : "";
+    $("#goalDate").value = state.settings.goalDate || "";
+    $("#benchmarkName").value = state.settings.benchmarkName || "Annual target";
+    $("#benchmarkRate").value = Number(state.settings.benchmarkRate) || 0;
+    $("#accountNames").value = state.accounts.map(account => account.name).join("\n");
+    $("#backupReminderDays").value = String(Number(state.settings.backupReminderDays) || 0);
+  }
+
+  function renderTerminologyToggle() {
+    const financial = pendingTerminology === "financial";
+    $("#terminologyToggle").setAttribute("aria-checked", String(financial));
+    $("#terminologyLabel").textContent = financial ? "Financial terms" : "Plain language";
+    $("#terminologyDescription").textContent = financial
+      ? "Uses standard investment and performance terminology."
+      : "Uses simple explanations instead of investing jargon.";
+  }
+
+  $("#terminologyToggle").addEventListener("click", () => {
+    pendingTerminology = pendingTerminology === "financial" ? "plain" : "financial";
+    state.settings.terminology = pendingTerminology;
+    saveState();
+    render();
+    renderTerminologyToggle();
+  });
+
+  $("#settingsUserName").addEventListener("input", updateSettingsProfilePreview);
+  $("#settingsAvatarPicker").addEventListener("change", updateSettingsProfilePreview);
+  $("#onboardingAvatarPicker").addEventListener("change", updateOnboardingPreview);
+
+  $("#onboardingSkipBtn").addEventListener("click", () => {
+    state.settings.onboardingComplete = true;
+    saveState();
+    closeModals();
+    render();
+    toast("You can add your profile in Settings");
+  });
+
+  $("#onboardingForm").addEventListener("submit", event => {
+    event.preventDefault();
+    const name = cleanName($("#onboardingUserName").value);
+    if (!name) {
+      toast("Enter your name or skip for now");
+      return;
+    }
+
+    state.settings.userName = name;
+    state.settings.avatarSeed = selectedAvatarSeed("onboardingAvatar");
+    state.settings.onboardingComplete = true;
+    saveState();
+    closeModals();
+    render();
+    toast(`Welcome, ${name}`);
+  });
+
+  function setSettingsTab(tab = "onboarding") {
+    const safeTab = ["onboarding", "data", "import"].includes(tab) ? tab : "onboarding";
+    $$("[data-settings-tab]").forEach(button => {
+      const active = button.dataset.settingsTab === safeTab;
+      button.classList.toggle("active", active);
+      button.setAttribute("aria-selected", String(active));
+      button.setAttribute("tabindex", active ? "0" : "-1");
+    });
+    $$(".settings-tab-panel").forEach(panel => {
+      const active = panel.id === `settingsTab${safeTab[0].toUpperCase()}${safeTab.slice(1)}`;
+      panel.classList.toggle("active", active);
+      panel.hidden = !active;
+    });
+  }
+
+  $(".settings-tabs").addEventListener("keydown", event => {
+    if (!["ArrowLeft", "ArrowRight"].includes(event.key)) return;
+    const tabs = $$("[data-settings-tab]");
+    const current = tabs.indexOf(document.activeElement);
+    if (current < 0) return;
+    event.preventDefault();
+    const next = event.key === "ArrowRight"
+      ? (current + 1) % tabs.length
+      : (current - 1 + tabs.length) % tabs.length;
+    tabs[next].click();
+    tabs[next].focus();
+  });
+
+  $$("[data-settings-tab]").forEach(button => {
+    button.addEventListener("click", () => setSettingsTab(button.dataset.settingsTab));
+  });
+
+  function openSettings(tab = "onboarding") {
+    populateSettings();
+    setSettingsTab(tab);
+    openModal("settingsModal");
+  }
+
+  $("#settingsBtn").addEventListener("click", openSettings);
+  $("#sidebarSettingsBtn").addEventListener("click", openSettings);
+  $("#editGoalBtn").addEventListener("click", openSettings);
+  $("#editAccountsBtn").addEventListener("click", openSettings);
+
+  $("#settingsForm").addEventListener("submit", event => {
+    event.preventDefault();
+    const goalValue = parseCurrency($("#goalValue").value);
+    const goalDate = $("#goalDate").value;
+    if (goalDate && !isValidIsoDate(goalDate)) {
+      toast("Enter a valid goal date");
+      return;
+    }
+
+    const previousAccounts = new Map(state.accounts.map(account => [account.name.toLowerCase(), account]));
+    const accountNames = [...new Set(
+      $("#accountNames").value.split(/\r?\n/).map(name => name.trim()).filter(Boolean)
+    )].slice(0, 12);
+
+    rememberUndo("Setup changes undone");
+    state.settings = {
+      ...state.settings,
+      userName: cleanName($("#settingsUserName").value),
+      avatarSeed: selectedAvatarSeed("settingsAvatar"),
+      onboardingComplete: true,
+      portfolioName: $("#portfolioName").value.trim() || "My portfolio",
+      terminology: pendingTerminology,
+      goalValue: Number.isFinite(goalValue) && goalValue > 0 ? goalValue : null,
+      goalDate,
+      benchmarkName: $("#benchmarkName").value.trim() || "Annual target",
+      benchmarkRate: Math.max(-99, Math.min(100, Number($("#benchmarkRate").value) || 0)),
+      backupReminderDays: Number($("#backupReminderDays").value) || 0
+    };
+    state.accounts = normaliseAccounts(accountNames.map(name => previousAccounts.get(name.toLowerCase()) || { name, id: slugify(name) }));
+    saveState();
+    renderAccountInputs();
+    closeModals();
+    render();
+    toast("Settings saved", true);
+  });
+
+  $("#calendarPrev").addEventListener("click", () => changeCalendarMonth(-1));
+  $("#calendarNext").addEventListener("click", () => changeCalendarMonth(1));
+
+  function changeCalendarMonth(amount) {
+    const date = new Date(`${calendarMonth || localToday().slice(0, 7)}-01T12:00:00`);
+    date.setMonth(date.getMonth() + amount);
+    calendarMonth = localDateKey(date).slice(0, 7);
+    renderCalendar();
+  }
+
+  $("#undoBtn").addEventListener("click", () => {
+    if (!undoSnapshot) return;
+    const restored = undoSnapshot;
+    undoSnapshot = null;
+    state = structuredClone(restored.state);
+    saveState();
+    renderAccountInputs();
+    render();
+    $("#toast").classList.remove("show", "has-action");
+    toast(restored.label);
+  });
 
   $("#historySearch").addEventListener("input", event => {
     historySearch = event.target.value;
@@ -3062,9 +4842,11 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 
     if (instant || reduceMotion) indicator.style.transitionDuration = "0s";
 
+    const x = Math.max(0, Math.min(containerRect.width - btnRect.width, btnRect.left - containerRect.left));
+    const y = Math.max(0, Math.min(containerRect.height - btnRect.height, btnRect.top - containerRect.top));
     indicator.style.width = `${btnRect.width}px`;
     indicator.style.height = `${btnRect.height}px`;
-    indicator.style.transform = `translate(${btnRect.left - containerRect.left}px, ${btnRect.top - containerRect.top}px)`;
+    indicator.style.transform = `translate(${x}px, ${y}px)`;
     indicator.classList.add("ready");
 
     if (instant || reduceMotion) {
@@ -3079,18 +4861,32 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   }
 
   const SCREEN_KEYS = ["dashboard", "add", "charts", "returns", "history"];
-  let currentScreen = "dashboard";
 
   // Removing the mobile nav's text labels means the header is now the only
   // place that names the current screen, so every destination gets its own
   // title + one-line description here.
-  const SCREEN_META = {
-    dashboard: { title: "Dashboard", subtitle: null },
-    add: { title: "Add a value", subtitle: "Log today's total, or backfill an earlier date." },
-    charts: { title: "Charts", subtitle: "Your portfolio's value and day-to-day movement." },
-    returns: { title: "Returns", subtitle: "Performance by period, and by month." },
-    history: { title: "History", subtitle: "Every recorded value, editable anytime." }
-  };
+  function screenMeta(key) {
+    return {
+      dashboard: { title: dashboardTitle(), subtitle: formatDateLong(localToday()) },
+      add: { title: "Add a value", subtitle: usesPlainLanguage() ? "Enter today's total, or add an earlier date." : "Log today's total, or backfill an earlier date." },
+      charts: { title: "Charts", subtitle: term("chartsScreenSubtitle") },
+      returns: { title: term("returnsScreenTitle"), subtitle: term("returnsScreenSubtitle") },
+      history: { title: "History", subtitle: "Every recorded value, editable anytime." }
+    }[key];
+  }
+
+  function resetScreenScroll() {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    $(".main").scrollTop = 0;
+    window.scrollTo(0, 0);
+    requestAnimationFrame(() => {
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      $(".main").scrollTop = 0;
+      window.scrollTo(0, 0);
+    });
+  }
 
   // Each nav destination is its own screen: switching hides every other
   // screen and marks the matching button active in both navs, rather than
@@ -3103,9 +4899,9 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
       screen.classList.toggle("active", screen.id === `screen-${key}`);
     });
 
-    window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
+    resetScreenScroll();
 
-    const meta = SCREEN_META[key];
+    const meta = screenMeta(key);
     $("#pageTitle").textContent = meta.title;
     $("#todayLong").textContent = meta.subtitle || formatDateLong(localToday());
 
@@ -3128,7 +4924,9 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 
     if (key === "add") {
       resetEntryToToday();
-      setTimeout(() => $("#entryValue").focus(), 320);
+      if (window.matchMedia("(pointer:fine)").matches) {
+        setTimeout(() => $("#entryValue").focus({ preventScroll: true }), 120);
+      }
     }
 
     // The canvases only have a real size once their screen is displayed, so
@@ -3139,6 +4937,9 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
         renderDeltaChart(true);
       });
     }
+
+    if (key === "returns") renderReturnsSection();
+    if (key === "history") renderHistory();
   }
 
   $("#periods").addEventListener("click", event => {
@@ -3170,6 +4971,12 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
 
     const monthRow = event.target.closest("[data-month]");
     if (monthRow) openPeriodDetail(monthRow.dataset.month, "month");
+
+    const yearRow = event.target.closest("[data-year]");
+    if (yearRow) openPeriodDetail(yearRow.dataset.year, "year");
+
+    const calendarDay = event.target.closest("[data-calendar-date]");
+    if (calendarDay) editEntry(calendarDay.dataset.calendarDate);
   });
 
   $$(".close-modal").forEach(button => button.addEventListener("click", closeModals));
@@ -3181,17 +4988,44 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   });
 
   window.addEventListener("keydown", event => {
-    if (event.key === "Escape") closeModals();
+    if (event.key === "Escape") {
+      closeModals();
+      return;
+    }
+
+    if (event.key === "Tab") {
+      const open = $(".modal-backdrop.open");
+      if (!open) return;
+      const focusable = [...open.querySelectorAll('button:not(:disabled), input:not(:disabled):not([type="hidden"]), select:not(:disabled), textarea:not(:disabled), [tabindex="0"]')]
+        .filter(node => node.offsetParent !== null);
+      if (!focusable.length) return;
+      const first = focusable[0];
+      const last = focusable.at(-1);
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    }
   });
 
   $("#exportCsvBtn").addEventListener("click", () => {
-    const rows = [["Date", "Total Value CAD"]];
+    const rows = [["Date", "Total Value CAD", "Cash Flow CAD", "Fees CAD", "Note", ...state.accounts.map(account => account.name)]];
 
     state.entries.forEach(entry => {
-      rows.push([entry.date, entry.value.toFixed(2)]);
+      rows.push([
+        entry.date,
+        entry.value.toFixed(2),
+        (Number(entry.cashFlow) || 0).toFixed(2),
+        (Number(entry.fee) || 0).toFixed(2),
+        entry.note || "",
+        ...state.accounts.map(account => Number.isFinite(Number(entry.accounts && entry.accounts[account.id])) ? Number(entry.accounts[account.id]).toFixed(2) : "")
+      ]);
     });
 
-    const csv = rows.map(row =>
+    const csv = "\uFEFF" + rows.map(row =>
       row.map(value => `"${String(value).replaceAll('"', '""')}"`).join(",")
     ).join("\n");
 
@@ -3202,34 +5036,134 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   });
 
   $("#exportBackupBtn").addEventListener("click", () => {
+    markBackupCreated();
     downloadBlob(
       new Blob([JSON.stringify(state, null, 2)], { type: "application/json" }),
       `ledger-backup-${localToday()}.json`
     );
+    renderBackupReminder();
+    toast("Backup exported");
   });
+
+  $("#exportEncryptedBtn").addEventListener("click", async () => {
+    const password = $("#backupPassword").value;
+    if (password.length < 8) {
+      toast("Use at least 8 characters for an encrypted backup");
+      $("#backupPassword").focus();
+      return;
+    }
+
+    try {
+      markBackupCreated();
+      const encrypted = await encryptBackup(state, password);
+      downloadBlob(
+        new Blob([JSON.stringify(encrypted)], { type: "application/json" }),
+        `ledger-encrypted-${localToday()}.ledger`
+      );
+      $("#backupPassword").value = "";
+      renderBackupReminder();
+      toast("Encrypted backup exported");
+    } catch (error) {
+      console.error(error);
+      toast("This browser could not create the encrypted backup");
+    }
+  });
+
+  function markBackupCreated() {
+    state.settings.lastBackupDate = localToday();
+    saveState();
+  }
+
+  function bytesToBase64(bytes) {
+    let binary = "";
+    bytes.forEach(byte => binary += String.fromCharCode(byte));
+    return btoa(binary);
+  }
+
+  function base64ToBytes(value) {
+    const binary = atob(value);
+    return Uint8Array.from(binary, char => char.charCodeAt(0));
+  }
+
+  async function passwordKey(password, salt, usage) {
+    const material = await crypto.subtle.importKey(
+      "raw",
+      new TextEncoder().encode(password),
+      "PBKDF2",
+      false,
+      ["deriveKey"]
+    );
+    return crypto.subtle.deriveKey(
+      { name: "PBKDF2", hash: "SHA-256", salt, iterations: 250000 },
+      material,
+      { name: "AES-GCM", length: 256 },
+      false,
+      [usage]
+    );
+  }
+
+  async function encryptBackup(value, password) {
+    const salt = crypto.getRandomValues(new Uint8Array(16));
+    const iv = crypto.getRandomValues(new Uint8Array(12));
+    const key = await passwordKey(password, salt, "encrypt");
+    const encoded = new TextEncoder().encode(JSON.stringify(value));
+    const encrypted = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, encoded);
+    return {
+      format: "ledger-encrypted-v1",
+      salt: bytesToBase64(salt),
+      iv: bytesToBase64(iv),
+      data: bytesToBase64(new Uint8Array(encrypted))
+    };
+  }
+
+  async function decryptBackup(container, password) {
+    const salt = base64ToBytes(container.salt);
+    const iv = base64ToBytes(container.iv);
+    const key = await passwordKey(password, salt, "decrypt");
+    const decrypted = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, base64ToBytes(container.data));
+    return JSON.parse(new TextDecoder().decode(decrypted));
+  }
+
+  function validateBackup(parsed) {
+    if (!parsed || !Array.isArray(parsed.entries)) throw new Error("Missing entries");
+    const entries = normaliseEntries(parsed.entries);
+    if (parsed.entries.length && !entries.length) throw new Error("No valid entries");
+    return {
+      ...emptyState(),
+      ...parsed,
+      version: 4,
+      privacy: !!parsed.privacy,
+      settings: normaliseSettings(parsed.settings),
+      accounts: normaliseAccounts(parsed.accounts),
+      entries
+    };
+  }
 
   $("#backupFile").addEventListener("change", async event => {
     const file = event.target.files[0];
     if (!file) return;
 
     try {
-      const parsed = JSON.parse(await file.text());
-      if (!parsed || !Array.isArray(parsed.entries)) throw new Error();
+      let parsed = JSON.parse(await file.text());
+      if (parsed && parsed.format === "ledger-encrypted-v1") {
+        const password = $("#backupPassword").value || prompt("Enter the password for this encrypted backup:");
+        if (!password) throw new Error("Password required");
+        parsed = await decryptBackup(parsed, password);
+      }
+      const restoredState = validateBackup(parsed);
 
       if (confirm("Replace your current history with this backup?")) {
-        state = {
-          ...emptyState(),
-          ...parsed,
-          entries: normaliseEntries(parsed.entries)
-        };
+        rememberUndo("Backup restore undone");
+        state = restoredState;
         saveState();
         closeModals();
         resetEntryToToday();
         render();
-        toast("Backup restored");
+        toast("Backup restored", true);
       }
-    } catch {
-      alert("That file does not look like a valid Ledger backup.");
+    } catch (error) {
+      console.error(error);
+      alert("That backup is invalid, damaged, or uses a different password.");
     }
 
     event.target.value = "";
@@ -3238,12 +5172,13 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   $("#resetBtn").addEventListener("click", () => {
     if (!confirm("Clear every saved daily value from this browser?")) return;
 
-    state = emptyState();
+    rememberUndo("Tracking data restored");
+    state = { ...emptyState(), settings: { ...state.settings }, accounts: [...state.accounts] };
     saveState();
     closeModals();
     resetEntryToToday();
     render();
-    toast("All data cleared");
+    toast("All tracking data cleared", true);
   });
 
   $("#csvFile").addEventListener("change", async event => {
@@ -3251,16 +5186,13 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     if (!file) return;
 
     try {
-      const imported = parseCsvHistory(await file.text());
+      const parsed = parseCsvHistory(await file.text());
 
-      if (!imported.length) {
+      if (!parsed.entries.length) {
         alert("I could not find usable date and value rows in that CSV.");
       } else {
-        state.entries = normaliseEntries([...state.entries, ...imported]);
-        saveState();
-        closeModals();
-        render();
-        toast(`${imported.length} ${imported.length === 1 ? "entry" : "entries"} imported`);
+        pendingImport = parsed;
+        renderImportPreview();
       }
     } catch {
       alert("I could not read that CSV file.");
@@ -3269,16 +5201,49 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     event.target.value = "";
   });
 
+  function renderImportPreview() {
+    if (!pendingImport) return;
+    const existingDates = new Set(state.entries.map(entry => entry.date));
+    const conflicts = pendingImport.entries.filter(entry => existingDates.has(entry.date)).length;
+    $("#importPreviewStats").innerHTML = `
+      <div class="preview-stat"><span>Ready</span><strong>${pendingImport.entries.length}</strong></div>
+      <div class="preview-stat"><span>Existing dates</span><strong>${conflicts}</strong></div>
+      <div class="preview-stat"><span>Rejected rows</span><strong>${pendingImport.rejected}</strong></div>
+    `;
+    $("#importPreviewList").innerHTML = pendingImport.entries.slice(0, 12).map(entry => `
+      <div class="preview-row"><span>${formatDate(entry.date)}</span><strong>${money(entry.value)}</strong></div>
+    `).join("") + (pendingImport.entries.length > 12 ? `<div class="preview-row"><span>And ${pendingImport.entries.length - 12} more</span><strong></strong></div>` : "");
+    $("#importPreview").classList.add("show");
+  }
+
+  $("#cancelImportBtn").addEventListener("click", () => {
+    pendingImport = null;
+    $("#importPreview").classList.remove("show");
+  });
+
+  $("#confirmImportBtn").addEventListener("click", () => {
+    if (!pendingImport) return;
+    const replace = $("#duplicatePolicy").value === "replace";
+    const existingDates = new Set(state.entries.map(entry => entry.date));
+    const incoming = replace
+      ? pendingImport.entries
+      : pendingImport.entries.filter(entry => !existingDates.has(entry.date));
+    rememberUndo("Import undone");
+    state.entries = normaliseEntries(replace
+      ? [...state.entries, ...incoming]
+      : [...state.entries, ...incoming]);
+    saveState();
+    const count = incoming.length;
+    pendingImport = null;
+    $("#importPreview").classList.remove("show");
+    closeModals();
+    render();
+    toast(`${count} ${count === 1 ? "entry" : "entries"} imported`, true);
+  });
+
   function parseCsvHistory(text) {
-    const lines = text
-      .replace(/\r/g, "")
-      .split("\n")
-      .map(line => line.trim())
-      .filter(Boolean);
-
-    if (!lines.length) return [];
-
-    const rows = lines.map(parseCsvLine);
+    const rows = parseCsvRows(text).filter(row => row.some(cell => String(cell).trim() !== ""));
+    if (!rows.length) return { entries: [], rejected: 0 };
     const headers = rows[0].map(cell => cell.trim().toLowerCase());
 
     const dateIndex = headers.findIndex(header =>
@@ -3288,35 +5253,63 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
     const valueIndex = headers.findIndex(header =>
       ["value", "amount", "balance", "total"].some(term => header.includes(term))
     );
+    const cashFlowIndex = headers.findIndex(header => header.includes("cash flow") || header.includes("cashflow"));
+    const contributionIndex = headers.findIndex(header => header.includes("contribution") || header.includes("deposit"));
+    const withdrawalIndex = headers.findIndex(header => header.includes("withdrawal"));
+    const feeIndex = headers.findIndex(header => header.includes("fee"));
+    const noteIndex = headers.findIndex(header => header.includes("note") || header.includes("comment"));
 
     const hasHeader = dateIndex >= 0 && valueIndex >= 0;
     const dIndex = hasHeader ? dateIndex : 0;
     const vIndex = hasHeader ? valueIndex : 1;
     const start = hasHeader ? 1 : 0;
     const results = [];
+    let rejected = 0;
 
     for (let i = start; i < rows.length; i++) {
       const date = normaliseDate(rows[i][dIndex]);
       const value = parseCurrency(rows[i][vIndex]);
 
-      if (date && Number.isFinite(value) && value >= 0) {
-        results.push({ date, value });
+      if (!date || date > localToday() || !Number.isFinite(value) || value < 0) {
+        rejected++;
+        continue;
       }
+
+      let cashFlow = cashFlowIndex >= 0 ? parseCurrency(rows[i][cashFlowIndex]) || 0 : 0;
+      if (contributionIndex >= 0) cashFlow += Math.abs(parseCurrency(rows[i][contributionIndex]) || 0);
+      if (withdrawalIndex >= 0) cashFlow -= Math.abs(parseCurrency(rows[i][withdrawalIndex]) || 0);
+      const accounts = {};
+      state.accounts.forEach(account => {
+        const index = headers.findIndex(header => header === account.name.toLowerCase());
+        if (index < 0) return;
+        const amount = parseCurrency(rows[i][index]);
+        if (Number.isFinite(amount) && amount >= 0) accounts[account.id] = amount;
+      });
+
+      results.push({
+        date,
+        value,
+        cashFlow,
+        fee: feeIndex >= 0 ? Math.max(0, parseCurrency(rows[i][feeIndex]) || 0) : 0,
+        note: noteIndex >= 0 ? String(rows[i][noteIndex] || "").trim().slice(0, 240) : "",
+        accounts
+      });
     }
 
-    return results;
+    return { entries: normaliseEntries(results), rejected };
   }
 
-  function parseCsvLine(line) {
-    const values = [];
+  function parseCsvRows(text) {
+    const rows = [];
+    let values = [];
     let current = "";
     let quoted = false;
 
-    for (let i = 0; i < line.length; i++) {
-      const char = line[i];
+    for (let i = 0; i < text.length; i++) {
+      const char = text[i];
 
       if (char === '"') {
-        if (quoted && line[i + 1] === '"') {
+        if (quoted && text[i + 1] === '"') {
           current += '"';
           i++;
         } else {
@@ -3325,24 +5318,38 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
       } else if (char === "," && !quoted) {
         values.push(current);
         current = "";
+      } else if ((char === "\n" || char === "\r") && !quoted) {
+        if (char === "\r" && text[i + 1] === "\n") i++;
+        values.push(current);
+        rows.push(values);
+        values = [];
+        current = "";
       } else {
         current += char;
       }
     }
 
-    values.push(current);
-    return values;
+    if (current || values.length) {
+      values.push(current);
+      rows.push(values);
+    }
+    return rows;
   }
 
   function parseCurrency(value = "") {
-    return Number(String(value).replace(/\$/g, "").replace(/,/g, "").replace(/\s/g, "").trim());
+    const raw = String(value).trim();
+    if (!raw) return 0;
+    const negative = /^\(.*\)$/.test(raw);
+    const cleaned = raw.replace(/[()$,%]/g, "").replace(/CAD/gi, "").replace(/,/g, "").replace(/\s/g, "").trim();
+    const parsed = Number(cleaned);
+    return negative ? -Math.abs(parsed) : parsed;
   }
 
   function normaliseDate(value = "") {
     const raw = String(value).trim();
     if (!raw) return null;
 
-    if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return raw;
+    if (/^\d{4}-\d{2}-\d{2}$/.test(raw)) return isValidIsoDate(raw) ? raw : null;
 
     const slash = raw.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{2,4})$/);
 
@@ -3352,12 +5359,17 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
       let year = Number(slash[3]);
       if (year < 100) year += 2000;
 
-      let month = first;
-      let day = second;
+      let month;
+      let day;
 
       if (first > 12 && second <= 12) {
         day = first;
         month = second;
+      } else if (second > 12 && first <= 12) {
+        month = first;
+        day = second;
+      } else {
+        return null;
       }
 
       const test = new Date(year, month - 1, day);
@@ -3408,14 +5420,28 @@ tbody tr:hover{background:rgba(255,255,255,.02)}
   }
 
   window.addEventListener("resize", () => {
-    renderValueChart(true);
-    renderDeltaChart(true);
-    refreshIndicators(true);
+    cancelAnimationFrame(resizeFrame);
+    resizeFrame = requestAnimationFrame(() => {
+      if (currentScreen === "charts") {
+        renderValueChart(true);
+        renderDeltaChart(true);
+      }
+      if ($("#periodModal").classList.contains("open")) {
+        drawValueLineChart($("#periodModalChart"), $("#periodModalChartEmpty"), periodModalEntries, true);
+      }
+      refreshIndicators(true);
+    });
   });
 
   initialiseToday();
+  renderAccountInputs();
   render();
   requestAnimationFrame(() => refreshIndicators(true));
+  maybeOpenOnboarding();
+
+  if ("serviceWorker" in navigator && location.protocol.startsWith("http")) {
+    window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
+  }
 })();
 </script>
 </body>
